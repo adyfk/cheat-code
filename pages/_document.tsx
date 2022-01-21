@@ -11,6 +11,11 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <meta content="/" name="app:pageurl"/>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="prefetch" href="https://devhints.io"/>
+          <link rel="prerender" href="https://devhints.io"/>
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
           </style>

@@ -1,9 +1,13 @@
 import {getMdxContent} from '@utils/get-mdx-content';
 import Blog from '@components/Blog';
+import Head from '@components/Head';
 
 export default function BlogPost({source, frontMatter}:any) {
   return (
-    <Blog source={source} frontMatter={frontMatter}/>
+    <>
+      <Head title={frontMatter.title} />
+      <Blog source={source} frontMatter={frontMatter}/>
+    </>
   );
 }
 
