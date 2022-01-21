@@ -1,18 +1,17 @@
 import {MDXRemote} from 'next-mdx-remote';
-import Block from './Block';
 import BlockNote from './BlockNote';
 import Code from './Code';
 import Header from './Header';
 
 const components = {
-  pre: ({children}:any) => <>{children}</>,
   code: Code,
-  div: Block,
+  note: BlockNote,
+  pre: ({children}:any) => <>{children}</>,
   h2: ({children, ...rest}:any) => {
     return (<h2 className='text-sky-900 text-2xl basis-full'>{children}</h2>);
   },
   h3: ({children, ...rest}:any) => {
-    return (<h3 className='text-sky-600 text-xl basis-full'>{children}</h3>);
+    return (<h3 className='text-sky-600 text-xl basis-full my-2'>{children}</h3>);
   },
   p: ({children}: any) => {
     return (<p className='basis-full'>{children}</p>);
@@ -20,7 +19,12 @@ const components = {
   section: ({children}:any) => <div className=''>
     {children}
   </div>,
-  note: BlockNote,
+  ul: ({children}: any) => <ul className='basis-full'>{children}</ul>,
+  li: ({children}: any) => (
+    <li className='px-2 py-1 bg-blue-50 text-sm font-thin'>
+      {children}
+    </li>
+  ),
 };
 
 const Blog: React.FC<any> = ({frontMatter, source}) => {
@@ -40,8 +44,8 @@ const Blog: React.FC<any> = ({frontMatter, source}) => {
             <span className='font-bold'>{frontMatter.author}</span>
           </a>
           <span className='text-sm text-sky-900 mr-5'>
-              Language {` `}
-            <span className='font-bold'>{frontMatter.language}</span>
+              Category {` `}
+            <span className='font-bold'>{frontMatter.category}</span>
           </span>
           {!!frontMatter.used.length && (
             <span className='text-sm text-sky-900'>

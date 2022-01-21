@@ -21,7 +21,6 @@ export async function getMdxContent(source) {
 
         const mdxSource = await fs.readFile(filepath);
         const {content, data} = matter(mdxSource);
-        console.log({data, content});
         const mdx = await serialize(content, {
           mdxOptions: {
             remarkPlugins: [sectionize],
@@ -32,6 +31,30 @@ export async function getMdxContent(source) {
           slug,
           data,
           mdx,
+        };
+      }),
+  );
+  return content;
+}
+
+export async function getMdxData(source) {
+  const contentGlob = `${source}/**/*.mdx`;
+  const files = glob.sync(contentGlob);
+
+  if (!files.length) return [];
+
+  const content = await Promise.all(
+      files.map(async (filepath) => {
+        const slug = filepath
+            .replace(source, '')
+            .replace(/^\/+/, '')
+            .replace(new RegExp(path.extname(filepath) + '$'), '');
+
+        const mdxSource = await fs.readFile(filepath);
+        const {data} = matter(mdxSource);
+        return {
+          slug,
+          data,
         };
       }),
   );

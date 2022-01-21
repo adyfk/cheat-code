@@ -5,7 +5,7 @@ import theme from 'prism-react-renderer/themes/nightOwlLight';
 const Code: React.FC<any> = ({children, className}) => {
   const language = className.replace(/language-/, '');
   return (
-    <div className='mt-2'>
+    <div className='mt-2 basis-full'>
       <Highlight
         {...defaultProps}
         theme={theme}
