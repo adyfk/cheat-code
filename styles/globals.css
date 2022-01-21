@@ -4,8 +4,15 @@
 
 
 .container-h2 {
-    @apply inline-flex w-full sm:basis-full flex-wrap items-start gap-2 mb-9;
+    @apply inline-flex w-full sm:basis-full flex-wrap items-start gap-5 mb-9;
 }
+
 .container-h3 {
-    @apply flex w-full 2xl:basis-[24.5%] lg:basis-[32.8572%] md:basis-[49.56%] sm:basis-full flex-wrap items-start;
+    @apply flex w-full 2xl:basis-[24%] lg:basis-[32%] md:basis-[49%] sm:basis-full flex-wrap items-start;
+}
+.prism-code {
+    font-size: 0.8em;
+}
+.token .comment {
+    font-size: 0.9em;
 }

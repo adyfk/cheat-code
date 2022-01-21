@@ -2,8 +2,10 @@ import {MDXRemote} from 'next-mdx-remote';
 import BlockNote from './BlockNote';
 import Code from './Code';
 import Header from './Header';
+import Link from './Link';
 
 const components = {
+  link: Link,
   code: Code,
   note: BlockNote,
   pre: ({children}:any) => <>{children}</>,
@@ -11,7 +13,7 @@ const components = {
     return (<h2 className='text-sky-900 text-2xl basis-full'>{children}</h2>);
   },
   h3: ({children, ...rest}:any) => {
-    return (<h3 className='text-sky-600 text-xl basis-full my-2'>{children}</h3>);
+    return (<h3 className='text-sky-600 text-xl basis-full mb-2'>{children}</h3>);
   },
   p: ({children}: any) => {
     return (<p className='basis-full'>{children}</p>);

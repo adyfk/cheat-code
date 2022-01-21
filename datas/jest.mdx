@@ -1,0 +1,234 @@
+---
+title: "Jest"
+version: "1.0.0"
+versionLink: "https://jestjs.io/"
+category: "Testing"
+language: "Javascript"
+used: []
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "Jest is a delightful JavaScript Testing Framework with a focus on simplicity. It works with projects using: Babel, TypeScript, Node, React, Angular, Vue and more!"
+updateAt: "21/1/2022 23:30:00"
+---             
+
+## Getting Started
+
+### Install & Init
+```bash
+  yarn add --dev jest 
+  // or
+  npm install --save-dev jest
+  // or using Babel
+  yarn add --dev babel-jest @babel/core @babel/preset-env  
+
+  // init configuration
+  jest --init
+```
+<note>
+  reference: <link to='https://jestjs.io/docs/getting-started'>Getting Started</link>
+</note>
+
+### Babel Config
+```js
+  // babel.config.js
+  module.exports = {
+    presets: [
+      [
+        '@babel/preset-env',
+        {targets: {node: 'current'}}   
+      ],
+      '@babel/preset-typescript' // Optional   
+    ],
+  };
+```
+
+## Using Matchers (expect)
+
+### Truthiness
+```js
+  expect(null).toBeNull();
+  expect(undefined).toBeDefined();
+  
+  // matches anything that an if statement  
+  expect(true).toBeTruthy();
+  expect(false).toBeFalsy();  
+
+  // not undefined
+  expect(true).toBeDefined()
+
+  expect(NAN).toBeNaN()
+
+```
+
+### Numbers
+```js
+  expect(4).toBeGreaterThan(3);
+  expect(4).toBeGreaterThanOrEqual(3.5);
+  expect(4).toBeLessThan(5);
+  expect(4).toBeLessThanOrEqual(4.5);
+
+  // toBe using (===) 
+  expect(4).toBe(4);
+  expect(4).toEqual(4);
+
+
+
+  // This won't work because of rounding error
+  expect(0.1 + 0.2).toBe(0.3);       
+  // toBeCloseTo(number, numDigits?) This works.
+  expect(0.1 + 0.2).toBeCloseTo(0.3); 
+```
+
+### String
+```js
+  // toBe using (===)
+  expect('cheat').toBe('cheat');
+  expect('cheat').toEqual('cheat');
+
+  // regex
+  expect('1').toMatch('1')
+  expect('1').toMatch(/1/)
+
+  expect('cheat').toHaveLength(5)
+```
+
+### Array
+```js
+  expect(['cheat']).toContain('cheat');
+  expect([4,3,2]).toHaveLength(3)
+  expect([{name:'cheat'}]).toContainEqual({name:'cheat'})
+  expect([{name:'cheat'}]).toMatchObject({name:'cheat'})
+```
+
+### Object
+```js
+  // toEqual to compare recursively all properties of 
+  // object instances (also known as "deep" equality)
+  const a = { name: 'cheat', birth: { date: 1 } };
+  const b = { name: 'cheat', birth: { date: 1 } }
+
+  expect(a).toEqual(b)
+
+  // toHaveProperty(keyPath, value?)
+  expect(a).toHaveProperty('name')
+  expect(a).toHaveProperty('name', 'cheat')
+  
+  // match object
+  expect(a).toMatchObject({ birth: { date: 1 } })
+```
+
+### Function
+```js
+  const drink = jest.fn((param)=>param);
+  drink('cheat', 'code');
+  expect(drink).toHaveBeenCalled();
+  expect(drink).toHaveBeenCalledTimes(1)
+  expect(drink).toHaveBeenCalledWith('cheat', 'code')
+  drink('code')
+  expect(drink).toHaveBeenLastCalledWith('code')
+  expect(drink).toHaveBeenNthCalledWith(1, 'cheat', 'code')
+  expect(drink).toHaveBeenNthCalledWith(2, 'code')
+
+  // to test that the mock function successfully returned
+  // (i.e., did not throw an error) at least one time
+  expect(drink).toHaveReturned()
+  expect(drink).toHaveReturnedTimes(2);
+  expect(drink).toHaveReturnedWith('code')
+```
+<note>
+  see: <link to='https://jestjs.io/docs/expect#tohavereturnedwithvalue'>Return</link>
+</note>
+
+### Exceptions
+```js
+  function fn() {
+      throw new Error('you are using the wrong JDK');
+  }
+
+  expect(fn).toThrow();
+  expect(fn).toThrow(Error);
+   // You can also use the exact error message or a regexp
+  expect(fn).toThrow('you are using the wrong JDK');
+  expect(fn).toThrow(/JDK/);
+
+  expect(Promise.reject(new Error('octopus')))
+    .rejects.toThrow('octopus',);
+```
+
+### Negation
+```js
+  expect(true).not.toBeNull();
+```
+
+## Mock
+
+### mockImplementation
+```js
+  const fn = jest.fn().mockImplementation(()=>{})
+  // shorthand
+  const fn = jest.fn(()=>{})
+```
+
+### mock.calls
+```js
+  const callTimesIndex = 0;
+  const callArgsIndex = 0
+  mockFn.mock.calls[callTimes][callArgs]
+  // ex: 
+  const fn = jest.fn(()=>{}) 
+  fn(1)
+  fn.mock.calls[0][0] === 1
+```
+
+### mockImplementationOnce
+```js
+  const myMockFn = jest
+    .fn()
+    .mockImplementationOnce(cb => cb(null, true))
+    .mockImplementationOnce(cb => cb(null, false));
+  myMockFn((err, val) => console.log(val)); // true
+  myMockFn((err, val) => console.log(val)); // false
+
+  const myMockFn = jest
+    .fn(() => 'default')
+    .mockImplementationOnce(() => 'first call')
+    .mockImplementationOnce(() => 'second call');
+  // 'first call', 'second call', 'default', 'default'
+  console.log(myMockFn(), myMockFn(), myMockFn(), myMockFn());
+```
+
+### mockReturnValue
+```js
+  const myMockFn = jest.fn()
+    .mockReturnValue('default')
+    .mockReturnValueOnce('first call')
+    .mockReturnValueOnce('second call');
+  // 'first call', 'second call', 'default', 'default'
+  console.log(myMockFn(), myMockFn(), myMockFn(), myMockFn());
+```
+
+### mockName
+```js
+  const mockFn = jest.fn().mockName('mockedFunction');
+  expect(mockFn).toHaveBeenCalled();
+  // result
+  // Expected mock function "mockedFunction" to have been called, but it was not called.
+```
+
+### Module
+```js
+  // SomeClass.js
+  module.exports = class SomeClass {
+    m(a, b) {}
+  };
+  //---------------------------------
+
+  // ModuleTest.js
+  jest.mock('./SomeClass'); // this happens automatically with automocking
+  const SomeClass = require('./SomeClass');
+  const mMock = jest.fn();
+  SomeClass.mockImplementation(() => ({ m: mMock }));
+  const some = new SomeClass();
+  some.m('a', 'b');
+  console.log('Calls to m: ', mMock.mock.calls);
+```

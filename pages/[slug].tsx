@@ -5,7 +5,7 @@ import Head from '@components/Head';
 export default function BlogPost({source, frontMatter}:any) {
   return (
     <>
-      <Head title={frontMatter.title} />
+      <Head title={frontMatter.title} desc={frontMatter.description}/>
       <Blog source={source} frontMatter={frontMatter}/>
     </>
   );
