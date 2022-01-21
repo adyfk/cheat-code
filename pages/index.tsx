@@ -49,8 +49,8 @@ const Home: NextPage<any> = ({contents}) => {
   );
 };
 
-export async function getStaticProps({params}:any) {
-  const posts = await getMdxData('data');
+export async function getStaticProps() {
+  const posts = await getMdxData('datas');
 
   const contents = posts.reduce((acc: any, item, index)=>{
     const category = item.data.category;

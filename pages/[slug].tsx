@@ -12,7 +12,7 @@ export default function BlogPost({source, frontMatter}:any) {
 }
 
 export async function getStaticPaths() {
-  const posts = await getMdxContent('data');
+  const posts = await getMdxContent('datas');
   const paths = posts.map(({slug}) => ({
     params: {
       slug: slug,
@@ -26,7 +26,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({params: {slug}}:any) {
-  const posts = await getMdxContent('data');
+  const posts = await getMdxContent('datas');
   const [post] = posts.filter((post) => post.slug === slug);
 
   if (!post) {
@@ -37,6 +37,7 @@ export async function getStaticProps({params: {slug}}:any) {
     props: {
       source: post.mdx,
       frontMatter: post.data,
+      slug,
     },
   };
 }
