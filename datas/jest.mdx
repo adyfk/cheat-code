@@ -49,16 +49,12 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
 ```js
   ec(null).toBeNull();
   ec(undefined).toBeDefined();
-  
   // matches anything that an if statement  
   ec(true).toBeTruthy();
   ec(false).toBeFalsy();  
-
   // not undefined
   ec(true).toBeDefined()
-
   ec(NAN).toBeNaN()
-
 ```
 
 ### Numbers
@@ -71,8 +67,6 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
   // toBe using (===) 
   ec(4).toBe(4);
   ec(4).toEqual(4);
-
-
 
   // This won't work because of rounding error
   ec(0.1 + 0.2).toBe(0.3);       
@@ -91,6 +85,31 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
   ec('1').toMatch(/1/)
 
   ec('cheat').toHaveLength(5)
+```
+
+### Array
+```js
+  ec(['cheat']).toContain('cheat');
+  ec([4,3,2]).toHaveLength(3)
+  ec([{name:'cheat'}]).toContainEqual({name:'cheat'})
+  ec([{name:'cheat'}]).toMatchObject({name:'cheat'})
+```
+
+### Object
+```js
+  // toEqual to compare recursively all properties of 
+  // object instances (also known as "deep" equality)
+  const a = { name: 'cheat', birth: { date: 1 } };
+  const b = { name: 'cheat', birth: { date: 1 } }
+
+  ec(a).toEqual(b)
+
+  // toHaveProperty(keyPath, value?)
+  ec(a).toHaveProperty('name')
+  ec(a).toHaveProperty('name', 'cheat')
+  
+  // match object
+  ec(a).toMatchObject({ birth: { date: 1 } })
 ```
 
 ### Function
@@ -115,31 +134,6 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
   see: <link to='https://jestjs.io/docs/expect#tohavereturnedwithvalue'>Return</link>
 </note>
 
-### Object
-```js
-  // toEqual to compare recursively all properties of 
-  // object instances (also known as "deep" equality)
-  const a = { name: 'cheat', birth: { date: 1 } };
-  const b = { name: 'cheat', birth: { date: 1 } }
-
-  ec(a).toEqual(b)
-
-  // toHaveProperty(keyPath, value?)
-  ec(a).toHaveProperty('name')
-  ec(a).toHaveProperty('name', 'cheat')
-  
-  // match object
-  ec(a).toMatchObject({ birth: { date: 1 } })
-```
-
-### Array
-```js
-  ec(['cheat']).toContain('cheat');
-  ec([4,3,2]).toHaveLength(3)
-  ec([{name:'cheat'}]).toContainEqual({name:'cheat'})
-  ec([{name:'cheat'}]).toMatchObject({name:'cheat'})
-```
-
 ### Exceptions
 ```js
   function fn() {
@@ -163,6 +157,7 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
 ```
 
 ## Mock
+Mock functions are also known as "spies", because they let you spy on the behavior of a function that is called indirectly by some other code, rather than only testing the output
 
 ### mockImplementation
 ```js

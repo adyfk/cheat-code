@@ -8,8 +8,16 @@
 }
 
 .container-h3 {
-    @apply flex 2xl:basis-[24%] 2xl:max-w-[24%] lg:basis-[32%] lg:max-w-[32%] md:basis-[48%] md:max-w-[48%] sm:basis-full sm:max-w-full flex-wrap items-start;
+    @apply basis-full flex flex-col max-w-full;
 }
+
+.container-col {
+    @apply flex 2xl:basis-[24%] 2xl:max-w-[24%] lg:basis-[32%] lg:max-w-[32%] md:basis-[48%] md:max-w-[48%] sm:basis-full sm:max-w-full flex-wrap items-start
+}
+
+/* .container-h3 {
+    @apply flex 2xl:basis-[24%] 2xl:max-w-[24%] lg:basis-[32%] lg:max-w-[32%] md:basis-[48%] md:max-w-[48%] sm:basis-full sm:max-w-full flex-wrap items-start;
+} */
 
 @layer utilities {
     /* Chrome, Safari and Opera */
@@ -33,6 +41,7 @@
 
 .prism-code {
     font-size: 0.8em;
+    background-color: transparent !important;
 }
 .token .comment {
     font-size: 0.9em;

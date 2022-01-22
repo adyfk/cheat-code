@@ -14,34 +14,66 @@ function transform(tree) {
 }
 
 function mappingHeaderAndChildren(between, depth) {
-  if (depth === 2) return between;
-  const [header, ...children] = between;
+  if (depth === 2) {
+    const mapChildren = (children) => {
+      const section = children.filter(({type})=>type==='section');
+      return {
+        header: children.filter(({type})=>type!=='section'),
+        section,
+        length: section.length,
+      };
+    };
 
-  return [
-    header,
-    {
-      type: 'content',
-      children,
+    const {header, section, length} = mapChildren(between);
+
+    const cells = [[], [], []];
+    for (let index = 0; index < length; index++) {
+      cells[(index % 3)].push(section[index]);
+    }
+    const cellContent = {
       data: {
         hName: 'content',
         hProperties: {
-          className: 'scrollbar overflow-x-auto flex flex-wrap basis-full border-2 rounded-lg items-start',
+          className: 'container-col',
         },
       },
-    },
-  ];
-}
+    };
 
-const borderBottom = {
-  type: 'span',
-  children: [],
-  data: {
-    hName: 'span',
-    hProperties: {
-      className: 'basis-full bg-slate-200 h-[1px] rounded-sm mt-5',
-    },
-  },
-};
+    return [
+      ...header,
+      {
+        type: 'content',
+        children: cells[0],
+        ...cellContent,
+      },
+      {
+        type: 'content',
+        children: cells[1],
+        ...cellContent,
+      },
+      {
+        type: 'content',
+        children: cells[2],
+        ...cellContent,
+      },
+    ];
+  } else {
+    const [header, ...children] = between;
+    return [
+      header,
+      {
+        type: 'content',
+        children,
+        data: {
+          hName: 'content',
+          hProperties: {
+            className: 'bg-white scrollbar overflow-x-auto flex flex-wrap basis-full border-2 rounded-lg items-start',
+          },
+        },
+      },
+    ];
+  }
+}
 
 function sectionize(node, ancestors) {
   const start = node;
@@ -61,10 +93,7 @@ function sectionize(node, ancestors) {
   const element = {
     type: 'section',
     depth: depth,
-    children: [
-      ...mappingHeaderAndChildren(between, depth),
-      depth > 2 && borderBottom,
-    ].filter(Boolean),
+    children: mappingHeaderAndChildren(between, depth),
     data: {
       hName: 'content',
       hProperties: {

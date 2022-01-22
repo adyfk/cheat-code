@@ -10,10 +10,10 @@ const components = {
   note: BlockNote,
   pre: ({children}:any) => <>{children}</>,
   h2: ({children, ...rest}:any) => {
-    return (<h2 className='text-sky-900 text-2xl basis-full'>{children}</h2>);
+    return (<h2 className='text-sky-900 text-2xl basis-full mt-5'>{children}</h2>);
   },
   h3: ({children, ...rest}:any) => {
-    return (<h3 className='text-sky-600 text-xl basis-full mb-2'>{children}</h3>);
+    return (<h3 className='text-sky-600 text-xl basis-full my-2'>{children}</h3>);
   },
   p: ({children}: any) => {
     return (<p className='basis-full text-slate-500'>{children}</p>);
