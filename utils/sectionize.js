@@ -25,7 +25,7 @@ function mappingHeaderAndChildren(between, depth) {
       data: {
         hName: 'content',
         hProperties: {
-          className: 'flex flex-wrap basis-full border-2 rounded-lg items-start',
+          className: 'scrollbar overflow-x-auto flex flex-wrap basis-full border-2 rounded-lg items-start',
         },
       },
     },

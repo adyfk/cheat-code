@@ -16,7 +16,7 @@ const components = {
     return (<h3 className='text-sky-600 text-xl basis-full mb-2'>{children}</h3>);
   },
   p: ({children}: any) => {
-    return (<p className='basis-full'>{children}</p>);
+    return (<p className='basis-full text-slate-500'>{children}</p>);
   },
   section: ({children}:any) => <div className=''>
     {children}

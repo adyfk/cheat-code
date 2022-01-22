@@ -1,6 +1,6 @@
 ---
 title: "Jest"
-version: "1.0.0"
+version: "24.4"
 versionLink: "https://jestjs.io/"
 category: "Testing"
 language: "Javascript"
@@ -19,7 +19,7 @@ updateAt: "21/1/2022 23:30:00"
   // or
   npm install --save-dev jest
   // or using Babel
-  yarn add --dev babel-jest @babel/core @babel/preset-env  
+  yarn add -D babel-jest @babel/core @babel/preset-env  
 
   // init configuration
   jest --init
@@ -43,62 +43,77 @@ updateAt: "21/1/2022 23:30:00"
 ```
 
 ## Using Matchers (expect)
+to make writing short, the "`expect`" function will use the alias "`ec`"
 
 ### Truthiness
 ```js
-  expect(null).toBeNull();
-  expect(undefined).toBeDefined();
+  ec(null).toBeNull();
+  ec(undefined).toBeDefined();
   
   // matches anything that an if statement  
-  expect(true).toBeTruthy();
-  expect(false).toBeFalsy();  
+  ec(true).toBeTruthy();
+  ec(false).toBeFalsy();  
 
   // not undefined
-  expect(true).toBeDefined()
+  ec(true).toBeDefined()
 
-  expect(NAN).toBeNaN()
+  ec(NAN).toBeNaN()
 
 ```
 
 ### Numbers
 ```js
-  expect(4).toBeGreaterThan(3);
-  expect(4).toBeGreaterThanOrEqual(3.5);
-  expect(4).toBeLessThan(5);
-  expect(4).toBeLessThanOrEqual(4.5);
+  ec(4).toBeGreaterThan(3);
+  ec(4).toBeGreaterThanOrEqual(3.5);
+  ec(4).toBeLessThan(5);
+  ec(4).toBeLessThanOrEqual(4.5);
 
   // toBe using (===) 
-  expect(4).toBe(4);
-  expect(4).toEqual(4);
+  ec(4).toBe(4);
+  ec(4).toEqual(4);
 
 
 
   // This won't work because of rounding error
-  expect(0.1 + 0.2).toBe(0.3);       
+  ec(0.1 + 0.2).toBe(0.3);       
   // toBeCloseTo(number, numDigits?) This works.
-  expect(0.1 + 0.2).toBeCloseTo(0.3); 
+  ec(0.1 + 0.2).toBeCloseTo(0.3); 
 ```
 
 ### String
 ```js
   // toBe using (===)
-  expect('cheat').toBe('cheat');
-  expect('cheat').toEqual('cheat');
+  ec('cheat').toBe('cheat');
+  ec('cheat').toEqual('cheat');
 
   // regex
-  expect('1').toMatch('1')
-  expect('1').toMatch(/1/)
+  ec('1').toMatch('1')
+  ec('1').toMatch(/1/)
 
-  expect('cheat').toHaveLength(5)
+  ec('cheat').toHaveLength(5)
 ```
 
-### Array
+### Function
 ```js
-  expect(['cheat']).toContain('cheat');
-  expect([4,3,2]).toHaveLength(3)
-  expect([{name:'cheat'}]).toContainEqual({name:'cheat'})
-  expect([{name:'cheat'}]).toMatchObject({name:'cheat'})
+  const drink = jest.fn((param)=>param);
+  drink('cheat', 'code');
+  ec(drink).toHaveBeenCalled();
+  ec(drink).toHaveBeenCalledTimes(1)
+  ec(drink).toHaveBeenCalledWith('cheat', 'code')
+  drink('code')
+  ec(drink).toHaveBeenLastCalledWith('code')
+  ec(drink).toHaveBeenNthCalledWith(1, 'cheat', 'code')
+  ec(drink).toHaveBeenNthCalledWith(2, 'code')
+
+  // to test that the mock function successfully returned
+  // (i.e., did not throw an error) at least one time
+  ec(drink).toHaveReturned()
+  ec(drink).toHaveReturnedTimes(2);
+  ec(drink).toHaveReturnedWith('code')
 ```
+<note>
+  see: <link to='https://jestjs.io/docs/expect#tohavereturnedwithvalue'>Return</link>
+</note>
 
 ### Object
 ```js
@@ -107,37 +122,23 @@ updateAt: "21/1/2022 23:30:00"
   const a = { name: 'cheat', birth: { date: 1 } };
   const b = { name: 'cheat', birth: { date: 1 } }
 
-  expect(a).toEqual(b)
+  ec(a).toEqual(b)
 
   // toHaveProperty(keyPath, value?)
-  expect(a).toHaveProperty('name')
-  expect(a).toHaveProperty('name', 'cheat')
+  ec(a).toHaveProperty('name')
+  ec(a).toHaveProperty('name', 'cheat')
   
   // match object
-  expect(a).toMatchObject({ birth: { date: 1 } })
+  ec(a).toMatchObject({ birth: { date: 1 } })
 ```
 
-### Function
+### Array
 ```js
-  const drink = jest.fn((param)=>param);
-  drink('cheat', 'code');
-  expect(drink).toHaveBeenCalled();
-  expect(drink).toHaveBeenCalledTimes(1)
-  expect(drink).toHaveBeenCalledWith('cheat', 'code')
-  drink('code')
-  expect(drink).toHaveBeenLastCalledWith('code')
-  expect(drink).toHaveBeenNthCalledWith(1, 'cheat', 'code')
-  expect(drink).toHaveBeenNthCalledWith(2, 'code')
-
-  // to test that the mock function successfully returned
-  // (i.e., did not throw an error) at least one time
-  expect(drink).toHaveReturned()
-  expect(drink).toHaveReturnedTimes(2);
-  expect(drink).toHaveReturnedWith('code')
+  ec(['cheat']).toContain('cheat');
+  ec([4,3,2]).toHaveLength(3)
+  ec([{name:'cheat'}]).toContainEqual({name:'cheat'})
+  ec([{name:'cheat'}]).toMatchObject({name:'cheat'})
 ```
-<note>
-  see: <link to='https://jestjs.io/docs/expect#tohavereturnedwithvalue'>Return</link>
-</note>
 
 ### Exceptions
 ```js
@@ -145,19 +146,20 @@ updateAt: "21/1/2022 23:30:00"
       throw new Error('you are using the wrong JDK');
   }
 
-  expect(fn).toThrow();
-  expect(fn).toThrow(Error);
-   // You can also use the exact error message or a regexp
-  expect(fn).toThrow('you are using the wrong JDK');
-  expect(fn).toThrow(/JDK/);
+  ec(fn).toThrow();
+  ec(fn).toThrow(Error);
+  
+  // string / regexp
+  ec(fn).toThrow('you are using the wrong JDK');
+  ec(fn).toThrow(/JDK/);
 
-  expect(Promise.reject(new Error('octopus')))
+  ec(Promise.reject(new Error('octopus')))
     .rejects.toThrow('octopus',);
 ```
 
 ### Negation
 ```js
-  expect(true).not.toBeNull();
+  ec(true).not.toBeNull();
 ```
 
 ## Mock
@@ -210,9 +212,60 @@ updateAt: "21/1/2022 23:30:00"
 ### mockName
 ```js
   const mockFn = jest.fn().mockName('mockedFunction');
-  expect(mockFn).toHaveBeenCalled();
+  ec(mockFn).toHaveBeenCalled();
   // result
   // Expected mock function "mockedFunction" to have been called, but it was not called.
+```
+
+### mockResolvedValue
+```js
+    const asyncMock = jest
+      .fn()
+      .mockResolvedValue('default')
+      .mockResolvedValueOnce('first call')
+      .mockResolvedValueOnce('second call');
+
+    await asyncMock(); // first call
+    await asyncMock(); // second call
+    await asyncMock(); // default
+    await asyncMock(); // default
+```
+
+### mockRejectedValue 
+```js
+  const asyncMock = jest
+    .fn()
+    .mockResolvedValueOnce('first call')
+    .mockRejectedValueOnce(new Error('Async error'));
+
+  await asyncMock(); // first call
+  await asyncMock(); // throws "Async error"
+```
+
+### MockedFunction
+<note>
+jest.MockedFunction is available in the @types/jest module from version 24.9.0
+<br/>---------------------------------<br/>
+You can use jest.MockedFunction to represent a function that has been replaced by a Jest mock.
+</note>
+
+```typescript
+  // Assume `add` is imported and used within `calculate`.
+  import add from './add';
+  import calculate from './calc';
+  jest.mock('./add');
+  // Our mock of `add` is now fully typed
+  const mockAdd = add as jest.MockedFunction<typeof add>;
+  calculate('Add', 1, 2);
+  expect(mockAdd).toBeCalledTimes(1);
+  expect(mockAdd).toBeCalledWith(1, 2);
+
+  // or using jest.fn
+  const mockAdd = jest.fn() as jest.MockedFunction<typeof add>;
+  mockAdd.mockImplementation((a, b) => a + b);
+  calculate(mockAdd, 1, 2);
+  expect(mockAdd).toBeCalledTimes(1);
+  expect(mockAdd).toBeCalledWith(1, 2);
 ```
 
 ### Module
@@ -222,7 +275,6 @@ updateAt: "21/1/2022 23:30:00"
     m(a, b) {}
   };
   //---------------------------------
-
   // ModuleTest.js
   jest.mock('./SomeClass'); // this happens automatically with automocking
   const SomeClass = require('./SomeClass');
@@ -232,3 +284,37 @@ updateAt: "21/1/2022 23:30:00"
   some.m('a', 'b');
   console.log('Calls to m: ', mMock.mock.calls);
 ```
+
+###  MockedClass
+<note>
+  jest.MockedClass is available in the @types/jest module from version 24.9.0
+</note>
+
+```typescript
+  import SoundPlayer from '../sound-player';
+  import SoundPlayerConsumer from '../sound-player-consumer';
+  jest.mock('../sound-player'); // SoundPlayer is now a mock constructor
+
+  const SoundPlayerMock = SoundPlayer as jest.MockedClass<typeof SoundPlayer>;
+
+  beforeEach(() => {
+    // Clear all instances and calls to constructor and all methods:
+    SoundPlayerMock.mockClear();
+  });
+
+  const soundPlayerConsumer = new SoundPlayerConsumer();
+  expect(SoundPlayerMock).toHaveBeenCalledTimes(1);
+
+  const coolSoundFileName = 'song.mp3';
+  soundPlayerConsumer.playSomethingCool();
+
+  // mock.instances is available with automatic mocks:
+  const mockSoundPlayerInstance = SoundPlayerMock.mock.instances[0];
+
+  // However, it will not allow access to `.mock` in TypeScript as it
+  // is returning `SoundPlayer`. Instead, you can check the calls to a
+  // method like this fully typed:
+  expect(SoundPlayerMock.prototype.playSoundFile.mock.calls[0][0])
+    .toEqual(coolSoundFileName);
+```
+
