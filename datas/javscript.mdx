@@ -1,0 +1,234 @@
+---
+title: "Javascript"
+version: ""
+versionLink: "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+category: "Programing Language"
+language: ""
+used: []
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "JavaScript (JS) is a lightweight, interpreted, or just-in-time compiled programming language with first-class functions. While it is most well-known as the scripting language for Web pages, many non-browser environments also use it, such as Node.js, Apache CouchDB and Adobe Acrobat. JavaScript is a prototype-based, multi-paradigm, single-threaded, dynamic language, supporting object-oriented, imperative, and declarative (e.g. functional programming) styles. Read more about JavaScript."
+updateAt: "27/1/2022 20:05:00"
+---             
+
+## Basic
+
+### Declaration Variables
+```js
+  var x = 1;
+  let y = 1;
+  const z = 1;
+
+  let a, b = 2, c = 'C';
+```
+
+### Data Types
+<note>JavaScript has dynamic types. This means that the same variable can be used to hold different data types:</note>
+
+```js
+  let x;           // Now x is undefined
+  x = 5;           // Now x is a Number
+  x = "John";      // Now x is a String
+```
+<note>
+  <strong>String</strong>
+</note>
+
+```js
+  let version = '123'
+  let carName1 = "version " + version;   // Using double quotes
+  let carName2 = 'version ' + version;   // Using single quotes
+  let carName3 = `version  ${version}`;   // Using backtick
+
+  // convert to string
+  let a = (123).toString()
+  let b = 123 + ''
+```
+<note>
+  <strong>Number</strong>
+</note>
+
+```js
+  let x1 = 34.00;     // Written with decimals
+  let x2 = 34;        // Written without decimals
+  let y = 123e5;      // 12300000
+  let z = 123e-5;     // 0.00123
+
+  // convert to number
+  let a = Number('123')   // 123
+  let b = +'123'          // 123
+  let c = parseInt('123') // 123
+  let d = parseFloat('123.4') // 123.4
+```
+* <strong>toExponential()</strong>	Returns a string, with a number rounded and written using exponential notation.
+* <strong>toFixed()</strong>	Returns a string, with a number rounded and written with a specified number of decimals.
+* <strong>toPrecision()</strong>	Returns a string, with a number written with a specified length
+
+<note>
+  <strong>Booleans</strong>
+</note>
+
+```js
+  let right = true;
+  let notRight = false;
+
+  // truthy
+  Boolean('name') === true;
+  Boolean(12) === true;
+  Boolean([]) === true;
+  Boolean({}) === true;
+  // falsy
+  Boolean(0) === false;
+  Boolean(undefined) === false;
+  Boolean(null) === false;
+```
+<note>
+  <strong>Arrays</strong>
+</note>
+
+```js
+  const cars1 = ["Saab", "Volvo", "BMW"];
+  const cars2 = new Array("Saab", "Volvo", "BMW");
+
+  // SET A JavaScript Set is a collection of unique values. 
+  // Each value can only occur once in a Set.
+  const cars3 = new Set(['Saab', 'Saab', 'Volvo']) // ['Saab', 'Volvo']
+
+  // A Map holds key-value pairs where the keys can be any datatype.
+  // A Map remembers the original insertion order of the keys.
+  const cars4 = new Map([
+    ["apples", 500],
+    ["bananas", 300],
+    ["oranges", 200]
+  ])
+```
+<note>
+  <strong>Objects</strong>
+</note>
+
+```js
+  const person = {
+    firstName:"John", 
+  };
+  
+  console.log(person.firstName); // Jhon
+  console.log(person['firstName']); // Jhon
+```
+
+### Data Type Checking
+
+```js
+  typeof "John"                 // Returns "string"
+  typeof 3.14                   // Returns "number"
+  typeof NaN                    // Returns "number"
+  typeof false                  // Returns "boolean"
+  typeof [1,2,3,4]              // Returns "object"
+  typeof {name:'John', age:34}  // Returns "object"
+  typeof new Date()             // Returns "object"
+  typeof function () {}         // Returns "function"
+  typeof myCar                  // Returns "undefined" *
+  typeof null                   // Returns "object"
+
+```
+
+### Function 
+```js
+  function func1(p1, p2) {
+    return p1 + p2;
+  }
+  const func2 = function(p1, p2) {
+    return p1 + p2;
+  }
+  const func3 = (p1 + p2) => { 
+    return p1 + p2;
+  }
+  const func4 = (p1 + p2) => p1 + p2;
+```
+
+###
+### Conditional
+<note>IF</note>
+
+```js
+  let data;
+
+  if(true) {
+    data = true;
+  } else {
+    data = false;
+  }
+
+  if(true) data = true
+  else  data = false
+
+  data = (true) ? true : false
+```
+<note>Switch</note>
+
+```js
+  let data;
+  switch(data){
+    case true: {
+      data = true;
+      break;
+    }
+    default: {
+      data = false;
+    }
+  }
+```
+
+### Looping
+<note>For</note>
+
+```js
+  for (let i = 0; i < 5; i++) {
+    console.log("The number is " + i;
+
+    // break;  will stop iteration
+    // continue; will skip iteration
+  }
+```
+<note>For In</note>
+
+```js
+  // for (key in object | array)
+  // if object will return key , if array will return index;
+  const person = {fname:"John", lname:"Doe", age:25}
+  for (let key in person) {
+    console.log(key) 
+  }
+  // fname, lname, age
+```
+<note>For Of</note>
+
+```js
+  // for (variable of iterable)
+
+  const cars = ["BMW", "Volvo", "Mini"];
+  for (let x of cars) {
+    console.log(x)
+  }
+  // BMW, Volvo, Mini
+```
+<note>While</note>
+
+```js
+  // while (condition) 
+  while(true){
+    console.log('invinity print')
+  }
+```
+###
+### Class
+```js
+  class Car {
+    constructor(name) {
+      this.name = name;
+    }
+    age() {
+      let date = new Date();
+      return date.getFullYear() - this.year;
+    }
+  }
+```
