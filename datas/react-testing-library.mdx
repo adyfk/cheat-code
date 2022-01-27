@@ -16,6 +16,7 @@ updateAt: "27/1/2022 20:05:00"
 ### Install & Init
 ```bash
     npm install --save-dev @testing-library/react
+    npm install --save-dev @testing-library/react-hooks
 ```
 <note>
   Ref <link to='https://testing-library.com/docs/dom-testing-library/install'>Install</link>
@@ -81,71 +82,71 @@ updateAt: "27/1/2022 20:05:00"
 ## API
 
 ### ByLabelText
-* getByLabelText
-* queryByLabelText
-* getAllByLabelText
-* queryAllByLabelText
-* findByLabelText
-* findAllByLabelText
+* <strong>getByLabelText</strong>
+* <strong>queryByLabelText</strong>
+* <strong>getAllByLabelText</strong>
+* <strong>queryAllByLabelText</strong>
+* <strong>findByLabelText</strong>
+* <strong>findAllByLabelText</strong>
 
 ### ByPlaceholderText
-* getByPlaceholderText
-* queryByPlaceholderText
-* getAllByPlaceholderText
-* queryAllByPlaceholderText
-* findByPlaceholderText
-* findAllByPlaceholderText
+* <strong>getByPlaceholderText</strong>
+* <strong>queryByPlaceholderText</strong>
+* <strong>getAllByPlaceholderText</strong>
+* <strong>queryAllByPlaceholderText</strong>
+* <strong>findByPlaceholderText</strong>
+* <strong>findAllByPlaceholderText</strong>
 
 ### ByText
-* getByText
-* queryByText
-* getAllByText
-* queryAllByText
-* findByText
-* findAllByText
+* <strong>getByText</strong>
+* <strong>queryByText</strong>
+* <strong>getAllByText</strong>
+* <strong>queryAllByText</strong>
+* <strong>findByText</strong>
+* <strong>findAllByText</strong>
 
 ### ByDisplayValue
-* getByDisplayValue
-* queryByDisplayValue
-* getAllByDisplayValue
-* queryAllByDisplayValue
-* findByDisplayValue
-* findAllByDisplayValue
+* <strong>getByDisplayValue</strong>
+* <strong>queryByDisplayValue</strong>
+* <strong>getAllByDisplayValue</strong>
+* <strong>queryAllByDisplayValue</strong>
+* <strong>findByDisplayValue</strong>
+* <strong>findAllByDisplayValue</strong>
 
 ### ByAltText 
-* getByAltText
-* queryByAltText
-* getAllByAltText
-* queryAllByAltText
-* findByAltText
-* findAllByAltText
+* <strong>getByAltText</strong>
+* <strong>queryByAltText</strong>
+* <strong>getAllByAltText</strong>
+* <strong>queryAllByAltText</strong>
+* <strong>findByAltText</strong>
+* <strong>findAllByAltText</strong>
 
 ### ByTitle
-* getByTitle
-* queryByTitle
-* getAllByTitle
-* queryAllByTitle
-* findByTitle
-* findAllByTitle
+* <strong>getByTitle</strong>
+* <strong>queryByTitle</strong>
+* <strong>getAllByTitle</strong>
+* <strong>queryAllByTitle</strong>
+* <strong>findByTitle</strong>
+* <strong>findAllByTitle</strong>
 
 ### ByRole
-* getByRole
-* queryByRole
-* getAllByRole
-* queryAllByRole
-* findByRole
-* findAllByRole
+* <strong>getByRole</strong>
+* <strong>queryByRole</strong>
+* <strong>getAllByRole</strong>
+* <strong>queryAllByRole</strong>
+* <strong>findByRole</strong>
+* <strong>findAllByRole</strong>
 
 ### ByTestId 
-* getByTestId
-* queryByTestId
-* getAllByTestId
-* queryAllByTestId
-* findByTestId
-* findAllByTestId
+* <strong>getByTestId</strong>
+* <strong>queryByTestId</strong>
+* <strong>getAllByTestId</strong>
+* <strong>queryAllByTestId</strong>
+* <strong>findByTestId</strong>
+* <strong>findAllByTestId</strong>
 
 
-## Example
+## Example React Compoennt
 
 ### Source Code
 <note>fetch.js</note>
@@ -261,5 +262,43 @@ updateAt: "27/1/2022 20:05:00"
 
     expect(screen.getByRole('alert')).toHaveTextContent('Oops, failed to fetch!')
     expect(screen.getByRole('button')).not.toBeDisabled()
+  })
+```
+
+
+## <link to='https://github.com/testing-library/react-hooks-testing-library'>Example React Custom Hook</link>
+
+### Source Code
+<note>useCounter.js</note>
+
+```js
+  import { useState, useCallback } from 'react'
+
+  function useCounter() {
+    const [count, setCount] = useState(0)
+
+    const increment = useCallback(() => setCount((x) => x + 1), [])
+
+    return { count, increment }
+  }
+
+  export default useCounter
+```
+
+### Testing
+<note>useCounter.test.js</note>
+
+```js
+  import { renderHook, act } from '@testing-library/react-hooks'
+  import useCounter from './useCounter'
+
+  test('should increment counter', () => {
+    const { result } = renderHook(() => useCounter())
+
+    act(() => {
+      result.current.increment()
+    })
+
+    expect(result.current.count).toBe(1)
   })
 ```
