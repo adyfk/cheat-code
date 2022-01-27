@@ -1,6 +1,9 @@
 
 ### Cheat Code
 
+## View Website
+
+[Link](https://cheat-code.onrender.com/ "go")
 ## Getting Started
 
 First, run the development server:
