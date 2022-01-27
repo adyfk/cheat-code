@@ -5,6 +5,7 @@ const Head: React.FC<{title?: string; desc?: string}> = ({title, desc='cheatshee
     <NextHead>
       <title>CheatCode {!!title && `- ${title}`}</title>
       <meta name="description" content={desc} />
+      <meta name="viewport" content="initial-scale=1, width=device-width" />
     </NextHead>
   );
 };

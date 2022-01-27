@@ -34,6 +34,17 @@ updateAt: "21/1/2022 23:30:00"
   // or
   yarn add --dev @testing-library/jest-dom
 ```
+<note>
+  config
+</note>
+
+```js
+  // In your own jest-setup.js (or any other name)
+  import '@testing-library/jest-dom'
+
+  // In jest.config.js add (if you haven't already)
+  setupFilesAfterEnv: ['<rootDir>/jest-setup.js']
+```
 
 ### Babel Config
 ```js
@@ -178,21 +189,89 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
 ### Promise 
 ```js
   test('resolves to lemon', async () => {
-    await expect(Promise.resolve('lemon')).resolves.toBe('lemon');
-    await expect(Promise.resolve('lemon')).resolves.not.toBe('octopus');
+    await ec(Promise.resolve('lemon')).resolves.toBe('lemon');
+    await ec(Promise.resolve('lemon')).resolves.not.toBe('octopus');
   });
   test('rejects to octopus', () => {
     // make sure to add a return statement
-    return expect(Promise.reject(new Error('octopus'))).rejects.toThrow(
+    return ec(Promise.reject(new Error('octopus'))).rejects.toThrow(
       'octopus',
     );
   });
+```
+
+###
+
+### DOM 1
+<note>
+  Reference:  <link to='https://github.com/testing-library/jest-dom'>Getting Started</link>
+</note>
+
+```js
+  // button, input, select, textarea, optgroup, option, fieldset
+  ec().toBeDisabled()
+  ec().toBeEnabled()
+  // Element not found when query element
+  ec().toBeEmptyDOMElement()
+  // Element found when query element
+  ec().toBeInTheDocument()
+  // if it has an aria-invalid attribute with no value or a value of "true"
+  ec().toBeInvalid()
+  // if it is having a required or aria-required="true" attribute.
+  ec().toBeRequired()
+  //  if it has no aria-invalid attributes or an attribute value of "false"
+  ec().toBeValid()
+
+  // it is present in the document
+  // it does not have its css property display set to none
+  // it does not have its css property visibility set to either hidden or collapse
+  // it does not have its css property opacity set to 0
+  // its parent element is also visible (and so on up to the top of the DOM tree)
+  // it does not have the hidden attribute
+  // if <details /> it has the open attribute
+  ec().toBeVisible()
+  // <span data-testid="ancestor"><span data-testid="descendant"></span></span>
+  // ex : expect(ancestor).toContainElement(descendant)
+  ec().toContainElement(HTMLElement | SVGElement | null)
+  // <span data-testid="parent"><span data-testid="child"></span></span>
+  // ex : expect(getByTestId('parent')).toContainHTML('<span data-testid="child" />')
+  ec().toContainHTML()
+```
+
+### DOM 2
+<note> detail: <link to='https://github.com/testing-library/jest-dom#tohaveaccessibledescription'>toHaveAccessibleDescription</link></note>
+
+```js
+  ec().toHaveAccessibleDescription(text: string | RegExp)
+  ec().toHaveAccessibleName(text: string | RegExp)
+  ec().toHaveAttribute(attr: string, value?: any)
+  ec().toHaveClass(...classNames: string[], options?: {exact: boolean})
+  ec().toHaveFocus()
+  ec().toHaveFormValues({ [name: string]: any })
+  // ex: expect(getByTestId('login-form')).toHaveFormValues({ username: 'jane.doe' })
+  ec().toHaveStyle(string | object)
+  ec().toHaveTextContent(text: string | RegExp, options?: {normalizeWhitespace: boolean})
+  ec().toHaveValue(value: string | string[] | number)
+  ec().toHaveDisplayValue(value: string | RegExp | (string|RegExp)[]))
+  // It accepts an input of type checkbox or radio and elements with a role of checkbox,
+  // radio or switch with a valid aria-checked attribute of "true" or "false"
+  ec().toBeChecked()
+  // It accepts an input of type checkbox and elements with a role of checkbox with 
+  // a aria-checked="mixed", or input of type checkbox with indeterminate set to true
+  ec().toBePartiallyChecked()
+  // Use the aria-errormessage attribute to reference another element that contains custom error message text. Multiple ids is NOT allowed.
+  // Authors MUST use aria-invalid in conjunction with aria-errormessage
+  // When a string argument is passed through, it will perform a whole case-sensitive match to the error message text.
+  // To perform a case-insensitive match, you can use a RegExp with the /i modifier.
+  // To perform a partial match, you can pass a RegExp or use expect.stringContaining("partial string").
+  ec().toHaveErrorMessage(text: string | RegExp)
 ```
 
 ### Negation
 ```js
   ec(true).not.toBeNull();
 ```
+
 
 ## Mock
 Mock functions are also known as "spies", because they let you spy on the behavior of a function that is called indirectly by some other code, rather than only testing the output
