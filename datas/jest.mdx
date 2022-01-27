@@ -199,6 +199,22 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
     );
   });
 ```
+<note>Assert</note> 
+
+```js
+  // expect.assertions(number) verifies that a certain number of assertions are called during a test
+  test('doAsync calls both callbacks', () => {
+    expect.assertions(2);
+    // The expect.assertions(2) call ensures that both callbacks actually get called
+    const callback1 = (data) => expect(data).toBeTruthy();
+    function callback2 = (data) => expect(data).toBeTruthy();
+    doAsync(callback1, callback2);
+  });
+
+  // verifies that at least one assertion is called during a test.
+  expect.hasAssertions()
+  
+```
 
 ###
 
@@ -237,6 +253,8 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
   // ex : expect(getByTestId('parent')).toContainHTML('<span data-testid="child" />')
   ec().toContainHTML()
 ```
+
+###
 
 ### DOM 2
 <note> detail: <link to='https://github.com/testing-library/jest-dom#tohaveaccessibledescription'>toHaveAccessibleDescription</link></note>
