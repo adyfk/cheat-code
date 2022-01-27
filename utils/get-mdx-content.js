@@ -3,7 +3,7 @@ import path from 'path';
 import {serialize} from 'next-mdx-remote/serialize';
 import matter from 'gray-matter';
 import glob from 'fast-glob';
-
+import remarkGfm from 'remark-gfm';
 import sectionize from './sectionize';
 
 export async function getMdxContent(source) {
@@ -23,7 +23,7 @@ export async function getMdxContent(source) {
         const {content, data} = matter(mdxSource);
         const mdx = await serialize(content, {
           mdxOptions: {
-            remarkPlugins: [sectionize],
+            remarkPlugins: [sectionize, remarkGfm],
           },
         });
         return {

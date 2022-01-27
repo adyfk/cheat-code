@@ -8,6 +8,12 @@ const components = {
   link: Link,
   code: Code,
   note: BlockNote,
+  table: ({children}: any) => <table className="divide-y divide-gray-200">{children}</table>,
+  tr: ({children}: any) => <tr>{children}</tr>,
+  th: ({children}: any) => <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{children}</th>,
+  td: ({children}: any) => <td className="px-5 py-2 whitespace-nowrap text-sky-700">{children}</td>,
+  thead: ({children}: any) => <thead className="bg-slate-200">{children}</thead>,
+  tbody: ({children}: any) => <tbody className="bg-white divide-y divide-gray-200">{children}</tbody>,
   pre: ({children}:any) => <>{children}</>,
   h2: ({children, ...rest}:any) => {
     return (<h2 className='text-sky-900 text-2xl basis-full mt-5'>{children}</h2>);
