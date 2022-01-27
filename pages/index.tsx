@@ -33,7 +33,7 @@ const Home: NextPage<any> = ({contents}) => {
                             </a>
                           )}
                           {data.language &&(
-                            <span className='text-sm text-green-300 ml-2'>({data.language})</span>
+                            <span className='text-sm text-green-600 ml-2'>({data.language})</span>
                           )}
                         </li>
                       );
