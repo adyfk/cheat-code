@@ -202,10 +202,12 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
 <note>Assert</note> 
 
 ```js
-  // expect.assertions(number) verifies that a certain number of assertions are called during a test
+  // expect.assertions(number) verifies that a certain number of 
+  // assertions are called during a test
   test('doAsync calls both callbacks', () => {
     expect.assertions(2);
-    // The expect.assertions(2) call ensures that both callbacks actually get called
+    // The expect.assertions(2) call ensures 
+    // that both callbacks actually get called
     const callback1 = (data) => expect(data).toBeTruthy();
     function callback2 = (data) => expect(data).toBeTruthy();
     doAsync(callback1, callback2);
@@ -291,8 +293,34 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
 ```
 
 
-## Mock
+## <link to='https://jestjs.io/docs/mock-function-api'>Mock</link>
 Mock functions are also known as "spies", because they let you spy on the behavior of a function that is called indirectly by some other code, rather than only testing the output
+
+### Mock Usefull
+<note>
+  <strong>Mock Clear</strong><br/>
+  Clears all information stored in the mockFn.mock.calls, mockFn.mock.instances and mockFn.mock.results arrays.
+</note>
+
+```js
+  mockFn.mockClear()
+```
+<note>
+  <strong>Mock Reset</strong><br/>
+  Does everything that mockFn.mockClear() does, and also removes any mocked return values or implementations.
+</note>
+
+```js
+  mockFn.mockReset()
+```
+<note>
+  <strong>Mock Restore</strong><br/>
+  This is useful when you want to mock functions in certain test cases and restore the original implementation in others.
+</note>
+
+```js
+  mockFn.mockRestore()
+```
 
 ### Mock Name
 ```js
@@ -307,13 +335,6 @@ Mock functions are also known as "spies", because they let you spy on the behavi
   const fn = jest.fn().mockImplementation(()=>{})
   // shorthand
   const fn = jest.fn(()=>{})
-
-  const myMockFn = jest
-    .fn()
-    .mockImplementationOnce(cb => cb(null, true))
-    .mockImplementationOnce(cb => cb(null, false));
-  myMockFn((err, val) => console.log(val)); // true
-  myMockFn((err, val) => console.log(val)); // false
 
   const myMockFn = jest
     .fn(() => 'default')
@@ -385,11 +406,7 @@ Mock functions are also known as "spies", because they let you spy on the behavi
   jest.mock('./SomeClass'); // this happens automatically with automocking
   const SomeClass = require('./SomeClass');
   const mMock = jest.fn();
-  
   SomeClass.mockImplementation(() => ({ m: mMock }));
-  const some = new SomeClass();
-  some.m('a', 'b');
-  console.log('Calls to m: ', mMock.mock.calls);
 ```
 
 ### Typescript Mocked Module
@@ -407,18 +424,12 @@ You can use jest.MockedFunction to represent a function that has been replaced b
   // Our mock of `add` is now fully typed
   const mockAdd = add as jest.MockedFunction<typeof add>;
   calculate('Add', 1, 2);
-  expect(mockAdd).toBeCalledTimes(1);
-  expect(mockAdd).toBeCalledWith(1, 2);
 
   // or using jest.fn
   const mockAdd = jest.fn() as jest.MockedFunction<typeof add>;
   mockAdd.mockImplementation((a, b) => a + b);
   calculate(mockAdd, 1, 2);
-  expect(mockAdd).toBeCalledTimes(1);
-  expect(mockAdd).toBeCalledWith(1, 2);
 ```
-
-###
 
 ### Typescript Mock Class Module
 <note>
@@ -439,22 +450,10 @@ You can use jest.MockedFunction to represent a function that has been replaced b
 
   const soundPlayerConsumer = new SoundPlayerConsumer();
   expect(SoundPlayerMock).toHaveBeenCalledTimes(1);
-
-  const coolSoundFileName = 'song.mp3';
-  soundPlayerConsumer.playSomethingCool();
-
-  // mock.instances is available with automatic mocks:
-  const mockSoundPlayerInstance = SoundPlayerMock.mock.instances[0];
-
-  // However, it will not allow access to `.mock` in TypeScript as it
-  // is returning `SoundPlayer`. Instead, you can check the calls to a
-  // method like this fully typed:
-  expect(SoundPlayerMock.prototype.playSoundFile.mock.calls[0][0])
-    .toEqual(coolSoundFileName);
 ```
 
-
-## Jest Object
+## <link to='https://jestjs.io/docs/jest-object'>Jest Object</link>
+The jest object is automatically in scope within every test file. The methods in the jest object help create mocks and let you control Jest's overall behavior. It can also be imported explicitly by via 
 
 ### Mocking 
 ```js
@@ -484,6 +483,31 @@ You can use jest.MockedFunction to represent a function that has been replaced b
     jest.doMock('../moduleName', () => jest.fn(() => 2));
   });
 ```
+<note>
+  <strong>SpyOn</strong> <br/>
+  Creates a mock function similar to jest.fn but also tracks calls to object[methodName]
+</note>
+
+```js
+  // jest.spyOn(object, methodName, accessType?)
+  const video = require('./video');
+  test('plays video', () => {
+    const spy = jest.spyOn(video, 'play');
+    video.play();
+
+    expect(spy).toHaveBeenCalled();
+    spy.mockRestore();
+  });
+```
+
+<note>
+  <strong>Deep mock</strong><br/>
+  The mocked test helper provides typings on your mocked modules and even their deep methods, based on the typing of its source
+</note>
+
+```js
+  jest.mocked<T>(item: T, deep = false)
+```
 
 ### Craete Mock From Module
 <note>
@@ -511,3 +535,44 @@ You can use jest.MockedFunction to represent a function that has been replaced b
     expect(utils.isAuthorized('not wizard')).toEqual(true);
   });
 ```
+
+### Actual Function
+```js
+  jest.mock('../myModule', () => {
+    // Require the original module to not be mocked...
+    const originalModule = jest.requireActual('../myModule');
+    return {
+      __esModule: true, // Use it when dealing with esModules
+      ...originalModule,
+      getRandom: jest.fn().mockReturnValue(10),
+    };
+  });
+```
+
+###
+
+### Clear Mock
+<note>
+  Clears the mock.calls, mock.instances and mock.results properties of all mocks
+  Equivalent to calling .mockClear() on every mocked function.
+</note>
+
+```js
+  jest.clearAllMocks()
+```
+<note>
+  Resets the state of all mocks. Equivalent to calling .mockReset() on every mocked function.
+</note>
+
+```js
+  jest.resetAllMocks()
+```
+<note>
+  Restores all mocks back to their original value. Equivalent to calling .mockRestore() on every mocked function. Beware that jest.restoreAllMocks() only works when the mock was created with jest.spyOn
+</note>
+
+```js
+  jest.restoreAllMocks()
+```
+
+### <link to='https://jestjs.io/docs/jest-object#mock-timers'>Mock Timers</link>
