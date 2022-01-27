@@ -28,6 +28,13 @@ updateAt: "21/1/2022 23:30:00"
   reference: <link to='https://jestjs.io/docs/getting-started'>Getting Started</link>
 </note>
 
+### Install Jest-Dom
+```bash
+  npm install --save-dev @testing-library/jest-dom
+  // or
+  yarn add --dev @testing-library/jest-dom
+```
+
 ### Babel Config
 ```js
   // babel.config.js
@@ -40,6 +47,23 @@ updateAt: "21/1/2022 23:30:00"
       '@babel/preset-typescript' // Optional   
     ],
   };
+```
+
+### Setup and Teardown
+```js
+  beforeAll(() => console.log('1 - beforeAll'));
+  afterAll(() => console.log('1 - afterAll'));
+  beforeEach(() => console.log('1 - beforeEach'));
+  afterEach(() => console.log('1 - afterEach'));
+  test('test-case', () => console.log('1 - test'));
+  describe('Scoped / Nested block', () => {
+    beforeAll(() => console.log('2 - beforeAll'));
+    afterAll(() => console.log('2 - afterAll'));
+    beforeEach(() => console.log('2 - beforeEach'));
+    afterEach(() => console.log('2 - afterEach'));
+    test('test-case', () => console.log('2 - test'));
+  });
+  // 1 - beforeAll, 1 - beforeEach, 1 - test, 1 - afterEach, 2 - beforeAll, 1 - beforeEach, 2 - beforeEach, 2 - test, 2 - afterEach, 1 - afterEach, 2 - afterAll, 1 - afterAll
 ```
 
 ## Using Matchers (expect)
@@ -151,6 +175,20 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
     .rejects.toThrow('octopus',);
 ```
 
+### Promise 
+```js
+  test('resolves to lemon', async () => {
+    await expect(Promise.resolve('lemon')).resolves.toBe('lemon');
+    await expect(Promise.resolve('lemon')).resolves.not.toBe('octopus');
+  });
+  test('rejects to octopus', () => {
+    // make sure to add a return statement
+    return expect(Promise.reject(new Error('octopus'))).rejects.toThrow(
+      'octopus',
+    );
+  });
+```
+
 ### Negation
 ```js
   ec(true).not.toBeNull();
@@ -159,26 +197,20 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
 ## Mock
 Mock functions are also known as "spies", because they let you spy on the behavior of a function that is called indirectly by some other code, rather than only testing the output
 
-### mockImplementation
+### Mock Name
+```js
+  const mockFn = jest.fn().mockName('mockedFunction');
+  ec(mockFn).toHaveBeenCalled();
+  // result
+  // Expected mock function "mockedFunction" to have been called, but it was not called.
+```
+
+### Mock Implementation
 ```js
   const fn = jest.fn().mockImplementation(()=>{})
   // shorthand
   const fn = jest.fn(()=>{})
-```
 
-### mock.calls
-```js
-  const callTimesIndex = 0;
-  const callArgsIndex = 0
-  mockFn.mock.calls[callTimes][callArgs]
-  // ex: 
-  const fn = jest.fn(()=>{}) 
-  fn(1)
-  fn.mock.calls[0][0] === 1
-```
-
-### mockImplementationOnce
-```js
   const myMockFn = jest
     .fn()
     .mockImplementationOnce(cb => cb(null, true))
@@ -194,7 +226,18 @@ Mock functions are also known as "spies", because they let you spy on the behavi
   console.log(myMockFn(), myMockFn(), myMockFn(), myMockFn());
 ```
 
-### mockReturnValue
+### Get History Args
+```js
+  const callTimesIndex = 0;
+  const callArgsIndex = 0
+  mockFn.mock.calls[callTimes][callArgs]
+  // ex: 
+  const fn = jest.fn(()=>{}) 
+  fn(1)
+  fn.mock.calls[0][0] === 1
+```
+
+### Mock Return
 ```js
   const myMockFn = jest.fn()
     .mockReturnValue('default')
@@ -204,15 +247,9 @@ Mock functions are also known as "spies", because they let you spy on the behavi
   console.log(myMockFn(), myMockFn(), myMockFn(), myMockFn());
 ```
 
-### mockName
-```js
-  const mockFn = jest.fn().mockName('mockedFunction');
-  ec(mockFn).toHaveBeenCalled();
-  // result
-  // Expected mock function "mockedFunction" to have been called, but it was not called.
-```
+### Mock Rejected & Resolved
+<note>Resolved</note>
 
-### mockResolvedValue
 ```js
     const asyncMock = jest
       .fn()
@@ -225,19 +262,40 @@ Mock functions are also known as "spies", because they let you spy on the behavi
     await asyncMock(); // default
     await asyncMock(); // default
 ```
+<note>Rejected</note>
 
-### mockRejectedValue 
 ```js
   const asyncMock = jest
     .fn()
-    .mockResolvedValueOnce('first call')
+    .mockRejectedValue(new Error('Async error 1'))
     .mockRejectedValueOnce(new Error('Async error'));
 
-  await asyncMock(); // first call
+  await asyncMock(); // throws "Async error 1"
   await asyncMock(); // throws "Async error"
 ```
 
-### MockedFunction
+### Mock Module
+<note>SomeClass.js</note>
+
+```js
+  module.exports = class SomeClass {
+    m(a, b) {}
+  };
+```
+<note>test.js</note>
+
+```js
+  jest.mock('./SomeClass'); // this happens automatically with automocking
+  const SomeClass = require('./SomeClass');
+  const mMock = jest.fn();
+  
+  SomeClass.mockImplementation(() => ({ m: mMock }));
+  const some = new SomeClass();
+  some.m('a', 'b');
+  console.log('Calls to m: ', mMock.mock.calls);
+```
+
+### Typescript Mocked Module
 <note>
 jest.MockedFunction is available in the @types/jest module from version 24.9.0
 <br/>---------------------------------<br/>
@@ -263,24 +321,9 @@ You can use jest.MockedFunction to represent a function that has been replaced b
   expect(mockAdd).toBeCalledWith(1, 2);
 ```
 
-### Module
-```js
-  // SomeClass.js
-  module.exports = class SomeClass {
-    m(a, b) {}
-  };
-  //---------------------------------
-  // ModuleTest.js
-  jest.mock('./SomeClass'); // this happens automatically with automocking
-  const SomeClass = require('./SomeClass');
-  const mMock = jest.fn();
-  SomeClass.mockImplementation(() => ({ m: mMock }));
-  const some = new SomeClass();
-  some.m('a', 'b');
-  console.log('Calls to m: ', mMock.mock.calls);
-```
+###
 
-###  MockedClass
+### Typescript Mock Class Module
 <note>
   jest.MockedClass is available in the @types/jest module from version 24.9.0
 </note>
@@ -313,3 +356,61 @@ You can use jest.MockedFunction to represent a function that has been replaced b
     .toEqual(coolSoundFileName);
 ```
 
+
+## Jest Object
+
+### Mocking 
+```js
+  jest.enableAutomock();
+  jest.disableAutomock();
+
+  // or you can set to jest config  
+  {
+    "automock": true
+  }
+  // or manualy mock
+  jest.mock(moduleName, factory, options)
+  // ex = jest.mock('../moduleName', () => jest.fn(() => 42));
+  jest.unmock(moduleName)
+```
+<note>
+  <strong>doMock</strong> <br/>
+  When using babel-jest, calls to mock will automatically be hoisted to the top of the code block. Use this method if you want to explicitly avoid this behavior.
+</note>
+
+
+```js
+  test('moduleName 1', () => {
+    jest.doMock('../moduleName', () => jest.fn(() => 1));
+  });
+  test('moduleName 1', () => {
+    jest.doMock('../moduleName', () => jest.fn(() => 2));
+  });
+```
+
+### Craete Mock From Module
+<note>
+  utils.js  
+</note>
+
+```js
+  export default {
+    authorize: () => {
+      return 'token';
+    },
+    isAuthorized: secret => secret === 'wizard',
+  };
+```
+<note>
+  test.js  
+</note>
+
+```js
+  const utils = jest.createMockFromModule('./utils').default;
+  utils.isAuthorized = jest.fn(secret => secret === 'not wizard');
+
+  test('implementation created by jest.createMockFromModule', () => {
+    expect(utils.authorize.mock).toBeTruthy();
+    expect(utils.isAuthorized('not wizard')).toEqual(true);
+  });
+```
