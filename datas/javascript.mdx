@@ -230,5 +230,24 @@ updateAt: "27/1/2022 20:05:00"
       let date = new Date();
       return date.getFullYear() - this.year;
     }
+    setName(name){
+      this.name;
+    }
+    // implement setter getter
+    get ageG(){
+      return this.date.getFullYear() - this.year;
+    }
+    set setNameS(name){
+      this.name;
+    }
   }
+  
+  const myCar = new Car("code")
+  // same
+  console.log(myCar.age())
+  console.log(myCar.ageG)
+  
+  // same
+  myCar.setName("Cheat")
+  myCar.setName = "Code"
 ```
