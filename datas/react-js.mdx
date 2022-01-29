@@ -1,0 +1,218 @@
+---
+title: "React JS"
+version: "17.0.2"
+versionLink: "https://reactjs.org/docs/getting-started.html"
+category: "Framework"
+language: "Javascript"
+used: []
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "React is a JavaScript library for building user interfaces"
+updateAt: "29/1/2022 19:05:00"
+---             
+
+## Getting Started
+
+### Installation
+```bash
+  npx create-react-app project-name
+```
+
+## LifeCycle Class Component
+
+reference:  <link to='https://reactjs.org/docs/react-component.html'>React Component</link>
+
+<img width='100%' src='/lifecycle-react-js.png'/>
+
+### Constructor
+
+```jsx
+  class LifeCycle extends React.Component {
+    constructor(props){
+      super(props);
+      // Don't call this.setState() here!
+      this.state = { counter: 0 };
+      this.handleClick = this.handleClick.bind(this);
+    }
+  }
+```
+<desc>
+  The constructor for a React component is called before it is mounted
+</desc>
+
+```jsx
+  constructor(props) {
+    super(props);
+    // Don't do this!
+    this.state = { color: props.color };
+  }
+```
+
+### getDerivedStateFromProps
+
+```jsx
+  class LifeCycle extends React.Component {
+    this.state = {}
+    static getDerivedStateFromProps(props, state){
+      return {
+        ...state,
+        no: props.no;
+      }
+    }
+  }
+```
+<desc>
+  invoked right before calling the render method, both on the initial mount and on subsequent updates.
+  It should return an object to update the state, or null to update nothing
+</desc>
+
+### UNSAFE_componentWillMount
+
+```jsx
+  class LifeCycle extends React.Component {
+    this.state = {}
+    static getDerivedStateFromProps(props, state){
+      return {
+        ...state,
+        no: props.no;
+      }
+    }
+  }
+```
+<desc>
+  invoked just before mounting occurs. It is called before render(), therefore calling setState() synchronously in this method will not trigger an extra rendering. Generally, we recommend using the constructor() instead for initializing state  
+</desc>
+<danger>
+  This lifecycle was previously named componentWillMount. That name will continue to work until version 17
+</danger>
+
+### componentDidMount
+
+```jsx
+  class LifeCycle extends React.Component {
+    componentDidMount(){}
+  }
+```
+<desc>
+  invoked immediately after a component is mounted (inserted into the tree).
+  You may call setState() immediately in componentDidMount(). It will trigger an extra rendering
+</desc>
+
+### UNSAFE_componentWillReceiveProps
+
+```jsx
+  class LifeCycle extends React.Component {
+    UNSAFE_componentWillReceiveProps(nextProps)(){
+
+    }
+  }
+```
+<desc>
+  invoked before a mounted component receives new props. If you need to update the state in response to prop changes (for example, to reset it)<br/>
+  you may compare this.props and nextProps and perform state transitions using this.setState()
+</desc>
+<danger>
+  This lifecycle was previously named componentWillReceiveProps. That name will continue to work until version 17
+</danger>
+
+### shouldComponentUpdate
+
+```jsx
+  class LifeCycle extends React.Component {
+    shouldComponentUpdate(nextProps, nextState){
+
+    }
+  }
+```
+<desc>
+  invoked before rendering when new props or state are being received. Defaults to true. This method is not called for the initial render or when forceUpdate() is used.
+</desc>
+<note>
+  if shouldComponentUpdate() returns false, then UNSAFE_componentWillUpdate(), render(), and componentDidUpdate() will not be invoked 
+</note>
+
+### getSnapshotBeforeUpdate
+
+```jsx
+  class LifeCycle extends React.Component {
+    getSnapshotBeforeUpdate(prevProps, prevState){
+      // Are we adding new items to the list?
+      // Capture the scroll position so we can adjust scroll later.
+      if (prevProps.list.length < this.props.list.length) {
+        const list = this.listRef.current;
+        return list.scrollHeight - list.scrollTop;
+      }
+      return null;
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+      // If we have a snapshot value, we've just added new items.
+      // Adjust scroll so these new items don't push the old ones out of view.
+      // (snapshot here is the value returned from getSnapshotBeforeUpdate)
+      if (snapshot !== null) {
+        const list = this.listRef.current;
+        list.scrollTop = list.scrollHeight - snapshot;
+      }
+    }
+  }
+```
+<desc>
+  invoked right before the most recently rendered output is committed to e.g. the DOM
+</desc>
+
+### componentDidUpdate
+
+```jsx
+  class LifeCycle extends React.Component {
+    componentDidUpdate(prevProps, prevState, snapshot) {}
+  }
+```
+<desc>
+   invoked immediately after updating occurs. This method is not called for the initial render
+</desc>
+<note>
+  componentDidUpdate() will not be invoked if shouldComponentUpdate() returns false.
+</note>
+
+
+### getDerivedStateFromError
+
+```jsx
+  class LifeCycle extends React.Component {
+    static getDerivedStateFromError(error) {
+      // Update state so the next render will show the fallback UI.
+      return { hasError: true };
+    }
+  }
+```
+<desc>
+  invoked after an error has been thrown by a descendant component.
+</desc>
+
+###
+### componentDidCatch
+
+```jsx
+   class LifeCycle extends React.Component {
+     // error - The error that was thrown.
+     // info - An object with a componentStack key containing 
+     //        information about which component threw the error.
+     componentDidCatch(error, info){}
+   }
+```
+<desc>
+  invoked after an error has been thrown by a descendant component
+</desc>
+
+### componentWillUnmount
+
+```jsx
+   class LifeCycle extends React.Component {
+     // error - The error that was thrown.
+     // info - An object with a componentStack key containing 
+     //        information about which component threw the error.
+     componentDidCatch(error, info){}
+   }
+```
+<desc>
+  invoked immediately before a component is unmounted and destroyed
+</desc>

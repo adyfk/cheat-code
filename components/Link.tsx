@@ -1,6 +1,6 @@
 const Link: React.FC<{to: string}> = ({to, children}) => {
   return (
-    <a className="hover:text-sky-900" href={to}>
+    <a className="hover:text-sky-900 underline" href={to}>
       {children}
     </a>
   );
