@@ -18,6 +18,168 @@ updateAt: "29/1/2022 22:05:00"
   npx create-react-app project-name
 ```
 
+## React API
+
+### createContext
+<desc>
+  Context is designed to share data that can be considered “global” for a tree of React components, such as the current authenticated user, theme, or preferred language
+</desc>
+
+```jsx
+  const ThemeContext = React.createContext('light');
+
+  class Class{
+    static contextType = ThemeContext;
+    render(){
+      console.log(this.context)
+    }
+  }
+
+  class Consumer{
+    render(){
+      return (
+        <ThemeContext.Consumer>
+          {value => /* render something based on the context value */}
+        </ThemeContext.Consumer>
+      )
+    }
+  }
+  
+  function Hooks(){
+    const value = useContext(ThemeContext)
+  }
+
+  function App(){
+    return (
+      <ThemeContext.Provider value="dark">
+        <Class />
+        <Consumer />
+        <Hooks />
+      </ThemeContext.Provider>
+    )
+  }
+```
+
+### memo 
+
+```jsx
+  React.memo(MyComponent, areEqual: (prevProps, nextProps)=>);
+```
+<desc>
+  return true if passing nextProps to render would return
+  the same result as passing prevProps to render,
+  otherwise return false
+</desc>
+
+### createElement
+
+```jsx
+  React.createElement(
+    type: 'div' | "span" | 'etc',
+    [props],
+    [...children]
+  )
+```
+
+###
+### cloneElement
+
+```jsx
+  React.cloneElement(
+    element,
+    [config],
+    [...children]
+  )
+```
+<desc>
+  React.cloneElement() is almost equivalent to:
+</desc>
+
+```jsx
+  <element.type {...element.props} {...props}>
+    {children}
+  </element.type>
+```
+
+### createFactory
+
+```jsx
+  React.createFactory(type)
+```
+<desc>
+  Return a function that produces React elements of a given type. Like React.createElement(), the type argument can be either a tag name string (such as 'div' or 'span'), a React component type (a class or a function), or a React fragment type.
+</desc>
+
+###
+### isValidElement
+
+```jsx
+  React.isValidElement(object)
+```
+<desc>
+  Verifies the object is a React element. Returns true or false.  
+</desc>
+
+### Children
+
+```jsx
+  React.Children.map(children, function[(thisArg)])
+  React.Children.forEach(children, function[(thisArg)])
+  React.Children.count(children)
+  // Returns the total number of components in children
+  React.Children.only(children)
+  // Verifies that children has only one child
+  React.Children.toArray(children)
+  // Returns the children opaque data structure as a flat array with keys assigned to each child
+```
+<note>
+  If children is a Fragment it will be treated as a single child and not traversed.
+</note>
+
+```jsx
+  // sample implement
+  React.Children.map(children, child => (
+    <>
+      {React.cloneElement(
+        child, 
+        {style: {...child.props.style, opacity: 0.5}}
+      )}
+    </>
+  )))
+```
+
+### createRef & forwardRef
+
+```jsx
+  const FancyButton = React.forwardRef((props, ref) => (
+    <button ref={ref} className="FancyButton">
+      {props.children}
+    </button>
+  ));
+
+  // You can now get a ref directly to the DOM button:
+  const ref = React.createRef();
+  <FancyButton ref={ref}>Click me!</FancyButton>;
+```
+
+### lazy & Suspense
+<desc>
+  <strong>lazy</strong> = lets you define a component that is loaded dynamically<br/>
+  <strong>Suspense</strong> =  lets you specify the loading indicator in case some components in the tree below it are not yet ready to render
+</desc>
+
+```jsx
+  const SomeComponent = React.lazy(() => import('./SomeComponent'));
+
+  function MyComponent(){
+    return (
+      <React.Suspense fallback={<Spinner />}>
+        <SomeComponent />
+      </React.Suspense>
+    )
+  }
+```
+
 ## Life Cycle Class Component
 
 reference:  <link to='https://reactjs.org/docs/react-component.html'>React Component</link>
