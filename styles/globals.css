@@ -4,7 +4,7 @@
 
 
 .container-h2 {
-    @apply flex sm:basis-full flex-wrap items-start gap-5 mb-9;
+    @apply w-full flex sm:basis-full flex-wrap items-start gap-5 mb-9;
 }
 
 .container-h3 {
