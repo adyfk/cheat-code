@@ -12,7 +12,7 @@
 }
 
 .container-col {
-    @apply flex 2xl:basis-[24%] 2xl:max-w-[24%] lg:basis-[32%] lg:max-w-[32%] md:basis-[48%] md:max-w-[48%] sm:basis-full sm:max-w-full flex-wrap items-start;
+    @apply w-full flex 2xl:basis-[24%] 2xl:max-w-[24%] lg:basis-[32%] lg:max-w-[32%] md:basis-[48%] md:max-w-[48%] sm:basis-full sm:max-w-full flex-wrap items-start;
 }
 
 /* .container-h3 {
