@@ -46,3 +46,7 @@
 .token .comment {
     font-size: 0.9em;
 }
+
+body { 
+    @apply w-full;
+}
