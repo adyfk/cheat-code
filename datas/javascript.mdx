@@ -60,10 +60,6 @@ updateAt: "27/1/2022 20:05:00"
   let c = parseInt('123') // 123
   let d = parseFloat('123.4') // 123.4
 ```
-* <strong>toExponential()</strong>	Returns a string, with a number rounded and written using exponential notation.
-* <strong>toFixed()</strong>	Returns a string, with a number rounded and written with a specified number of decimals.
-* <strong>toPrecision()</strong>	Returns a string, with a number written with a specified length
-
 <note>
   <strong>Booleans</strong>
 </note>
@@ -128,7 +124,6 @@ updateAt: "27/1/2022 20:05:00"
   typeof function () {}         // Returns "function"
   typeof myCar                  // Returns "undefined" *
   typeof null                   // Returns "object"
-
 ```
 
 ### Function 
@@ -147,7 +142,7 @@ updateAt: "27/1/2022 20:05:00"
 
 ###
 ### Conditional
-<note>IF</note>
+<note><strong>IF</strong></note>
 
 ```js
   let data;
@@ -163,7 +158,7 @@ updateAt: "27/1/2022 20:05:00"
 
   data = (true) ? true : false
 ```
-<note>Switch</note>
+<note><strong>Switch</strong></note>
 
 ```js
   let data;
@@ -179,7 +174,7 @@ updateAt: "27/1/2022 20:05:00"
 ```
 
 ### Looping
-<note>For</note>
+<note><strong>For</strong></note>
 
 ```js
   for (let i = 0; i < 5; i++) {
@@ -189,7 +184,7 @@ updateAt: "27/1/2022 20:05:00"
     // continue; will skip iteration
   }
 ```
-<note>For In</note>
+<note><strong>For In</strong></note>
 
 ```js
   // for (key in object | array)
@@ -200,7 +195,7 @@ updateAt: "27/1/2022 20:05:00"
   }
   // fname, lname, age
 ```
-<note>For Of</note>
+<note><strong>For Of</strong></note>
 
 ```js
   // for (variable of iterable)
@@ -211,7 +206,7 @@ updateAt: "27/1/2022 20:05:00"
   }
   // BMW, Volvo, Mini
 ```
-<note>While</note>
+<note><strong>While</strong></note>
 
 ```js
   // while (condition) 
@@ -222,8 +217,16 @@ updateAt: "27/1/2022 20:05:00"
 ###
 ### Class
 ```js
-  class Car {
+  class Behavior {
+    #action; // private property
+    constructor(action){
+      this.action = action;
+    }
+  }
+
+  class Car extends Behavior {
     constructor(name) {
+      this.super("Flying") // set parent constructor
       this.name = name;
     }
     age() {
@@ -243,11 +246,83 @@ updateAt: "27/1/2022 20:05:00"
   }
   
   const myCar = new Car("code")
-  // same
+  // native
   console.log(myCar.age())
-  console.log(myCar.ageG)
-  
-  // same
   myCar.setName("Cheat")
+  // getter setter 
+  console.log(myCar.ageG)
   myCar.setName = "Code"
+```
+
+
+## Method
+
+### String
+
+```js
+  let text = 'ABCDEF ';
+
+  // String Getting --------------
+  text.length             // = '7'
+  // slice(start, end)
+  text.slice(2,3)         // = 'C' 
+  // substring(start, end)
+  text.substring(2,3)     // = 'C'
+  // substr(start, length)
+  text.substr(2,1)        // = 'C'
+  // replace(string | RegExp, string)
+  text.replace('A', 'B')  // = 'BBCDEF'
+  text.replace(/^A/, 'B') // = 'BBCDEF'
+  // toUpperCase & toLowerCase
+  text.toLowerCase()      // = 'abcdef'
+  text.trim()             // = 'ABCDEF'
+  text.padStart(2,1)      // = '11ABCDEF'
+  text.padEnd(2,1)        // = 'ABCDEF11'
+  text.split('')          // = ['A','B','C','D','E','F']
+
+  // String Search --------------
+  text.indexOf('B')       // = 1
+  text.match(/F/)         // = ["F",index: 5]
+  // The search() method cannot take a second start position argument.
+  // lastIndexOf()
+  // startsWith()
+  // endsWith()
+```
+
+### Number
+
+```js
+  let data1 = 123
+  let data2 = 123.456
+
+  data1.toString()        // = '123'
+  data2.toExponential()   // = '1.23e+2'
+  data2.toFixed(2)        // = 123.47 
+  data2.toPrecision(4)    // = 123.5
+
+  Number.MAX_VALUE
+  Number.MIN_VALUE
+  Number.POSITIVE_INFINITY
+  Number.NEGATIVE_INFINITY
+  Number.NaN
+
+  let currency = 1234567
+  
+  currency.toLocalString('id-ID') // = '1.234.567'
+```
+<note>
+  ref: 
+  <link to='https://www.w3schools.com/jsref/jsref_tolocalestring.asp'>
+    toLocalString
+  </link>
+</note>
+
+### Array
+
+```js
+  const fruits = ["Banana", "Orange", "Apple", "Mango"];
+  
+  fruits.toString()       // = 'Banana,Orange,Apple,Mango'
+  
+  
 ```
