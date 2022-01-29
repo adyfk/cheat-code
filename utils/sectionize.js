@@ -67,7 +67,7 @@ function mappingHeaderAndChildren(between, depth) {
         data: {
           hName: 'content',
           hProperties: {
-            className: 'bg-white scrollbar overflow-x-auto flex flex-wrap basis-full border-2 rounded-lg items-start',
+            className: 'bg-white flex flex-col basis-full items-stretch border-2 rounded-lg items-start',
           },
         },
       },
