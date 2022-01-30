@@ -3,6 +3,7 @@ import Header from '@components/Header';
 import {getMdxData} from '@utils/get-mdx-content';
 import type {NextPage} from 'next';
 import Link from 'next/link';
+import {PauseIcon} from '@heroicons/react/solid';
 
 const Home: NextPage<any> = ({contents}) => {
   return (
@@ -16,7 +17,7 @@ const Home: NextPage<any> = ({contents}) => {
           <div className='flex gap-10 flex-wrap w-full lg:px-20 md:px-10 sm:px-5 mt-5'>
             {Object.entries(contents).map(([category, content]:any, index)=>{
               return (
-                <div className='lg:basis-1/2 md:basis-full mb-5' key={index}>
+                <div className='basis-full lg:basis-[47%]' key={index}>
                   <h2 className='text-xl text-sky-700'>{category}</h2>
                   <ul className='list-disc pl-5 pt-2'>
                     {content.map(({slug, data}:any)=>{
@@ -27,6 +28,7 @@ const Home: NextPage<any> = ({contents}) => {
                               {data.title}
                             </a>
                           </Link>
+                          {data.progress && (<PauseIcon className='text-orange-500 inline ml-2' width={20}/>)}
                           {data.version && (
                             <a href={data.versionLink} className='cursor-pointer text-yellow-500 ml-5 hover:underline'>
                               [{data.version}]

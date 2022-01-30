@@ -48,10 +48,10 @@ const components = {
       </>
     );
   },
-  h2: ({children, ...rest}:any) => {
+  h2: ({children}:any) => {
     return (<h2 className='text-sky-900 text-2xl basis-full mt-5'>{children}</h2>);
   },
-  h3: ({children, ...rest}:any) => {
+  h3: ({children}:any) => {
     return (<h3 className='text-sky-600 text-xl basis-full my-2'>{children}</h3>);
   },
   p: ({children}: any) => {
