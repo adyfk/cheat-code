@@ -255,3 +255,190 @@ On-demand image resizing, even for images stored on remote servers.
     },
   }
 ```
+
+## Routing
+
+### Index Routes
+
+<desc>
+  <text>pages/index.js</text> → / 
+</desc> 
+<desc>
+  <text>pages/blog/index.js</text> → /blog
+</desc> 
+<desc>
+  <text>pages/blog/first-post.js</text> → /blog/first-post
+</desc> 
+
+### Dynamic Routes
+
+<desc> 
+  <text>pages/blog/[slug].js</text> → /blog/:slug
+</desc>
+
+```jsx
+  // path (/blog/hello-world?id=1)
+  const Post = () => {
+    const router = useRouter()
+    const { slug, id } = router.query
+    return <p>Post: {slug} {id}</p>
+  }
+```
+<desc> 
+  <text>pages/[username]/settings.js</text> → /:username/settings
+</desc>
+<desc>  
+ <text>pages/post/[...all].js</text> → /post/* <br/>
+</desc>
+
+```jsx
+  // path (/post/2020/id/title)
+  const Post = () => {
+    const router = useRouter()
+    const all = router.query.all || []
+    return <p>Post: {all.join('/')}</p>
+  }
+``` 
+
+### Imperatively
+
+```jsx
+  import { useRouter } from 'next/router'
+  export default function ReadMore() {
+    const router = useRouter()
+    const onClick = () => router.push('/about')
+  }
+```
+
+### Shallow Routing
+<desc>
+  Shallow routing allows you to change the URL without running data fetching methods again, that includes getServerSideProps, getStaticProps, and getInitialProps.
+</desc>
+
+```jsx
+  const router = useRouter()
+  useEffect(() => {
+    // Always do navigations after the first render
+    router.push('/?counter=10', undefined, { shallow: true })
+  }, [])
+```
+###
+### <link to='https://nextjs.org/docs/api-reference/next/server#nextrequest'>Middleware</link>
+
+## Advanced Features
+
+* <link to='https://nextjs.org/docs/advanced-features/compiler'>Compiler</link>
+
+### Dynamic Import
+
+```jsx
+  // React.lazy
+  import dynamic from 'next/dynamic'
+
+  // to active Suspense , add config `suspense` = true
+  const Component = dynamic(()=>import('./x'))
+  const Component2WithCustomLoading = dynamic(()=>import('./x'),
+    { loading: () => <p>Loading caused by client page transition ...</p> }
+  )
+  const Component3WithNoSSR = dynamic(()=>import('./x'),
+    { loading: () => <p>Loading ...</p>, ssr: false }
+  )
+
+  /* Load immediately, but in a separate bundle */
+  <Component />
+  /* This component will never be loaded */
+  falsyField && <Component />
+  /* Load on demand */
+  showMore && <Component />
+  /* Show a progress indicator while loading */
+  <Component2WithCustomLoading />
+  /* Load only on the client side */
+  <Component3WithNoSSR />
+```
+
+### Absolute Import & Path Aliases
+
+```json
+  // tsconfig.json or jsconfig.json
+  {
+    "compilerOptions": {
+      "baseUrl": "."
+    }
+  }
+  // pages/index.js
+  // import Button from 'components/button'
+```
+
+```json
+  // tsconfig.json or jsconfig.json
+  {
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/components/*": ["components/*"]
+      }
+    }
+  }
+  // pages/index.js
+  // import Button from '@/components/button'
+```
+
+### Customer Error Page
+
+```jsx
+  // pages/404.js
+  export default function Custom404() {
+    return <h1>404 - Page Not Found</h1>
+  }
+```
+
+### <link to='https://nextjs.org/docs/advanced-features/custom-app'>Custom App</link>
+
+```jsx
+  // import App from 'next/app'
+
+  function MyApp({ Component, pageProps }) {
+    return <Component {...pageProps} />
+  }
+
+  // Only uncomment this method if you have blocking data requirements for
+  // every single page in your application. This disables the ability to
+  // perform automatic static optimization, causing every page in your app to
+  // be server-side rendered.
+  //
+  // MyApp.getInitialProps = async (appContext) => {
+  //   // calls page's `getInitialProps` and fills `appProps.pageProps`
+  //   const appProps = await App.getInitialProps(appContext);
+  //
+  //   return { ...appProps }
+  // }
+
+  export default MyApp
+```
+
+### <link to='https://nextjs.org/docs/advanced-features/custom-document'>Custom Document</link>
+
+```jsx
+  import Document, { Html, Head, Main, NextScript } from 'next/document'
+
+  class MyDocument extends Document {
+    static async getInitialProps(ctx) {
+      const initialProps = await Document.getInitialProps(ctx)
+      return { ...initialProps }
+    }
+
+    render() {
+      return (
+        <Html>
+          <Head />
+          <body>
+            <Main />
+            <NextScript />
+          </body>
+        </Html>
+      )
+    }
+  }
+
+  export default MyDocument
+```
