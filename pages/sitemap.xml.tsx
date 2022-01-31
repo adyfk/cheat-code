@@ -16,16 +16,12 @@ export const getServerSideProps: GetServerSideProps = async ({res}) => {
         <url>
             <loc>${baseUrl}</loc>
             <lastmod>${new Date().toISOString()}</lastmod>
-            <changefreq>always</changefreq>
-            <priority>1.0</priority>
         </url>
         ${posts.map(({slug, data}:any) => {
     return `
             <url>
                 <loc>${baseUrl+'/'+slug}</loc>
                 <lastmod>${getDate(data.updateAt)}</lastmod>
-                <changefreq>monthly</changefreq>
-                <priority>1.0</priority>
             </url>
             `;
   })
