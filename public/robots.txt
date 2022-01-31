@@ -1,0 +1,7 @@
+Sitemap: https://cheat-code.onrender.com/sitemap.xml
+
+User-agent: *
+Allow: /*
+
+Disallow: /*
+Disallow: /api/*
