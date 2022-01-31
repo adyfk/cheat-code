@@ -7,8 +7,10 @@ import {LazyLoadImage} from 'react-lazy-load-image-component';
 import DangerNote from './DangerNote';
 import {useState} from 'react';
 import Desc from './DescNote';
+import Text from './Text';
 
 const components = {
+  text: Text,
   desc: Desc,
   link: Link,
   code: Code,

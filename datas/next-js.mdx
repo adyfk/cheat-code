@@ -73,10 +73,6 @@ progress: true
       props: {}, // will be passed to the page component as props
     }
   }
-  // typescript
-  import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-  export const getServerSideProps: GetServerSideProps = async (context) => {}
-  function Page({}: InferGetServerSidePropsType<typeof getServerSideProps>) {}
   // The context parameter is an object containing the following keys:
   // * params: If this page uses a dynamic route, params contains the route parameters. If the page name is [id].js , then params will look like { id: ... }.
   // * req: The HTTP IncomingMessage object.
@@ -94,6 +90,10 @@ progress: true
   // * `redirect` object allows redirecting to internal and external resources.
   // * `notFound` boolean allows the page to return a 404 status and 404 Page.
 
+  // typescript
+  import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+  export const getServerSideProps: GetServerSideProps = async (context) => {}
+  function Page({}: InferGetServerSidePropsType<typeof getServerSideProps>) {} 
 ```
 <desc>
   getServerSideProps runs at request time, and this page will be pre-rendered with the returned props
@@ -113,13 +113,14 @@ progress: true
       fallback: true // false or 'blocking'
     };
   }
-  // typescript
-  import { GetStaticPaths } from 'next'
-  export const getStaticPaths: GetStaticPaths = async () => {}
   // The getStaticPaths function should return an object with the following required properties:
   // * `paths` The paths key determines which paths will be pre-rendered.
   // * `fallback: false` If fallback is false, then any paths not returned by getStaticPaths will result in a 404 page.
   // * `fallback: 'blocking'` If fallback is 'blocking', new paths not returned by getStaticPaths will wait for the HTML to be generated, identical to SSR (hence why blocking), and then be cached for future requests so it only happens once per path
+  
+  // typescript
+  import { GetStaticPaths } from 'next'
+  export const getStaticPaths: GetStaticPaths = async () => {}
 ```
 <desc>
   getStaticPaths (Static Site Generation) from a page that uses dynamic routes, Next.js will statically pre-render all the paths specified by getStaticPaths.
@@ -193,5 +194,64 @@ progress: true
     // Use the layout defined at the page level, if available
     const getLayout = Component.getLayout || ((page) => page)
     return getLayout(<Component {...pageProps} />)
+  }
+```
+
+## <link to='https://nextjs.org/docs/api-reference/next/image'>Image Optimization</link>
+* <strong>Improved Performance</strong>:
+Always serve correctly sized image for each device, using modern image formats.
+* <strong>Visual Stability</strong>:
+Prevent Cumulative Layout Shift automatically.
+* <strong>Faster Page Loads</strong>:
+Images are only loaded when they enter the viewport, with optional blur-up placeholders.
+* <strong>Asset Flexibility</strong>:
+On-demand image resizing, even for images stored on remote servers.
+
+### Import
+<desc>
+  <text>layout='fill'</text>, parent must have position: relative <br/>
+  <text>layout='responsive'</text>, parent must have display: block <br/>
+</desc>
+
+```jsx
+  import Image from 'next/image'
+```
+
+### Local Image
+<note>
+  To use a local image, import your .jpg, .png, or .webp files:
+</note>
+
+```jsx
+  import profilePic from '../public/me.png'
+  <Image
+    src={profilePic}
+    alt="Picture of the author"
+  />
+```
+### Remote Image
+
+```jsx
+  <Image
+      src="/me.png"
+      alt="Picture of the author"
+      width={500}
+      height={500}
+    />
+```
+
+### Domains
+<desc>
+  Sometimes you may want to access a remote image, but still use the built-in Next.js Image Optimization API. To do this, leave the loader at its default setting and enter an absolute URL for the Image src.
+</desc>
+<desc>
+  To protect your application from malicious users, you must define a list of remote domains that you intend to access this way. This is configured in your <text>next.config.js</text> file, as shown below:
+</desc>
+
+```jsx
+  module.exports = {
+    images: {
+      domains: ['example.com', 'example2.com'],
+    },
   }
 ```
