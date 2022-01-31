@@ -61,7 +61,7 @@ const components = {
     {children}
   </div>),
   li: ({children}: any) => (
-    <li className='px-2 py-1 bg-blue-50 text-sm font-thin'>
+    <li className='px-2 py-1 bg-blue-50 text-sm'>
       {children}
     </li>
   ),

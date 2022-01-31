@@ -1,0 +1,197 @@
+---
+title: "Next JS"
+version: "12.0.9"
+versionLink: "https://www.typescriptlang.org/cheatsheets"
+category: "Framework"
+language: "Javascript"
+used: ['React Js']
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "React is a JavaScript library for building user interfaces"
+updateAt: "29/1/2022 22:05:00"
+progress: true
+---             
+
+## About Next JS
+
+* An intuitive page-based routing system (with support for dynamic routes)
+* Pre-rendering, both static generation (SSG) and server-side rendering (SSR) are supported on a per-page basis
+* Automatic code splitting for faster page loads
+* Client-side routing with optimized prefetching
+* Built-in CSS and Sass support, and support for any CSS-in-JS library
+* Development environment with Fast Refresh support
+* API routes to build API endpoints with Serverless Functions
+* Fully extendable
+
+## Getting Started
+
+### Install & Init Project
+
+```bash
+  npx create-next-app project-name
+```
+
+## Data Fetching
+### getInitialProps
+<note>
+  Recommended: getStaticProps or getServerSideProps instead of getInitialProps
+</note>
+<desc>
+  getInitialProps enables server-side rendering in a page and allows you to do initial data population, it means sending the page with the data already populated from the server.
+</desc>
+
+```jsx
+  Page.getInitialProps = async (ctx) => {
+    const res = await fetch('https://api.github.com/repos/vercel/next.js')
+    const json = await res.json()
+    return { stars: json.stargazers_count }
+  }
+
+  // getInitialProps receives a single argument called context, it's an object with the following properties:
+  // * pathname - Current route. That is the path of the page in /pages
+  // * query - Query string section of URL parsed as an object
+  // * asPath - String of the actual path (including the query) shown in the browser
+  // * req - HTTP request object (server only)
+  // * res - HTTP response object (server only)
+  // * err - Error object if any error is encountered during the rendering
+```
+
+### getServerSideProps
+```jsx
+  // javascript
+  export async function getServerSideProps(context) {
+    if (redirect) return {
+      redirect: {
+        destination: '/',
+          permanent: false,
+        },
+      }
+    if(notFound) return {
+      notFound: true
+      }
+    return {
+      props: {}, // will be passed to the page component as props
+    }
+  }
+  // typescript
+  import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+  export const getServerSideProps: GetServerSideProps = async (context) => {}
+  function Page({}: InferGetServerSidePropsType<typeof getServerSideProps>) {}
+  // The context parameter is an object containing the following keys:
+  // * params: If this page uses a dynamic route, params contains the route parameters. If the page name is [id].js , then params will look like { id: ... }.
+  // * req: The HTTP IncomingMessage object.
+  // * res: The HTTP response object.
+  // * query: An object representing the query string.
+  // * preview: preview is true if the page is in the Preview Mode and false otherwise.
+  // * previewData: The preview data set by setPreviewData.
+  // * resolvedUrl: A normalized version of the request URL that strips the _next/data prefix for client transitions and includes original query values.
+  // * locale contains the active locale (if enabled).
+  // * locales contains all supported locales (if enabled).
+  // * defaultLocale contains the configured default locale (if enabled).
+
+  // The getServerSideProps function should return an object with any one of the following properties:
+  // * `props`
+  // * `redirect` object allows redirecting to internal and external resources.
+  // * `notFound` boolean allows the page to return a 404 status and 404 Page.
+
+```
+<desc>
+  getServerSideProps runs at request time, and this page will be pre-rendered with the returned props
+</desc>
+<desc>
+  client-side page transitions through next/link or next/router, Next.js sends an API request to the server, which runs getServerSideProps.
+</desc>
+
+### getStaticPaths
+```jsx
+  // javascript
+  export async function getStaticPaths() {
+    return {
+      paths: [
+        { params: { ... } }
+      ],
+      fallback: true // false or 'blocking'
+    };
+  }
+  // typescript
+  import { GetStaticPaths } from 'next'
+  export const getStaticPaths: GetStaticPaths = async () => {}
+  // The getStaticPaths function should return an object with the following required properties:
+  // * `paths` The paths key determines which paths will be pre-rendered.
+  // * `fallback: false` If fallback is false, then any paths not returned by getStaticPaths will result in a 404 page.
+  // * `fallback: 'blocking'` If fallback is 'blocking', new paths not returned by getStaticPaths will wait for the HTML to be generated, identical to SSR (hence why blocking), and then be cached for future requests so it only happens once per path
+```
+<desc>
+  getStaticPaths (Static Site Generation) from a page that uses dynamic routes, Next.js will statically pre-render all the paths specified by getStaticPaths.
+</desc>
+<note>
+  Note thatgetStaticProps must be used with getStaticPaths, and that you cannot use it with getServerSideProps.
+</note>
+
+### getStaticProps
+
+```jsx
+  // javscript
+  export async function getStaticProps(context) {
+    return {
+      props: {}, // will be passed to the page component as props
+    }
+  }
+  // typescript
+  import { GetStaticProps } from 'next'
+  export const getStaticProps: GetStaticProps = async (context) => {}
+  // The context parameter is an object containing the following keys:
+  // * `params` contains the route parameters for pages using dynamic routes. For example, if the page name is [id].js , then params will look like { id: ... }. You should use this together with getStaticPaths, which we’ll explain later.
+  // * `preview` is true if the page is in the Preview Mode and undefined otherwise.
+  // * `previewData` contains the preview data set by setPreviewData.
+  // * `locale` contains the active locale (if enabled).
+  // * `locales` contains all supported locales (if enabled).
+  // * `defaultLocale` contains the configured default locale (if enabled).
+
+  // The getStaticProps function should return an object.
+  // * `props`
+  // * `redirect` object allows redirecting to internal and external resources.
+  // * `notFound` boolean allows the page to return a 404 status and 404 Page.
+  // * `revalidate`  property is the amount in seconds after which a page re-generation can occur (defaults to false or no revalidation)
+```
+
+<desc>
+  getStaticProps (Static Site Generation) from a page, Next.js will pre-render this page at build time using the props returned by getStaticProps.
+</desc>
+
+## Layout
+
+### Single Shared Layout
+```jsx
+  // pages/_app.js
+  import Layout from '../components/layout'
+  export default function MyApp({ Component, pageProps }) {
+    return (
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    )
+  }
+```
+### Per-Page Layouts
+```jsx
+  // pages/index.js
+  import Layout from '../components/layout'
+  import NestedLayout from '../components/nested-layout'
+  export default function Page() {
+    return /** Your content */
+  }
+  Page.getLayout = function getLayout(page) {
+    return (
+      <Layout>
+        <NestedLayout>{page}</NestedLayout>
+      </Layout>
+    )
+  }
+  // pages/_app.js
+  export default function MyApp({ Component, pageProps }) {
+    // Use the layout defined at the page level, if available
+    const getLayout = Component.getLayout || ((page) => page)
+    return getLayout(<Component {...pageProps} />)
+  }
+```
