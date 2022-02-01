@@ -226,7 +226,7 @@ SQL constraints are used to specify rules for the data in a table.
 ```
 
 
-## Create
+## Manipulating
 
 ### Create Database
 ```sql
@@ -235,13 +235,79 @@ SQL constraints are used to specify rules for the data in a table.
 
 ### Create Table
 ```sql
-  CREATE TABLE `table1` ();
+  CREATE TABLE `table_name` ();
 ```
 
-### Create Table AS
+### Delete Table 
+```sql
+  DROP TABLE `table_name`;
+```
+
+### Add Column
+```sql
+  ALTER TABLE `table_name`
+  ADD `column_name` datatype;
+```
+
+### Modify Column
+```sql
+  ALTER TABLE `table_name`
+  ALTER COLUMN `column_name` datatype;
+```
+
+### Delete Column
+```sql
+  ALTER TABLE `table_name`
+  DROP COLUMN `column_name`;
+```
+
+### Copy of Table
 ```sql 
   CREATE TABLE `table1` AS SELECT * FROM `table_target`;
 ```
+
+### Insert 
+<desc>
+  Specify both the column names and the values to be inserted:
+</desc>
+
+```sql
+  INSERT INTO `table_name` (column1, ...) VALUES (value1, ...);
+  -- for multiple values
+  -- VALUES (value1, ...), (value1, ...);
+```
+<desc>
+  If you are adding values for all the columns of the table, you do not need to specify the column names in the SQL query
+</desc>
+
+```sql
+  INSERT INTO `table_name` VALUES (value1, ...);
+```
+<desc>
+  Insert Hierarchical Rows
+</desc>
+
+```sql
+  INSERT INTO `table1` VALUES (NULL, 'code');
+  -- get id after insert
+  INSERT INTO `table2` VALUES (LAST_INSERT_ID(), 'code');
+```
+
+### Update
+```sql
+  UPDATE `table_name`
+  SET column1 = value1, column2 = value2, ...
+  WHERE condition;
+```
+
+### Delete
+```sql
+  DELETE FROM `table_name` WHERE condition;
+```
+
+
+
+
 
 ## Select
 
@@ -379,7 +445,7 @@ SQL constraints are used to specify rules for the data in a table.
   HAVING COUNT(CustomerID) > 5
   ORDER BY COUNT(CustomerID) DESC;
 ```
-
+###
 ### Exists
 * used to test for the existence of any record in a subquery.
 * returns TRUE if the subquery returns one or more records.
@@ -444,6 +510,31 @@ SQL constraints are used to specify rules for the data in a table.
   END AS QuantityText
   FROM OrderDetails;
 ```
+<note><b>IF</b></note>
+
+```sql
+  SELECT 
+    order_id, 
+    order_date, 
+    IF(
+      YEAR(order_date) = YEAR(NOW()), 
+      'Active', 
+      'Archive'
+    ) AS CATEGORY
+  FROM Orders
+```
+
+### Rollup 
+<desc>Rollup operator calculates the summary for each group.</desc>
+<danger>Its only available on in MySQL, its not part of standart SQL language</danger>
+
+```sql
+  SELECT 
+    city,
+    SUM(invoice_total) AS total_sales
+  FROM invoices i
+  GROUP BY city WITH ROLLUP
+```
 
 ### Null Functions
 ```sql
@@ -452,6 +543,185 @@ SQL constraints are used to specify rules for the data in a table.
   FROM Products;
 ```
 
-## JOIN
+## Join Table
+
+<img alt='sql-join' width='32%' src='/sql/sql-join.jpg' />
+<note>
+</note>
 
 ### Inner Join
+<desc>
+  keyword selects records that have matching values in both tables.
+</desc>
+
+```sql
+  SELECT *
+  FROM `table1`
+  INNER JOIN `table2`
+  ON `table1`.`col1` = `table2`.`col1`;
+```
+<note>
+  Shorter USING syntax if identical column
+</note>
+
+```sql
+  SELECT *
+  FROM `table1`
+  INNER JOIN `table2`
+    USING ('col1')
+```
+
+### Natural Join
+<desc>
+  Will look at these two tables and it will join them based on the common columns.
+  The columns that have the same name.
+</desc>
+<danger>
+  Really easy to code, but they can be a little dangerous because we are letting
+  the database engine, figure out or guess the join.
+</danger>
+
+```sql
+  SELECT * 
+  FROM orders o
+  NATURAL JOIN customers c;
+```
+
+### Left Join
+<desc>
+  keyword returns all records from the left table (table1), and the matching records from the right table (table2). The result is 0 records from the right side, if there is no match.
+</desc>
+
+```sql
+  SELECT *
+  FROM `table1`
+  LEFT JOIN `table2`
+  ON `table1`.`col1` = `table2`.`col1`;
+```
+
+### Right Join
+<desc>
+  keyword returns all records from the right table (table2), and the matching records from the left table (table1). The result is 0 records from the left side, if there is no match.
+</desc>
+
+```sql
+  SELECT *
+  FROM `table1`
+  RIGHT JOIN `table2`
+  ON `table1`.`col1` = `table2`.`col1`;
+```
+
+### Full Join
+<desc>
+  keyword returns all records when there is a match in left (table1) or right (table2) table records.
+</desc>
+<note>
+  FULL OUTER JOIN and FULL JOIN are the same.
+</note>
+
+```sql
+  SELECT *
+  FROM `table1`
+  FULL OUTER JOIN `table2`
+  ON `table1`.`col1` = `table2`.`col1`;
+```
+
+### Self Join 
+```sql 
+  SELECT e.employee_id, e.first_name, m.first_name AS 'Manager'
+  FROM employees e
+  JOIN employees m
+    ON e.reports_to = m.employee_id
+```
+
+### Subqueries
+```sql
+  SELECT * FROM employees
+  WHERE salary > (
+    SELECT AVG(salary) FROM employees
+  );
+```
+<note>Correlated Subqueries</note>
+<danger>
+  when we use correlated subquery, this subquery gets executed for each row. 
+  The more data you have the more overhead your query is going
+</danger>
+
+```sql
+  SELECT * FROM employees e
+  WHERE clients > (
+    SELECT AVG(salary) FROM employees 
+    WHERE office_id = e.office_id
+  )
+```
+
+## MySQL Functions
+
+### Numeric
+```sql
+  SELECT ROUND(5.76, 1); -- 5.8
+  SELECT TRUNCATE(5.59, 1); -- 5.5
+  SELECT CEILING(5.2); -- 6
+  SELECT FLOOR(5.9); -- 5
+  SELECT ABS(-5); -- 5
+  SELECT RAND(); -- random 0.000 - 1.000
+```
+<note>
+  Reference:
+  <link to='https://dev.mysql.com/doc/refman/8.0/en/numeric-functions.html'>
+    Numeric Functions
+  </link>
+</note>
+
+### String
+```sql
+  SELECT LENGTH('sky'); -- 3
+  SELECT UPPER('Sky'); -- 'SKY'
+  SELECT LOWER('Sky'); -- 'sky'
+  SELECT TRIM('  Sky '); -- 'Sky' (LTRIM, RTRIM)
+  SELECT LEFT('abcdefg',3); -- 'abc' (RIGHT, SUBSTRING)
+  SELECT LOCATE('n','abcdefg') -- 3 (not case sensitive)
+  SELECT REPLACE('abcdefg','a','b') -- 'bbcdefg' (not case sensitive)
+  SELECT CONCAT('a',' ','a') -- 'a a'
+```
+<note>
+  Reference:
+  <link to='https://dev.mysql.com/doc/refman/8.0/en/string-functions.html'>
+    String Functions
+  </link>
+</note>
+
+### Date
+```sql
+  SELECT 
+    NOW(),                    -- '2022-02-01 23:28:55'
+    CURDATE(),                -- '2022-02-01'
+    CURTIME(),                -- '23:28:55'
+    MONTH(NOW()),             -- 2
+    MONTHNAME(NOW())          -- `March`
+    EXTRACT(YEAR FROM NOW()); -- 2022 
+    DATE_FORMAT(NOW(), '%d %D %m %M %Y')  -- 1 Monday 3 March 2019
+```
+<note>
+  Reference:
+  <link to='https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html'>
+    Date Functions
+  </link>
+</note>
+
+### Calculate Date
+```sql
+  SELECT 
+    DATE_ADD(NOW(), INTERVAL 1 DAY), -- tomorrow
+    DATE_SUB(NOW(), INTERVAL 1 YEAR), -- last year
+    DATEDIFF('2019-01-05', '2019-01-01'), -- 4
+    TIME_TO_SEC('09:00');
+```
+<note>
+  Reference:
+  <link to='https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html'>
+    Date Functions
+  </link>
+</note>
+
+
