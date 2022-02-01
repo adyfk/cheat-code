@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async ({res}) => {
             <url>
                 <loc>${baseUrl+'/'+slug}</loc>
                 <lastmod>${getDate(data.updateAt)}</lastmod>
-                <changefreq>daily</changefreq>
+                <changefreq>weekly</changefreq>
                 <priority>0.9</priority>
             </url>
             `;

@@ -3,6 +3,7 @@ import type {AppProps} from 'next/app';
 import {logEvent} from 'firebase/analytics';
 import {analytics} from 'configs/firebase';
 import Router from 'next/router';
+import NextNprogress from 'nextjs-progressbar';
 
 Router.events.on('routeChangeComplete', (pathname) =>{
   logEvent(analytics, 'page-view', {
@@ -12,7 +13,10 @@ Router.events.on('routeChangeComplete', (pathname) =>{
 });
 
 function MyApp({Component, pageProps}: AppProps) {
-  return <Component {...pageProps} ></Component>;
+  return <>
+    <NextNprogress />
+    <Component {...pageProps} ></Component>;
+  </>;
 }
 
 export default MyApp;

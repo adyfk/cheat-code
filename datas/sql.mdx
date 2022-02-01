@@ -1,0 +1,242 @@
+---
+title: "SQL"
+version: ""
+versionLink: "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+category: "Language"
+language: ""
+used: []
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "(Structured Query Language) is a domain-specific language used in programming and designed for managing data held in a relational database management system (RDBMS), or for stream processing in a relational data stream management system (RDSMS)"
+updateAt: "1/2/2022 20:05:00"
+progress: true
+---             
+
+
+## Basic
+
+### Database Target
+```sql
+  USE `database_name`;
+```
+
+### Data Type
+<desc>
+  The data type of a col defines what value the col can hold: integer, character, money, date and time, binary, and so on.
+</desc>
+
+* <link to='https://www.w3schools.com/sql/sql_datatypes.asp'> Data Type W3School</link>
+* <link to='https://www.w3schools.com/sql/sql_dates.asp'> Date Types </link>
+
+### Auto Increment
+<note>
+  MySQL
+</note>
+
+```sql
+  CREATE TABLE Persons (
+    `col1` INT NOT NULL AUTO_INCREMENT
+  );
+  -- AUTO_INCREMENT start with value
+  ALTER TABLE `table_name` AUTO_INCREMENT=100;
+```
+<note>
+  SQL Server
+</note>
+
+```sql
+  -- IDENTITY(start, incrementBy)
+  CREATE TABLE Persons (
+    `col1` INT IDENTITY(1,1) PRIMARY KEY
+  );
+```
+
+## SQL Constraints
+SQL constraints are used to specify rules for the data in a table.
+
+### Syntax
+```sql
+  CREATE TABLE `table_name` (
+      `col1` datatype constraint,
+      `col2` datatype constraint,
+      `col3` datatype constraint,
+      ....
+  );
+```
+
+### NOT NULL
+<desc>
+  Ensures that a col cannot have a NULL value
+</desc>
+<note>
+  By default, a col can hold NULL values.
+</note>
+
+```sql  
+  `col1` INT NOT NULL
+```
+### UNIQUE
+<desc>
+  Ensures that all values in a col are different
+</desc>
+<note>
+  SQL Server / Oracle / MS Access:
+</note>
+
+```sql
+  `col1` INT NOT NULL UNIQUE
+```
+<note>
+  MySQL:
+</note>
+
+```sql
+  `col1` INT NOT NULL,
+  UNIQUE (`col1`)
+```
+<note>
+  MySQL / SQL Server / Oracle / MS Access:
+</note>
+
+```sql 
+  --  UNIQUE constraint on multiple cols
+  `col1` INT NOT NULL,
+  `col2` VARCHAR(255) NOT NULL,
+  CONSTRAINT `UC_Table` UNIQUE (`col1`,`col2`)
+```
+
+
+### PRIMARY KEY
+<desc>
+  A combination of a NOT NULL and UNIQUE. Uniquely identifies each row in a table
+</desc>
+<note>
+  SQL Server / Oracle / MS Access:
+</note>
+
+```sql
+  `col1` INT NOT NULL PRIMARY KEY,
+```
+<note>
+  MySQL:
+</note>
+
+```sql
+  `col1` INT NOT NULL,
+  PRIMARY KEY (`col1`)
+```
+<note>
+  MySQL / SQL Server / Oracle / MS Access:
+</note>
+
+```sql 
+  -- PRIMARY KEY constraint on multiple cols
+  `col1` INT NOT NULL,
+  `col2` VARCHAR(255) NOT NULL,
+  CONSTRAINT `PK_Table` PRIMARY KEY (`col1`,`col2`)
+```
+
+### FOREIGN KEY
+<desc>
+  Prevents actions that would destroy links between tables
+</desc>
+<note>
+  SQL Server / Oracle / MS Access:
+</note>
+
+```sql
+  `col1` INT FOREIGN KEY REFERENCES `table_target`(`col_target`)
+```
+<note>
+  MySQL:
+</note>
+
+```sql
+  `col1` INT,
+  FOREIGN KEY (`col1`) REFERENCES `table_target`(`col_target`)
+```
+<note>
+  MySQL / SQL Server / Oracle / MS Access:
+</note>
+
+```sql 
+  -- FOREIGN KEY constraint on multiple cols
+  `col1` INT, 
+  CONSTRAINT `FK_Table` FOREIGN KEY (`col1`)
+  REFERENCES `table_target`(`col_target`)
+```
+
+### CHECK
+<desc>
+  Ensures that the values in a col satisfies a specific condition
+</desc>
+<note>
+  SQL Server / Oracle / MS Access:
+</note>
+
+```sql
+  `col1` INT CHECK (`col1`>=18)
+```
+<note>
+  MySQL:
+</note>
+
+```sql
+  `col1` INT,
+  `col2` VARCHAR(10),
+  CONSTRAINT `CHK_Table` CHECK (`col1`>=18 AND `col2`='Sandnes')  
+```
+<note>
+  MySQL / SQL Server / Oracle / MS Access:
+</note>
+
+```sql 
+  -- CHECK constraint on multiple cols
+  `col1` INT, 
+  CONSTRAINT `FK_Table` FOREIGN KEY (`col1`)
+  REFERENCES `table_target`(`col_target`)
+```
+
+### DEFAULT
+<desc>
+  Sets a default value for a col if no value is specified
+</desc>
+<note>
+  SQL Server / Oracle / MS Access:
+</note>
+
+```sql
+  `col1` date DEFAULT GETDATE(),
+  `col2` varchar(255) DEFAULT 'Men',
+```
+
+### CREATE INDEX
+<desc>
+  Used to create and retrieve data from the database very quickly
+</desc>
+<note>
+  Updating a table with indexes takes more time than updating a table without (because the indexes also need an update). So, only create indexes on columns that will be frequently searched against.
+</note>
+
+```sql
+  CREATE INDEX `index_name`
+  ON `table_target` (`col1`, `col2`, ...);
+```
+
+
+## Create Database & Table
+
+### Create Database;
+```sql
+  CREATE DATABASE `database_name`; 
+```
+
+### Create Table
+```sql
+  CREATE TABLE `table_name` ()
+```
+
+### Create Table AS
+```sql 
+  CREATE TABLE `table_name` AS SELECT * FROM `table_target` 
+```
