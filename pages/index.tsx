@@ -12,8 +12,8 @@ const Home: NextPage<any> = ({contents}) => {
       <Header />
       <main className='p-5 flex justify-center'>
         <div className='container flex items-center flex-col'>
-          <h2 className='text-5xl font-light text-neutral-700'>Hello Cheater</h2>
-          <h3 className='my-5'>This content for you</h3>
+          <h2 className='text-5xl font-light text-neutral-700'>Hello Lazy</h2>
+          <h3 className='my-5'>This will save you from having to remember everything you learn</h3>
           <div className='flex gap-10 flex-wrap w-full lg:px-20 md:px-10 sm:px-5 mt-5'>
             {Object.entries(contents).map(([category, content]:any, index)=>{
               return (

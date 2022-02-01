@@ -8,12 +8,14 @@ used: []
 author: "Adi Fatkhurozi"
 authorLink: "https://github.com/adyfk"
 description: "(Structured Query Language) is a domain-specific language used in programming and designed for managing data held in a relational database management system (RDBMS), or for stream processing in a relational data stream management system (RDSMS)"
-updateAt: "1/2/2022 20:05:00"
+updateAt: "1/2/2022 20:09:00"
 progress: true
 ---             
 
 
 ## Basic
+
+Download:  <link to='/sql/sql_demo.zip'> Dummy Database </link> 
 
 ### Database Target
 ```sql
@@ -38,7 +40,7 @@ progress: true
     `col1` INT NOT NULL AUTO_INCREMENT
   );
   -- AUTO_INCREMENT start with value
-  ALTER TABLE `table_name` AUTO_INCREMENT=100;
+  ALTER TABLE `table1` AUTO_INCREMENT=100;
 ```
 <note>
   SQL Server
@@ -56,7 +58,7 @@ SQL constraints are used to specify rules for the data in a table.
 
 ### Syntax
 ```sql
-  CREATE TABLE `table_name` (
+  CREATE TABLE `table1` (
       `col1` datatype constraint,
       `col2` datatype constraint,
       `col3` datatype constraint,
@@ -224,19 +226,232 @@ SQL constraints are used to specify rules for the data in a table.
 ```
 
 
-## Create Database & Table
+## Create
 
-### Create Database;
+### Create Database
 ```sql
   CREATE DATABASE `database_name`; 
 ```
 
 ### Create Table
 ```sql
-  CREATE TABLE `table_name` ()
+  CREATE TABLE `table1` ();
 ```
 
 ### Create Table AS
 ```sql 
-  CREATE TABLE `table_name` AS SELECT * FROM `table_target` 
+  CREATE TABLE `table1` AS SELECT * FROM `table_target`;
 ```
+
+## Select
+
+### All
+```sql
+  SELECT * FROM `table1`;
+```
+
+### Some
+```sql
+  SELECT `col1`, `col2` FROM `table1`;
+```
+
+### Alias
+```sql
+  SELECT `col1` AS `name` FROM `table1`;
+  SELECT `o`.`col1`, `p`.`col2` FROM `table1` AS `o`, `table2` AS `p` ;
+
+  -- in mysql make it shorter
+  SELECT `o`.`col1`, `p`.`col2` FROM `table1` `o`, `table2` `p` ;
+```
+
+### Static
+```sql
+  -- will add column status with value Active in every row
+  SELECT *, "Active" AS `status`
+  FROM `table1`
+  WHERE `date` >= '2021';
+```
+
+### Distinct
+<desc>
+  statement is used to return only distinct (different) values.
+</desc>
+
+```sql
+  SELECT DISTINCT `col1`, `col2` FROM `table1`;
+```
+
+### Min, Max, Count, Avg, & Sum
+```sql
+   SELECT MIN(`col1`) FROM `table1`;
+   SELECT MAX(`col1`) FROM `table1`;
+   SELECT COUNT(`col1`) FROM `table1`;
+   SELECT AVG(`col1`) FROM `table1`;
+   SELECT SUM(`col1`) FROM `table1`;
+```
+
+
+### Where
+
+```sql
+  --  SELECT column1, column2 FROM table1 WHERE condition;
+  WHERE `col1` = 1;
+  WHERE `col1` = '1';
+  WHERE `col1` <> 2;
+  WHERE `col1` IN (val1,val2);
+  WHERE `col1` BETWEEN 50 AND 60;
+  WHERE `col1` REGEXP '[abc]'
+  -- _ = single character
+  -- % = any number of characters
+  -- more wildcards like regex in reference
+  WHERE `col1` LIKE '_s';
+  WHERE `col1` LIKE 's%';
+  -- OR, AND, NOT
+  WHERE `col1` = '1' OR `col2` = '2';
+  -- IS NULL
+  WHERE `col1` IS NULL;
+```
+<note>
+  Reference: <link to='https://www.w3schools.com/sql/sql_wildcards.asp'>LIKE (Wildcard)</link>
+</note>
+
+### Order By
+```sql
+  SELECT * FROM `table1`
+  ORDER BY `col1` DESC;
+
+  SELECT * FROM `table1`
+  ORDER BY `col1` ASC;
+```
+
+### Limit
+```sql
+  -- get 3 rows
+  SELECT * FROM `table1` LIMIT 3
+
+  -- pagination case (offset, page)
+  -- get 3 rows in page 2
+  SELECT * FROM `table1` LIMIT 3, 2
+```
+
+### Union 
+<desc>
+  The UNION operator is used to combine the result-set of two or more SELECT statements.
+</desc>
+
+* Must have the same number of columns
+* Must also have similar data types
+* Must also be in the same order
+
+```sql
+  --  (only distinct values) from both the table
+  SELECT `col1` FROM `table1`
+  UNION
+  SELECT `col1`  FROM `table2`;
+
+  -- also select duplicate values
+  SELECT `col1` FROM `table1`
+  UNION ALL
+  SELECT `col1`  FROM `table2`;
+```
+
+### Group By
+<desc>
+  groups rows that have the same values into summary rows, like "find the number of customers in each country".
+</desc>
+
+```sql
+  SELECT COUNT(CustomerID), Country
+  FROM Customers
+  GROUP BY Country
+  ORDER BY COUNT(CustomerID) DESC;
+```
+
+### Having
+<desc>
+  because the WHERE keyword cannot be used with aggregate functions
+</desc>
+
+```sql
+  SELECT COUNT(CustomerID), Country
+  FROM Customers
+  GROUP BY Country
+  HAVING COUNT(CustomerID) > 5
+  ORDER BY COUNT(CustomerID) DESC;
+```
+
+### Exists
+* used to test for the existence of any record in a subquery.
+* returns TRUE if the subquery returns one or more records.
+
+```sql
+  SELECT SupplierName
+  FROM Suppliers
+  WHERE EXISTS (
+    SELECT ProductName 
+    FROM Products 
+    WHERE Products.SupplierID = Suppliers.supplierID 
+    AND Price < 20
+  );
+```
+
+### Any, All
+<desc>
+  The ANY and ALL operators allow you to perform a comparison between a single column value and a range of other values. <br/>
+  <text>ANY</text> One Of List <br/>
+  <text>ALL</text> All Of List <br/>
+</desc>
+
+```sql
+  -- WHERE qty > ANY (20, 559, 902)
+  -- WHERE qty > ALL (20, 559, 902)
+
+  SELECT ProductName
+  FROM Products
+  WHERE ProductID = ANY (
+    SELECT ProductID
+    FROM OrderDetails
+    WHERE Quantity = 10
+  );
+```
+
+### Into
+<desc>
+  Statement copies data from one table into a new table.
+</desc>
+
+```sql
+  -- SELECT * INTO newtable [IN externaldb]
+  -- FROM oldtable WHERE condition;
+  SELECT * INTO CustomersBackup2017 IN 'Backup.mdb'
+  FROM Customers;
+
+  SELECT CustomerName, ContactName INTO CustomersBackup2017
+  FROM Customers;
+```
+
+### Case
+<desc>
+  statement goes through conditions and returns a value when the first condition is met (like an if-then-else statement)
+</desc>
+
+```sql
+  SELECT OrderID, Quantity,
+  CASE
+      WHEN Quantity > 30 THEN 'The quantity is greater than 30'
+      WHEN Quantity = 30 THEN 'The quantity is 30'
+      ELSE 'The quantity is under 30'
+  END AS QuantityText
+  FROM OrderDetails;
+```
+
+### Null Functions
+```sql
+  --- IFNULL(), ISNULL(), COALESCE(), and NVL()
+  SELECT ProductName, UnitPrice * (UnitsInStock + IFNULL(UnitsOnOrder, 0))
+  FROM Products;
+```
+
+## JOIN
+
+### Inner Join

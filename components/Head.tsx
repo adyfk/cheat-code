@@ -1,6 +1,6 @@
 import NextHead from 'next/head';
 
-const Head: React.FC<{title?: string; desc?: string}> = ({title, desc='cheatsheet code that saves you from having to remember everything you learn'}) => {
+const Head: React.FC<{title?: string; desc?: string}> = ({title, desc='CheatCode will save you from having to remember everything you learn'}) => {
   return (
     <NextHead>
       <title>CHEATCODE {!!title ? `- ${title}`: ''}</title>
