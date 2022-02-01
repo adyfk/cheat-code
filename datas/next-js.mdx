@@ -442,3 +442,39 @@ On-demand image resizing, even for images stored on remote servers.
 
   export default MyDocument
 ```
+
+### <link to='https://nextjs.org/docs/basic-features/script'>Script</link>
+
+* <b>beforeInteractive:</b> Load before the page is interactive
+* <b>afterInteractive:</b> (default): Load immediately after the page becomes interactive
+* <b>lazyOnload:</b> Load during idle time
+
+```jsx
+  import Script from 'next/script'
+
+  export default function Home() {
+    return (
+      <>
+        <Script src="https://www.google-analytics.com/analytics.js" />
+        <Script
+          id="show-banner"
+          dangerouslySetInnerHTML={{
+            __html: `document.getElementById('banner').classList.remove('hidden')`,
+          }}
+        />
+        <Script
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer', 'GTM-XXXXXX');
+          `,
+          }}
+        />
+      </>
+    )
+  }
+```

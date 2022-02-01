@@ -2,10 +2,17 @@ import {getMdxContent} from '@utils/get-mdx-content';
 import Blog from '@components/Blog';
 import Head from '@components/Head';
 
-export default function BlogPost({source, frontMatter}:any) {
+export default function BlogPost({source, frontMatter, slug, category}:any) {
   return (
     <>
-      <Head title={frontMatter.title} desc={frontMatter.description}/>
+      <Head
+        slug={slug}
+        author={frontMatter.author}
+        title={frontMatter.title}
+        desc={frontMatter.description}
+        category={category}
+        authorLink={frontMatter.authorLink}
+      />
       <Blog source={source} frontMatter={frontMatter}/>
     </>
   );

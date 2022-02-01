@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import '../styles/globals.css';
 import type {AppProps} from 'next/app';
 import {logEvent} from 'firebase/analytics';
@@ -15,7 +16,7 @@ Router.events.on('routeChangeComplete', (pathname) =>{
 function MyApp({Component, pageProps}: AppProps) {
   return <>
     <NextNprogress />
-    <Component {...pageProps} ></Component>;
+    <Component {...pageProps} ></Component>
   </>;
 }
 
