@@ -1,4 +1,4 @@
-Sitemap: https://cheat-code.onrender.com/sitemap.xml
+Sitemap: https://www.cheatcode.website/sitemap-content.xml
 
 User-agent: *
 Allow: /*
