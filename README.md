@@ -3,7 +3,7 @@
 
 ## View Website
 
-[Link](https://cheat-code.onrender.com/ "go")
+[Link](https://www.cheatcode.website/ "go")
 ## Getting Started
 
 First, run the development server:
