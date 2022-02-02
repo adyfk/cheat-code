@@ -1,5 +1,5 @@
 ---
-title: "SQL"
+title: "SQL (Structured Query Language)"
 version: ""
 versionLink: "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
 category: "Language"
@@ -725,4 +725,327 @@ SQL constraints are used to specify rules for the data in a table.
   </link>
 </note>
 
+## View
+  We can save these queries or subqueries in a view, and this will greatly simplify
+  our select statements, and then we can reuse these views so we don't have to code those queries again.\
+  So a view behaves like a virtual table, but remember, view don't tore data, our data is actually stored in our tables
 
+<note>
+  INSERT, UPDATE, DELETE only under certain circumstances. If the view does'nt have <br/>
+  1. DISTINCT <br/>
+  2. Aggregate Functions (MIN, MAX, SUM, COUNT, etc) <br/>
+  3. GROUP BY / HAVING <br/>
+  4. UNION
+</note>
+
+### Create
+```sql
+  CREATE VIEW sales_by_client AS
+  SELECT 
+    c.client_id,
+    c.name,
+    SUM(invoice_total) AS total_sales
+  FROM clients calculates
+  JOIN invoices i USING (client_id)
+  GROUP BY client_id, name;
+
+  -- now u can see like table 
+  SELECT * FROM sales_by_client;
+```
+
+### Altering Or Droping
+```sql
+  -- Altering
+  CREATE OR REPLACE VIEW sales_by_client AS
+  SELECT 
+      c.client_id,
+      c.name,
+      SUM(invoice_total) AS total_sales
+    FROM clients calculates
+    JOIN invoices i USING (client_id)
+    GROUP BY client_id, name;
+  -- Drop
+  DROP VIEW sales_by_client;
+```
+
+### Updateable View
+```sql
+  CREATE VIEW invoices_with_balance AS
+  SELECT 
+    invoice_id, 
+    client_id, 
+    invoice_total, 
+    payment_total, 
+    invoice_total - payment_total AS balance,
+    invoice_date,
+    due_date,
+    payment_date
+  FROM invoices
+  WHERE (invoice_total - payment_total) > 0;
+  -- DELETE
+  DELETE FROM invoices_with_balance WHERE invoice_id = 1;
+  -- UPDATE
+  UPDATE invoices_with_balance
+  SET due_date = DATE_ADD(due_date, INTERVAL 2 DAY)
+  WHERE invoice_id = 2;
+
+  -- IF You don't want an update or delete statement to exclude a row
+  WITH CHECK OPTION
+```
+
+## Stored Procedures
+
+* **Store and Organize SQL**
+* **Faster execution**
+* **Data security**  
+
+### Create
+```sql
+  -- DELIMITER = to change semicolon `;` to something else
+  -- DELIMITER [any]
+  DELIMITER $$
+  CREATE PROCEDURE `get_clients`()
+  BEGIN
+    SELECT * FROM clients;
+  END$$
+  -- with $$ will take statement to one unit 
+
+  -- back to semicolon
+  DELIMITER ;
+
+  -- how to call function
+  CALL get_clients();
+```
+### Parameters
+```sql
+  DELIMITER $$
+  CREATE PROCEDURE `get_clients_by_state`(
+    state CHAR(2)
+  )
+  BEGIN
+    IF(state IS NULL) THEN 
+     SELECT * FROM clients c
+    ELSE
+     SELECT * FROM clients c
+     WHERE c.state = state;
+    END IF;
+  END $$
+
+  DELIMITER ;
+
+  CALL get_clients_by_state('CA');
+```
+
+### Parameter Default 
+```sql
+  DELIMITER $$
+  CREATE PROCEDURE `get_clients_by_state`(
+    state CHAR(2)
+  )
+  BEGIN
+    -- Add default parameter case 1
+    IF(state IS NULL) THEN 
+      SET state = 'CA'
+    END IF;
+
+    SELECT * FROM clients c
+    WHERE c.state = state;
+
+    -- Add default parameter case 2
+    -- SELECT * FROM clients c
+    -- WHERE c.state = IFNULL(state, 'CA');
+  END $$
+
+  DELIMITER ;
+
+  CALL get_clients_by_state('CA');
+```
+
+### Paramter validation
+```sql
+  DELIMITER $$
+  CREATE PROCEDURE `get_clients_by_state`(
+    state CHAR(2)
+  )
+  BEGIN
+    IF(state IS NULL) THEN
+       SIGNAL SQLSTATE '22004'
+       SET MESSAGE_TEXT = 'Invalid state null'
+    END IF;
+    SELECT * FROM clients;
+  END $$
+  DELIMITER ;
+
+  CALL get_clients_by_state(NULL);
+```
+<desc>
+  Reference : 
+  <link to='https://www.ibm.com/docs/en/db2-for-zos/11?topic=codes-sqlstate-values-common-error'>
+    SQLState Errors Codes
+  </link>
+</desc>
+
+### Output Parameter
+```sql
+  DELIMITER $$
+  CREATE PROCEDURE `get_unpaid_invoices_for_client`
+  (
+    client_id INT,
+    OUT invoices_count TINYINT,
+    OUT invoices_total DECIMAL(9,2)
+  )
+  BEGIN
+    SELECT COUNT(*), SUM(invoice_total)
+    INTO invoices_count, invoices_total
+    FROM invoices i
+    WHERE i.client_id = client_id 
+      AND payment_total = 0;
+  END$$
+  DELIMITER ;
+
+  -- Implement
+  SET @invoice_count = 0;
+  SET @invoice_total = 0;
+  CALL get_unpaid_invoices_for_client
+    (1,  @invoice_count, @invoice_total);
+  SELECT @invoice_count, @invoice_total;
+```
+
+### Variable
+```sql
+  -- User or session Variables
+  SET @invoices_count = 0;
+
+  -- Local Variable
+  DELIMITER $$
+  CREATE PROCEDURE `get_risk_factor`()
+  BEGIN
+    DECLARE risk_factor DECIMAL(9,2) DEFAULT 0;
+    DECLARE invoics_count DECIMAL(9,0);
+    DECLARE invoics_count INT;
+
+    SELECT COUNT(*), SUM(invoice_total)
+    INTO invoics_count, invoics_count
+    FROM invoices;
+
+    SET risk_factor = invoice_total / invoics_count * 5;
+    SELECT risk_factor;
+  END$$
+  DELIMITER ;
+
+  CALL get_risk_factor()
+```
+
+### Drop
+```sql
+  DROP PROCEDURE `get_clients`
+  -- DROP PROCEDURE IF EXISTS `get_clients`
+```
+
+## Functions
+Create own function like MIN, MAX, COUNT, et \
+this only can result single value
+
+### Create
+```sql
+  CREATE FUNCTION `get_risk_factor_for_client`
+  (
+    client_id INT
+  )
+  RETURNS INTEGER
+  -- // DETERMINISTIC, if we give this function the same set of values,
+  -- // it always returns the same value. This is useful in situations where
+  -- // ex : when params 2 will return 'Genap '
+  -- DETERMINISTIC
+
+  READS SQL DATA
+  -- // MODIFIES SQL DATA
+  BEGIN
+    DECLARE risk_factor DECIMAL(9,2) DEFAULT 0;
+    DECLARE invoics_count DECIMAL(9,0);
+    DECLARE invoics_count INT;
+
+    SELECT COUNT(*), SUM(invoice_total)
+    INTO invoics_count, invoics_count
+    FROM invoices i 
+    WHERE i.client_id = client_id;
+
+    SET risk_factor = invoice_total / invoics_count * 5;
+    RETURN risk_factor;
+  END
+
+  -- Implement
+  SELECT 
+    client_id,
+    get_risk_factor_for_client(client_id) AS risk_factor
+  FROM clients; 
+```
+
+### Drop
+```sql
+  DROP FUNCTION IF EXISTS `get_risk_factor_for_client`;
+```
+
+## Tiggers & Events
+<desc>
+  [AFTER|BEFORE] [INSERT|UPDATE|DELETE] ON
+</desc>
+
+### Create
+```sql
+  DELIMITER $$
+  -- sometime format (table-[before|after]-event)
+  -- NEW, OLD (to get table attribut)
+  -- EVENT delete only can use (OLD)
+  CREATE TRIGGER payments_after_insert
+    AFTER INSERT ON payments
+    FOR EACH ROW
+  BEGIN
+    UPDATE invoices
+    SET payment_total = payment_total + NEW.amount
+    WHERE invoice_id = NEW.invoice_id;
+  END $$
+  DELIMITER ;
+```
+
+### Show
+```sql
+  -- SHOW TRIGGERS;
+  -- SHOW EVENTS;
+  -- SHOW TRIGGERS LIKE 'payments%';
+```
+
+### Drop
+```sql
+  DROP TRIGGER `payments_after_insert`;
+  -- DROP TRIGGER IF EXISTS `payments_after_insert`;
+```
+
+###
+### Events
+```sql
+  -- // check if event scheluler ON
+  -- SHOW VARIABLES LIKE 'event%';
+  -- SET GLOBAL event_scheduler = OFF|ON;
+
+  DELIMITER $$
+  CREATE EVENT yearly_delete_stale_audit_rows
+  ON SCHEDULE
+    -- AT `2019-05-1`  (on time excution)
+    EVERY 1 YEAR START '2019-01-01' ENDS '2029-01-01'
+  
+  DO BEGIN
+      DELETE FROM payments_audit
+      WHERE action_date < NOW() - INTERVAL 1 YEAR; 
+      -- DATEADD(NOW. INTERVAL 1 YEAR) // longtype
+
+  END$$
+```
+
+### Alter Events
+```sql
+  ALTER EVENT yearly_delete_stale_audit_rows
+  ON SCHEDULE
+  ...
+  END
+```

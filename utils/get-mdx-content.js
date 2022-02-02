@@ -23,7 +23,11 @@ export async function getMdxContent(source) {
         const {content, data} = matter(mdxSource);
         const mdx = await serialize(content, {
           mdxOptions: {
-            remarkPlugins: [sectionize, remarkGfm],
+            remarkPlugins: [
+              sectionize,
+              remarkGfm,
+            ],
+            commonmark: true,
           },
         });
         return {
