@@ -5,7 +5,7 @@ import type {GetServerSideProps} from 'next';
 export const getServerSideProps: GetServerSideProps = async ({res}) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
 
-  const posts = await getMdxData('datas');
+  const posts = await getMdxData();
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

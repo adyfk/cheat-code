@@ -6,8 +6,8 @@ import glob from 'fast-glob';
 import remarkGfm from 'remark-gfm';
 import sectionize from './sectionize';
 
-export async function getMdxContent(source) {
-  const contentGlob = `${source}/**/*.mdx`;
+export async function getMdxContent() {
+  const contentGlob = `**/*.mdx`;
   const files = glob.sync(contentGlob);
 
   if (!files.length) return [];
@@ -15,7 +15,8 @@ export async function getMdxContent(source) {
   const content = await Promise.all(
       files.map(async (filepath) => {
         const slug = filepath
-            .replace(source, '')
+            .replace('public', '')
+            .replace('md', '')
             .replace(/^\/+/, '')
             .replace(new RegExp(path.extname(filepath) + '$'), '');
 
@@ -41,8 +42,8 @@ export async function getMdxContent(source) {
   return content;
 }
 
-export async function getMdxData(source) {
-  const contentGlob = `${source}/**/*.mdx`;
+export async function getMdxData() {
+  const contentGlob = `**/*.mdx`;
   const files = glob.sync(contentGlob);
 
   if (!files.length) return [];
@@ -50,7 +51,8 @@ export async function getMdxData(source) {
   const content = await Promise.all(
       files.map(async (filepath) => {
         const slug = filepath
-            .replace(source, '')
+            .replace('public', '')
+            .replace('md', '')
             .replace(/^\/+/, '')
             .replace(new RegExp(path.extname(filepath) + '$'), '');
 
