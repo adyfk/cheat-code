@@ -16,6 +16,7 @@ const Head: React.FC<{
   authorLink = 'https://github.com/adyfk',
 }) => {
   const headline = `Cheat Code ${!!title ? `- ${title}`: ''}`;
+  const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
   return (
     <NextHead>
       <title>{headline}</title>
@@ -47,14 +48,14 @@ const Head: React.FC<{
                 '@type': 'ListItem',
                 'position': 1,
                 'item': {
-                  '@id': `https://cheat-code.onrender.com/#${category}`,
+                  '@id': `${baseUrl}/#${category}`,
                   'name': category,
                 },
               }, {
                 '@type': 'ListItem',
                 'position': 2,
                 'item': {
-                  '@id': `https://cheat-code.onrender.com/${slug}`,
+                  '@id': `${baseUrl}/${slug}`,
                   'name': headline,
                 },
               }],

@@ -3,11 +3,7 @@ import {getDate} from '@utils/get-date';
 import type {GetServerSideProps} from 'next';
 
 export const getServerSideProps: GetServerSideProps = async ({res}) => {
-  const baseUrl = {
-    development: 'http://localhost:3000',
-    production: 'https://cheat-code.onrender.com',
-    test: 'https://cheat-code.onrender.com',
-  }[process.env.NODE_ENV];
+  const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
 
   const posts = await getMdxData('datas');
 
@@ -16,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async ({res}) => {
         <url>
             <loc>${baseUrl}</loc>
             <lastmod>${new Date().toISOString()}</lastmod>
-            <changefreq>daily</changefreq>
+            <changefreq>weekly</changefreq>
             <priority>1.0</priority>
         </url>
         ${posts.map(({slug, data}:any) => {
@@ -24,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async ({res}) => {
             <url>
                 <loc>${baseUrl+'/'+slug}</loc>
                 <lastmod>${getDate(data.updateAt)}</lastmod>
-                <changefreq>weekly</changefreq>
+                <changefreq>monthly</changefreq>
                 <priority>0.9</priority>
             </url>
             `;
