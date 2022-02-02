@@ -1,6 +1,7 @@
 import {getMdxContent} from '@utils/get-mdx-content';
 import Blog from '@components/Blog';
 import Head from '@components/Head';
+import {getDate} from '@utils/get-date';
 
 export default function BlogPost({source, frontMatter, slug, category}:any) {
   return (
@@ -9,9 +10,13 @@ export default function BlogPost({source, frontMatter, slug, category}:any) {
         slug={slug}
         author={frontMatter.author}
         title={frontMatter.title}
-        desc={frontMatter.description}
+        desc={`
+          ${frontMatter.title} cheatsheet resume to guide: usage, examples, links, snippets, shorthand, best practice, and more.
+        `}
         category={category}
         authorLink={frontMatter.authorLink}
+        createdAt={getDate(frontMatter.createdAt)}
+        updateAt={getDate(frontMatter.updateAt)}
       />
       <Blog source={source} frontMatter={frontMatter}/>
     </>

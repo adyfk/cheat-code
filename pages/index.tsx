@@ -18,7 +18,7 @@ const Home: NextPage<any> = ({contents}) => {
             {Object.entries(contents).map(([category, content]:any, index)=>{
               return (
                 <div className='basis-full lg:basis-[47%]' key={index}>
-                  <h2 className='text-xl text-sky-700'>{category}</h2>
+                  <h2 className='text-xl text-sky-700' id={category}>{category}</h2>
                   <ul className='list-disc pl-5 pt-2'>
                     {content.map(({slug, data}:any)=>{
                       return (
