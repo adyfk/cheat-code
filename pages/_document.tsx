@@ -12,7 +12,7 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="icon" href="/favicon.ico" />
-          <meta name="google-site-verification" content="za3e5rHgaRcpR91kpbiZ-3AmJNyT4OKTf5Szljc1eoI" />
+          <meta name="google-site-verification" content="pqURzWqJv4aLGt93AqrLuOZ4R0ZxbwlJymFj1mnpkSo" />
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
           </style>
