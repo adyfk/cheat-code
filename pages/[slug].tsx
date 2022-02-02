@@ -3,7 +3,7 @@ import Blog from '@components/Blog';
 import Head from '@components/Head';
 import {getDate} from '@utils/get-date';
 
-export default function BlogPost({source, frontMatter, slug, category}:any) {
+export default function BlogPost({source, frontMatter, slug}:any) {
   return (
     <>
       <Head
@@ -13,7 +13,7 @@ export default function BlogPost({source, frontMatter, slug, category}:any) {
         desc={`
           ${frontMatter.title} cheatsheet resume to guide: usage, examples, links, snippets, shorthand, best practice, and more.
         `}
-        category={category}
+        category={frontMatter.category}
         authorLink={frontMatter.authorLink}
         createdAt={getDate(frontMatter.createdAt)}
         updateAt={getDate(frontMatter.updateAt)}
