@@ -1,12 +1,8 @@
-import {getMdxData} from '@utils/get-mdx-content';
 import {getDate} from '@utils/get-date';
-import type {GetServerSideProps} from 'next';
+import {writeFileSync, rmSync} from 'fs';
 
-export const getServerSideProps: GetServerSideProps = async ({res}) => {
+export async function generate(posts: any) {
   const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
-
-  const posts = await getMdxData();
-
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <url>
@@ -27,19 +23,9 @@ export const getServerSideProps: GetServerSideProps = async ({res}) => {
   })
       .join('')}
     </urlset>`;
-
-  res.setHeader('Content-Type', 'text/xml');
-  res.write(sitemap);
-  res.end();
-
-  return {
-    props: { },
-  };
-};
-
-
-const Sitemap = () => {
-  return <div></div>;
-};
-
-export default Sitemap;
+  try {
+    rmSync('public/sitemap.xml', {recursive: true, force: true});
+  } catch (error) {
+  }
+  writeFileSync('public/sitemap.xml', sitemap);
+}

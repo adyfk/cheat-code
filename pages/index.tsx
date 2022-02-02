@@ -4,6 +4,7 @@ import {getMdxData} from '@utils/get-mdx-content';
 import type {NextPage} from 'next';
 import Link from 'next/link';
 import {PauseIcon} from '@heroicons/react/solid';
+import {generate} from 'scripts/generate-sitemap';
 
 const Home: NextPage<any> = ({contents}) => {
   return (
@@ -53,6 +54,7 @@ const Home: NextPage<any> = ({contents}) => {
 
 export async function getStaticProps() {
   const posts = await getMdxData();
+  await generate(posts);
 
   const contents = posts.reduce((acc: any, item, index)=>{
     const category = item.data.category;
