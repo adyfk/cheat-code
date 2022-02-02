@@ -8,7 +8,7 @@ used: []
 author: "Adi Fatkhurozi"
 authorLink: "https://github.com/adyfk"
 description: "(Structured Query Language) is a domain-specific language used in programming and designed for managing data held in a relational database management system (RDBMS), or for stream processing in a relational data stream management system (RDSMS)"
-updateAt: "1/2/2022 20:09:00"
+updateAt: "2/2/2022 22:09:00"
 createdAt: "1/1/2022 00:00:00"
 progress: true
 ---             
@@ -22,14 +22,6 @@ Download:  <link to='/sql/sql_demo.zip'> Dummy Database </link>
 ```sql
   USE `database_name`;
 ```
-
-### Data Type
-<desc>
-  The data type of a col defines what value the col can hold: integer, character, money, date and time, binary, and so on.
-</desc>
-
-* <link to='https://www.w3schools.com/sql/sql_datatypes.asp'> Data Type W3School</link>
-* <link to='https://www.w3schools.com/sql/sql_dates.asp'> Date Types </link>
 
 ### Auto Increment
 <note>
@@ -52,6 +44,84 @@ Download:  <link to='/sql/sql_demo.zip'> Dummy Database </link>
   CREATE TABLE Persons (
     `col1` INT IDENTITY(1,1) PRIMARY KEY
   );
+```
+
+## Data Types
+The data type of a col defines what value the col can hold: integer, character, money, date and time, binary, and so on.
+
+* <link to='https://www.w3schools.com/sql/sql_datatypes.asp'> Data Type W3School</link>
+* <link to='https://dev.mysql.com/doc/refman/8.0/en/data-types.html'>MySQL Data Types </link>
+* <link to='https://www.w3schools.com/sql/sql_dates.asp'> Date Types </link>
+
+### String
+<img src='/sql/string.png' alt="Data Types of String" width='100%'/>
+
+### Integer
+<img src='/sql/integer.png' alt="Data Types of Integer" width='100%'/>
+
+### Fixed / Floating Point
+<img src='/sql/floating-point.png' alt="Data Types of Fixed / Floating Point" width='100%'/>
+
+### Boolean
+<img src='/sql/boolean.png' alt="Data Types of Boolean" width='100%'/>
+
+### Enum
+<img src='/sql/enum.png' alt="Data Types of Enum" width='100%'/>
+
+### Date and Time
+<img src='/sql/date-time.png' alt="Data Types of Date and Time" width='100%'/>
+
+### Blob
+<img src='/sql/blob.png' alt="Data Types of Blob" width='100%'/>
+
+### JSON
+<danger>
+  minimum MySQL version 8
+</danger>
+
+```sql
+  CREATE TABLE `products` {
+    properties JOSN
+  }
+  UPDATE products
+  -- // case 1
+  -- SET properties = '
+  -- {
+  --   "dimensions": [1,2,3,4],
+  --   "weight": 10,
+  --   "manufacture": {
+  --     "name": "cheat-sheet"
+  --   }
+  -- }
+  -- '
+  -- // case 2
+  -- SET properties = JSON_OBJECT(
+  --   'weight', 10,
+  --   'dimensions': JSON_ARRAY(1,2,3),
+  --   'manufacture': JSON_OBJECT('name','cheat-sheet') 
+  -- )
+  -- // case 3 update only one key
+  -- SET properties = JSON_SET(
+  --   properties
+  --   '$.weight', 20,
+  --   '$.age', 10
+  -- )
+  -- // case 4 delete key value
+  SET properties = JSON_REMOVE(
+    properties,
+    '$.age'
+  )
+  WHERE product_id = 1;
+
+  SELECT 
+    product_id, 
+    JSON_EXTRACT(properties, '$.weight'),
+    properties -> '$.dimensions[0]',
+    properties -> '$.manufacture.name', -- "cheat-sheet" (with "")
+    properties ->> '$.manufacture.name', -- cheat-code (without "")
+
+  FROM products
+  WHERE product_id = 1;
 ```
 
 ## SQL Constraints
@@ -1049,3 +1119,69 @@ this only can result single value
   ...
   END
 ```
+
+## Transaction
+A transaction is a group of simple statements that represent a single unit of work, so all these statements
+should be completed successfully or the transaction will fail.
+
+<danger>
+  MySQL wrap every single statement inside a transaction, and then it will commit if that statement didn't return an error. 
+  So whenever we have an INSERT UPDATE or DELETE statement, MySQL wraps this inside a transaction and then it will do a commit automatically.
+  <br/>
+  -- SHOW VARIABLES LIKE 'autocommmit';
+</danger>
+<note>
+  If u wanna check condition transaction, u can execute statement, line by line;
+</note>
+### Create
+
+```sql
+  START TRANSACTION;
+
+  INSERT INTO orders (customer_id, order_date, status)
+  VALUES (1, '2019-01-01',1);
+
+  INSERT INTO order_items
+  VALUES (LAST_INSERT_ID(), 1, 1, 1);
+
+  -- // But there are situations where we may want to do some error checking and
+  -- // pull back a transaction. In those cases instead of the commit statement
+  -- // u can add ROLLBACK
+  -- ROLLBACK;
+  COMMIT;
+```
+
+### Concurenccy and Locking
+
+* **Lost Updates** \
+This happens when two transactions try to update the same data and you don't use locks, 
+in this situation the transaction that commits later will override the changes made by the previous transaction.
+* **Dirty Reads** \
+Dirty Reads. A dirty read happens when a transaction reads data that hasn't been committed yet. 
+* **Non-repeatable Reads** \ 
+So by adding more isolation to our transaction, 
+we can guarantee the transaction can only read committed data. 
+But what if during a course of a transaction, you read something twice and get different results.
+* **Phantom Reads** \
+Phantom means ghost, so we have data that suddenly appears like a ghost. 
+And we miss them in our query, because they get added, updated or removed,
+
+<desc>
+  <img src='/sql/sql-isolation-levels.png' width='100%' />
+</desc>
+
+```sql
+  SHOW VARIABLES LIKE 'transaction_isolation';
+  -- // set to next transactin
+  -- SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+  -- // set to all session / connection
+  -- SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+  -- // set global for all new transaction and all connection
+  -- SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+```
+
+### Deadlock
+<desc>
+  What is a deadlock, a deadlock happens when different transactions cannot complete because each transaction holds
+  a lock that the other needs, so both transactions need each other and never release their lock. 
+</desc>
