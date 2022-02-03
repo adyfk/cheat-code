@@ -6,7 +6,6 @@ const nextConfig = {
 };
 
 const withPlugins = require('next-compose-plugins');
-console.log(process.env.NODE_ENV);
 module.exports = withPlugins([
   [
     withPWA,
