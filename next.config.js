@@ -6,13 +6,18 @@ const nextConfig = {
 };
 
 const withPlugins = require('next-compose-plugins');
-
+console.log(process.env.NODE_ENV);
 module.exports = withPlugins([
   [
     withPWA,
     {
-      dest: 'public',
-      disable: process.env.NODE_ENV !== 'production',
+      pwa: {
+        dest: 'public',
+        register: true,
+        skipWaiting: true,
+        disable: process.env.NODE_ENV === 'development',
+        cacheOnFrontEndNav: true,
+      },
     },
   ],
 ], nextConfig);
