@@ -8,9 +8,8 @@ used: []
 author: "Adi Fatkhurozi"
 authorLink: "https://github.com/adyfk"
 description: "(Structured Query Language) is a domain-specific language used in programming and designed for managing data held in a relational database management system (RDBMS), or for stream processing in a relational data stream management system (RDSMS)"
-updateAt: "3/2/2022 15:05:00"
-createdAt: "2/1/2022 00:00:00"
-progress: true
+updateAt: "3/2/2022 16:05:00"
+createdAt: "2/1/2022 00:00:00"=
 ---             
 
 
@@ -40,14 +39,20 @@ Download:  **<link to='/assets/sql/sql_demo.zip'> Dummy Database </link>**
 </note>
 
 ```sql
-  -- IDENTITY(start, incrementBy)
+  -- IDENTIFIED(start, incrementBy)
   CREATE TABLE Persons (
-    `col1` INT IDENTITY(1,1) PRIMARY KEY
+    `col1` INT IDENTIFIED(1,1) PRIMARY KEY
   );
 ```
 
-### Last Query Cost 
+### SHOW
 ```sql
+  SHOW STATUS;
+  SHOW TRIGGERS;
+  SHOW EVENTS;
+  SHOW VARIABLES;
+  SHOW DATABASES;
+  -- show last query cost
   SHOW STATUS LIKE 'last_query_cost';
 ```
 
@@ -1353,6 +1358,90 @@ This is way faster then scanning and reading every single record in the master t
 ```
 
 ### Index for Sorting
+<desc>
+  Extra = Using filesort are slow
+</desc>
+<img alt='Sort Index' src='/assets/sql/sort-index.png'/>
+
 ```sql
+  -- index (a, b)
+  -- sort good condition
+  -- a
+  -- a, b
+  -- a DESC, b DESC
+
+  -- you can test query and SHOW STATUS LIKE 'last_query_cost';
+```
+
+## Securing Databases
+
+### Create a User
+```sql
+  -- CREATE 
+      -- USER 
+        -- [name]
+        -- [restrictIp | host | subdomian]?  user connect form;
+      -- IDENTIFIED BY 
+        -- [password] 
+
+  CREATE USER cheatcode IDENTIFIED BY '1234';
+  CREATE USER cheatcode@127.0.0.1;
+  CREATE USER cheatcode@'cheatcode.website';
+  CREATE USER cheatcode@'%.cheatcode.website';
+```
+
+### Viewing Users
+```sql
+  SELECT * FROM mysql.user;
+```
+
+### Droping Users
+```sql
+  DROP USER cheatcode@'cheatcode.website';
+```
+
+### Changing Password
+```sql
+  -- set self
+  SET PASSWORD = '1235';
+  -- set another user
+  SET PASSWORD FOR cheatcode = '1235';
+```
+
+### Granting Privileges
+```sql
+  -- 1: web/dekstop appliaction (READ, WRITE)
+  CREATE USER userApp IDENTIFIED BY '1234';
+  CREATE USER adminApp IDENTIFIED BY '1234';
   
+  GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE
+  -- ON 'database_name'.'table_name'
+  ON 'sql_store'.*
+  TO userApp;
+
+  -- 2: admin (CRUD)
+  GRANT ALL
+  ON *.*
+  TO adminApp;
+```
+<note>
+  References : 
+  <link to='https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html'>
+    Privileges Provided
+  </link>
+</note>
+
+### Viewing Privileges
+```sql
+  -- show self
+  SHOW GRANTS;
+  -- show anohter user
+  SHOW GRANTS FOR `userName`;
+```
+
+### Revoking Privileges
+```sql
+  REVOKE CREATE VIEW
+  ON *.*
+  FROM `userName`;
 ```
