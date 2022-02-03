@@ -12,7 +12,7 @@ const Head: React.FC<{
 }> = ({
   author = 'Adi Fatkhurozi',
   title,
-  desc='CheatCode will save you from having to remember everything you learn',
+  desc = process.env.NEXT_PUBLLC_DESC,
   slug = '',
   category = '',
   authorLink = 'https://github.com/adyfk',
