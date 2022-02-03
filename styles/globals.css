@@ -50,3 +50,7 @@
 body { 
     @apply w-full;
 }
+
+html {
+    scroll-behavior: smooth;
+}

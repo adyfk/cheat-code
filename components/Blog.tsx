@@ -5,9 +5,10 @@ import Header from './Header';
 import Link from './Link';
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import DangerNote from './DangerNote';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Desc from './DescNote';
 import Text from './Text';
+import {ArrowSmLeftIcon, ArrowSmRightIcon} from '@heroicons/react/solid';
 
 const components = {
   text: Text,
@@ -72,6 +73,7 @@ const components = {
 const Blog: React.FC<any> = ({frontMatter, source}) => {
   return (
     <>
+      <NavigationHeading />
       <Header />
       <main className='p-5'>
         <h2 className='inline-block text-4xl mr-3 text-sky-900 mb-5'>
@@ -106,5 +108,57 @@ const Blog: React.FC<any> = ({frontMatter, source}) => {
     </>
   );
 };
+
+function NavigationHeading() {
+  const [openNav, setOpenNav] = useState(false);
+  const [navs, setNavs] = useState([]);
+  useEffect(()=>{
+    setTimeout(()=>{
+      const tempNavs: any = [];
+      const nodes = document.querySelectorAll('h2');
+      nodes.forEach((node)=>{
+        if (!node.id) return;
+        tempNavs.push(node);
+      });
+      setNavs(tempNavs);
+      setOpenNav(true);
+    }, 1000);
+  }, []);
+
+  const toogleNav = ( ) => setOpenNav((prev)=>!prev);
+
+  return (
+    <div className={`fixed bottom-1/2 translate-y-[50%] right-0 select-none`} >
+      <div className='relative'>
+        <div className=' transition-all cursor-pointer w-10 bg-sky-600 hover:bg-amber-400 absolute left-[-10px] top-1/2 translate-y-[-50%] translate-x-[-100%] text-white rounded-full'>
+          {openNav ?
+            <ArrowSmRightIcon onClick={toogleNav} />:
+            <ArrowSmLeftIcon onClick={toogleNav} />
+          }
+        </div>
+        <div className={`${openNav ? '': 'mr-[-280px]'} transition-all w-[280px]  rounded-md p-4 bg-sky-600`}>
+          <div className='mb-2'>
+            <h2 className='mb-2 text-white font-bold text-xl'>Navigate Topic</h2>
+          </div>
+          <ul className='list-disc pl-4 text-white font-semibold flex flex-col gap-1'>
+            {navs.map((nav:any)=>{
+              const text = nav.innerText;
+              return (
+                <li key={text} className='text-ellipsis'>
+                  <a
+                    className='hover:text-amber-300'
+
+                    href={`#${text}`}>
+                    {text}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default Blog;
