@@ -23,7 +23,7 @@ const Home: NextPage<any> = ({contents}) => {
                   <ul className='list-disc pl-5 pt-2'>
                     {content.map(({slug, data}:any)=>{
                       return (
-                        <li key={slug} className='mb-1'>
+                        <li key={'/'+slug} className='mb-1'>
                           <Link href={slug}>
                             <a className='hover:text-sky-900'>
                               {data.title}

@@ -12,7 +12,7 @@ const Head: React.FC<{
 }> = ({
   author = 'Adi Fatkhurozi',
   title,
-  desc = process.env.NEXT_PUBLLC_DESC,
+  desc = process.env.NEXT_PUBLIC_DESC,
   slug = '',
   category = '',
   authorLink = 'https://github.com/adyfk',
@@ -36,6 +36,17 @@ const Head: React.FC<{
       <link rel="dns-prefetch" href="https://www.google.com"></link>
       <link rel="dns-prefetch" href="https://www.google-analytics.com"></link>
       <meta content="" name="copyright"></meta>
+      <meta name='twitter:card' content='summary' />
+      <meta name='twitter:url' content={`${process.env.BASEURL}`} />
+      <meta name='twitter:title' content='Cheat Code' />
+      <meta name='twitter:description' content={desc} />
+      <meta name='twitter:image' content={`${process.env.BASEURL}/icon-192x192.png`} />
+      <meta name='twitter:creator' content='@Adyfkz' />
+      <meta property='og:type' content='website' />
+      <meta property='og:title' content='Cheat Code' />
+      <meta property='og:description' content={desc} />
+      <meta property='og:site_name' content='Cheat Code' />
+      <meta property='og:url' content={`${process.env.BASEURL}`} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify({
