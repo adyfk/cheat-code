@@ -38,7 +38,8 @@ class MyDocument extends Document {
           <meta property='og:description' content={process.env.DESC} />
           <meta property='og:site_name' content='Cheat Code' />
           <meta property='og:url' content={`${process.env.BASEURL}`} />
-
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6527215730285341"
+            crossOrigin="anonymous"></script>
         </Head>
         <body className='bg-slate-50'>
           <Main></Main>
