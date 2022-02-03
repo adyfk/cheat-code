@@ -4,18 +4,13 @@ const nextConfig = {
 };
 
 const withPlugins = require('next-compose-plugins');
-// const withMDX = require('@next/mdx')({
-//   extension: /\.mdx?$/,
-//   options: {
-//     remarkPlugins: [],
-//     rehypePlugins: [],
-//   },
-// });
 
 module.exports = withPlugins([
-  // [
-  //   withMDX, {
-  //     pageExtensions: ['md', 'mdx'],
-  //   },
-  // ],
+  [
+    withPWA,
+    {
+      dest: 'public',
+      disable: process.env.NODE_ENV === 'development',
+    },
+  ],
 ], nextConfig);

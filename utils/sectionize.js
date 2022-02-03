@@ -32,7 +32,7 @@ function mappingHeaderAndChildren(between, depth) {
     }
     const cellContent = {
       data: {
-        hName: 'content',
+        hName: 'div',
         hProperties: {
           className: 'container-col',
         },
@@ -42,17 +42,17 @@ function mappingHeaderAndChildren(between, depth) {
     return [
       ...header,
       {
-        type: 'content',
+        type: 'div',
         children: cells[0],
         ...cellContent,
       },
       {
-        type: 'content',
+        type: 'div',
         children: cells[1],
         ...cellContent,
       },
       {
-        type: 'content',
+        type: 'div',
         children: cells[2],
         ...cellContent,
       },
@@ -62,10 +62,10 @@ function mappingHeaderAndChildren(between, depth) {
     return [
       header,
       {
-        type: 'content',
+        type: 'div',
         children,
         data: {
-          hName: 'content',
+          hName: 'div',
           hProperties: {
             className: 'bg-white flex flex-col basis-full items-stretch border-2 rounded-lg items-start',
           },
@@ -95,7 +95,7 @@ function sectionize(node, ancestors) {
     depth: depth,
     children: mappingHeaderAndChildren(between, depth),
     data: {
-      hName: 'content',
+      hName: 'div',
       hProperties: {
         className: depth === 2 ?
         'container-h2' :
