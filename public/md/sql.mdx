@@ -8,7 +8,7 @@ used: []
 author: "Adi Fatkhurozi"
 authorLink: "https://github.com/adyfk"
 description: "(Structured Query Language) is a domain-specific language used in programming and designed for managing data held in a relational database management system (RDBMS), or for stream processing in a relational data stream management system (RDSMS)"
-updateAt: "2/2/2022 23:05:00"
+updateAt: "3/2/2022 15:05:00"
 createdAt: "2/1/2022 00:00:00"
 progress: true
 ---             
@@ -16,7 +16,7 @@ progress: true
 
 ## Basic
 
-Download:  <link to='/assets/sql/sql_demo.zip'> Dummy Database </link> 
+Download:  **<link to='/assets/sql/sql_demo.zip'> Dummy Database </link>**
 
 ### Database Target
 ```sql
@@ -45,6 +45,21 @@ Download:  <link to='/assets/sql/sql_demo.zip'> Dummy Database </link>
     `col1` INT IDENTITY(1,1) PRIMARY KEY
   );
 ```
+
+### Last Query Cost 
+```sql
+  SHOW STATUS LIKE 'last_query_cost';
+```
+
+### Explain 
+<desc>
+  will explain what execute behind of syntax
+</desc>
+
+```sql
+  EXPLAIN SELECT `col1` FROM `table1` WHERE `id` = 1;
+```
+
 
 ## Data Types
 The data type of a col defines what value the col can hold: integer, character, money, date and time, binary, and so on.
@@ -1106,7 +1121,7 @@ this only can result single value
   
   DO BEGIN
       DELETE FROM payments_audit
-      WHERE action_date < NOW() - INTERVAL 1 YEAR; 
+      WHERE action_date <link NOW() - INTERVAL 1 YEAR; 
       -- DATEADD(NOW. INTERVAL 1 YEAR) // longtype
 
   END$$
@@ -1185,3 +1200,159 @@ And we miss them in our query, because they get added, updated or removed,
   What is a deadlock, a deadlock happens when different transactions cannot complete because each transaction holds
   a lock that the other needs, so both transactions need each other and never release their lock. 
 </desc>
+
+## Indexing for High Performance
+
+Sample SQL Data to test **<link to='/assets/sql/load_1000_customers.sql'>Download Here</link>** 
+
+MySQL scan every record in the customers table. 
+This is not a big deal in a small table with a few hundred or thousand records,
+but as our tables grow larger the cost of these queries is going to increase dramatically, 
+we can speed up this query by creating an index on the column, 
+and this is like creating a directory of column sorted
+by your state. So MySQL can quickly find the corresponding column using this index,
+and then it will read those records. 
+This is way faster then scanning and reading every single record in the master table. 
+
+<img width='45%' src='/assets/sql/performance.png' alt='Sample Indexing Table' />
+<img width='45%' src='/assets/sql/comparison-data-index.png' alt='Comparison Data Index' />
+<danger>
+  <b>Cost Of Index</b><br/>
+  1. Increment the Database <br/>
+  2. Slow down the writes
+</danger>
+
+### Create 
+```sql
+  -- natural select will type `ALL` mean to select all column on table
+  EXPLAIN SELECT customer_id FROM customers WHERE state = 'CA';
+
+  -- CREATE INDEX [index_name] ON [table_name] ([column_name])
+  CREATE INDEX `idx_state` ON `customers` (state);
+
+  -- natural select will type `ref` mean to reference to index state, and than get to customer columns
+  -- u can test code below
+  EXPLAIN SELECT customer_id FROM customers WHERE state = 'CA';
+```
+
+### View 
+```sql
+  -- in mySQL primary,secondary,unique column automaticly create index by that column
+  -- default analyse just number of estimate
+  SHOW INDEXES IN `table_name`;
+
+  -- to analyse table with accurate value, you can run code below
+  -- and than run SHOW INDEXS `table_name`;
+  ANALYZE TABLE `table_name`;
+```
+
+### Prefix indexes
+<desc>
+    if index is a string column, like char var char, text or blob,
+    our index may consume a lot of this space and it won't perform well.
+    Smaller indexes are better because they can fit in memory.
+    And this makes our searches faster. 
+</desc>
+<desc>
+    So when indexing string columns we don't want to include the entire column in the index, 
+    we only want to include the first few characters or the prefix of the column so our index will be smaller.
+</desc>
+
+```sql
+  -- lastname(length of character)
+  CREATE INDEX `idx_lastname` ON `customers` (`last_name`(20))
+
+  -- To find the optimal number we have to look at our data, 
+  -- we want to include enough characters that can uniquely identify each customer.
+  -- example
+  SELECT 
+    COUNT(DISTINCT LEFT(lastname, 1)),
+    COUNT(DISTINCT LEFT(lastname, 5)),
+    COUNT(DISTINCT LEFT(lastname, 10)) 
+  FROM customers;
+```
+ 
+### Full Text Indexes
+<desc>
+  MySQL and many other database management systems, 
+  we have a special kind of index called a full text index. 
+  We use this index to build fast and flexible applications in our search engines.
+</desc>
+
+```sql
+  SELECT * FROM posts
+  WHERE title LIKE '%react redux%' OR 
+        body LIKE '%react redux%';
+
+  -- fast case , first create index
+  CREATE FULLTEXT INDEX idx_title_body ON posts (title, body);
+  
+  SELECT 
+    *, 
+    MATCH(title, body) AGAINTS('react redux') AS relevant_score
+  FROM posts
+  WHERE MATCH(title, body) AGAINTS('react redux');
+  -- has 'react', hasno 'redux', must have 'form', must has exac "handling in form" 
+  -- WHERE MATCH(title, body) AGAINTS('react -redux +form "handling in form"' IN BOOLEAN MODE);
+```
+
+### Order In Composite Indexes
+* Put the most frequently used columns first
+* Put the cloumns with a higher cardinality first
+
+<img src='/assets/sql/order-in-composite.png' alt='Order In Composite Indexes'/>
+
+```sql
+  SELECT 
+    COUNT(DISTINCT `state`),
+    COUNT(DISTINCT `lastname`),
+  FROM customers;
+  -- state = 48 | lastname = 996
+  
+  -- case 1
+  CREATE INDEX `idx_lastname_state` ON `customers`(`lastname`,`state`);
+  EXPLAIN SELECT customer_id FROM customers
+  WHERE `state` = 'CA' AND `last_name` LIKE 'A%';
+  -- rows scan is 40
+
+  CREATE INDEX `idx_state_lastname` ON `customers`(`state`, `lastname`);
+  EXPLAIN SELECT customer_id FROM customers
+  WHERE `state` = 'CA' AND `last_name` LIKE 'A%';
+  -- rows scan is 7
+```
+
+### When Indexes are Ignored
+```sql
+  EXPLAIN SELECT customer_id FROM customers
+    -- this will not use index
+    WHERE points + 10 > 2010
+    -- alternative
+    -- WHERE points > 2020 - 10;
+```
+<desc>Another Case</desc>
+
+```sql
+  CREATE INDEX `idx_state` ON `customers` (`state`);
+  -- than run
+  EXPLAIN SELECT `customer_id` FROM `customers`
+  WHERE `state` = 'CA' OR `points` > 1000;
+  -- will scan 1010 rows
+```
+<img src='/assets/sql/when-ignore-index.png' alt='When Ignore Index'/>
+
+```sql
+  CREATE INDEX `idx_points` ON `customers` (`points`);
+  -- than run
+  EXPLAIN 
+    SELECT `customer_id` FROM `customers`
+    WHERE `state` = 'CA' 
+    UNION 
+    SELECT `customer_id` FROM `customers`
+    WHERE `points` > 1000;
+  -- will scan state 112 rows and points 528 rows
+```
+
+### Index for Sorting
+```sql
+  
+```

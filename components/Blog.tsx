@@ -34,6 +34,7 @@ const components = {
           alt={alt}
           height={height}
           src={src}
+          className='cursor-pointer'
           width={width}
         />
         {open && (
