@@ -8,7 +8,7 @@ used: ['React Js']
 author: "Adi Fatkhurozi"
 authorLink: "https://github.com/adyfk"
 description: "React is a JavaScript library for building user interfaces"
-updateAt: "2/2/2022 23:05:00"
+updateAt: "3/2/2022 23:05:00"
 createdAt: "2/1/2022 00:00:00"
 ---             
 
@@ -477,4 +477,37 @@ On-demand image resizing, even for images stored on remote servers.
       </>
     )
   }
+```
+
+## Analytics to Router
+
+### Hooks
+
+```jsx
+  import { useRouter } from 'next/router'
+
+  const router = useRouter()
+  useEffect(() => {
+    const handleRouteChange = (pathname) => {
+      // analytic action
+    }
+    //When the component is mounted, subscribe to router changes
+    //and log those page views
+    router.events.on('routeChangeComplete', handleRouteChange)
+
+    // If the component is unmounted, unsubscribe
+    // from the event with the `off` method
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
+```
+
+### Global
+```jsx
+  import Router from 'next/router';
+
+  Router.events.on('routeChangeComplete', (pathname) =>{
+    // analytic action
+  });
 ```
