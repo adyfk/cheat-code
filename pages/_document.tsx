@@ -25,8 +25,6 @@ class MyDocument extends Document {
           <link rel="apple-touch-icon" href={`${process.env.BASEURL}/icon-192x192.png`} />
 
           <link rel='icon' type='image/png' sizes='32x32' href='icon-32x32.png' />
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6527215730285341"
-            crossOrigin="anonymous"></script>
         </Head>
         <body className='bg-slate-50'>
           <Main></Main>

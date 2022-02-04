@@ -1,4 +1,5 @@
 import NextHead from 'next/head';
+import Script from 'next/script';
 
 const Head: React.FC<{
   author?: string;
@@ -47,6 +48,10 @@ const Head: React.FC<{
       <meta property='og:description' content={desc} />
       <meta property='og:site_name' content='Cheat Code' />
       <meta property='og:url' content={`${process.env.BASEURL}`} />
+      <Script
+        strategy="lazyOnload"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6527215730285341"
+        crossOrigin="anonymous"></Script>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify({
