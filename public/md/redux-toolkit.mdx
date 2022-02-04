@@ -1,0 +1,435 @@
+---
+title: "Redux Toolkit"
+version: "1.7.2"
+versionLink: "https://redux-toolkit.js.org/introduction/getting-startedm"
+category: "Javascript Library"
+language: "Javascript"
+used: ['React JS']
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "The Redux Toolkit package is intended to be the standard way to write Redux logic"
+updateAt: "4/2/2022 14:05:00"
+createdAt: "3/1/2022 00:00:00"
+progress: true
+---             
+
+## Getting Started
+
+### Instalation
+
+```bash
+  npm install @reduxjs/toolkit
+  # or
+  yarn add @reduxjs/toolkit
+```
+
+## Redux Create Store
+
+### configureStore
+```tsx
+  // And use redux-batch as an example of adding enhancers
+  import { reduxBatch } from '@manaflair/redux-batch'
+  import { Reducer } from '@reduxjs/toolkit'
+  // We'll use redux-logger just as an example of adding another middleware
+  import logger from 'redux-logger'
+
+  declare const reducer: Reducer<{}>
+  
+  const reducer = {
+    todos: todosReducer,
+    visibility: visibilityReducer,
+  }
+
+  const preloadedState = {
+    todos: [
+      {
+        text: 'Eat food',
+        completed: true,
+      },
+      {
+        text: 'Exercise',
+        completed: false,
+      },
+    ],
+    visibilityFilter: 'SHOW_COMPLETED',
+  }
+
+  const store = configureStore({
+    reducer,
+    // getDefaultMiddleware()
+    // dev [thunk, immutableStateInvariant, serializableStateInvariant]
+    // prod [thunk]
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    devTools: process.env.NODE_ENV !== 'production',
+    preloadedState,
+    enhancers: [reduxBatch],
+  })
+```
+
+### createReducer 'General'
+<note>Basic Reducer</note>
+
+```tsx
+  const initialState = { value: 0 }
+  function counterReducer(state = initialState, action) {
+    switch (action.type) {
+      case 'increment':
+        return { ...state, value: state.value + 1 }
+      case 'incrementByAmount':
+        return { ...state, value: state.value + action.payload }
+      default:
+        return state
+    }
+  }
+```
+
+### createReducer 'Builder Callback'
+
+```tsx
+  import {
+    createAction,
+    createReducer,
+    AnyAction,
+    PayloadAction,
+    current
+  } from '@reduxjs/toolkit'
+  
+  interface CounterState { value: number }
+
+  const increment = createAction<number>('counter/increment')
+  const isActionWithNumberPayload = (action: AnyAction): action is PayloadAction<number> 
+    => typeof action.payload === 'number'
+  
+  const initialState = { value: 0 } as CounterState
+  const counterReducer = createReducer(initialState, (builder) => {
+    builder 
+      .addCase(increment, (state, action) => {
+        // Logging Draft State Values
+        
+        console.log('before', current(state))
+        state.value+=action.payload 
+        console.log('after', current(state))
+      })
+      .addCase('incrementByAmount', (state, action) => { state.value += action.payload })
+      // "Builder Callback" Notation
+      .addMatcher(isActionWithNumberPayload, (state, action) => {})
+      // if no case reducer and no matcher reducer was executed.
+      .addDefaultCase((state, action) => {})
+  })
+
+  // dispatch(increment(2))
+  // dispatch({ type: 'incrementByAmount', payload: 2 })
+  // matcher isActionWithNumberPayload will called when payload === 'number'
+```
+### createReducer 'Map Object'
+
+```tsx
+  const initialState = 0
+  const increment = createAction('increment')
+  const counterReducer = createReducer(initialState, {
+    [increment]: (state, action) => state + action.payload,
+    decrement: (state, action) => state - action.payload,
+  })
+```
+<desc>
+  Alternately, use a "lazy initializer" to provide the initial state
+</desc>
+
+```tsx
+  const initialState = () => 0
+  const increment = createAction('increment')
+  const counterReducer = createReducer(
+    initialState, 
+    {
+      [increment]: (state, action) => state + action.payload,
+      decrement: (state, action) => state - action.payload,
+    },
+    [
+      {
+        matcher: (action) => typeof action.payload === 'string',
+        reducer(state, action) {
+          state.strLen += action.payload.length
+        },
+      },
+    ],
+    // default reducer
+    (state) => {
+      state.nonStringActions++
+    }
+  )
+
+```
+
+###
+### createAction
+```tsx
+  function createAction(type, prepareAction?)
+```
+<desc>Implementation</desc>
+
+```tsx
+  import { createAction } from '@reduxjs/toolkit'
+
+  const increment = createAction<number | undefined>('counter/increment')
+  // increment(2)
+  // { type: 'counter/increment', payload: 2 }
+
+
+  const addTodo = createAction('todos/add', function prepare(text: string) {
+    return {
+      payload: {
+        text,
+        createdAt: new Date().toISOString(),
+      },
+    }
+  });
+  console.log(addTodo('Write more docs'))
+  /**
+   * {
+   *   type: 'todos/add',
+   *   payload: {
+   *     text: 'Write more docs',
+   *     createdAt: '2019-10-03T07:53:36.581Z'
+   *   }
+   * }
+   **/
+```
+
+### createSlice
+```tsx
+  function createSlice({
+      // A name, used in action types
+      name: string,
+      // The initial state for the reducer
+      initialState: any,
+      // An object of "case reducers". 
+      // Key names will be used to generate actions.
+      reducers: Object<string, ReducerFunction | ReducerAndPrepareObject>
+      // A "builder callback" function used to add more reducers, or
+      // an additional object of "case reducers", 
+      // where the keys should be other action types
+      extraReducers?:
+      | Object<string, ReducerFunction>
+      | ((builder: ActionReducerMapBuilder<State>) => void)
+  })
+```
+<note>Implementation</note>
+
+```tsx
+  import { createSlice, createAction, PayloadAction } from '@reduxjs/toolkit'
+  import { createStore, combineReducers } from 'redux'
+
+  const incrementBy = createAction<number>('incrementBy')
+  const decrementBy = createAction<number>('decrementBy')
+
+  const counter = createSlice({
+    name: 'counter',
+    initialState: 0 as number,
+    reducers: {
+      increment: (state) => state + 1,
+      decrement: (state) => state - 1,
+      multiply: {
+        reducer: (state, action: PayloadAction<number>) => state * action.payload,
+        prepare: (value?: number) => ({ payload: value || 2 }), // fallback if the payload is a falsy value
+      },
+    },
+    // "builder callback API", recommended for TypeScript users
+    extraReducers: (builder) => {
+      builder.addCase(incrementBy, (state, action) => state + action.payload)
+      builder.addCase(decrementBy, (state, action) => state - action.payload)
+    },
+  })
+
+  const user = createSlice({
+    name: 'user',
+    initialState: { name: '', age: 20 },
+    reducers: {
+      setUserName: (state, action) => { state.name = action.payload }, // mutate the state all you want with immer
+    },
+    // "map object API"
+    extraReducers: {
+      // @ts-expect-error in TypeScript, this would need to be [counter.actions.increment.type]
+      [counter.actions.increment]: ( state, action) => {
+        state.age += 1
+      },
+    },
+  })
+
+  const reducer = combineReducers({
+    counter: counter.reducer,
+    user: user.reducer,
+  })
+
+  const store = createStore(reducer)
+
+  store.dispatch(counter.actions.increment()) // -> { counter: 1, user: {name : '', age: 21} }
+  store.dispatch(counter.actions.increment()) // -> { counter: 2, user: {name: '', age: 22} }
+  store.dispatch(counter.actions.multiply(3)) // -> { counter: 6, user: {name: '', age: 22} }
+  store.dispatch(counter.actions.multiply())  // -> { counter: 12, user: {name: '', age: 22} }
+  store.dispatch(user.actions.setUserName('eric')) // -> { counter: 12, user: { name: 'eric', age: 22} }
+```
+
+### createAsyncThunk 'Create'
+```tsx
+  import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+  import { userAPI } from './userAPI'
+  // will get SerializedError
+  const fetchUserById = createAsyncThunk(
+    'users/fetchByIdStatus',
+    async (userId, thunkAPI) => {
+      const response = await userAPI.fetchById(userId)
+      return response.data
+    }
+  )
+  // will get custom reject
+  const fetchUserById = createAsyncThunk(
+    'users/fetchByIdStatus',
+    async (userId, thunkAPI) => {
+      try {        
+        const response = await userAPI.fetchById(userId)
+        return response.data
+      } catch (error) {
+        const { rejectWithValue } = thunkAPI
+        return rejectWithValue(err.response.data)
+      }
+    }
+  )
+  // implement abort request with fetch
+  const fetchUserById = createAsyncThunk(
+    'users/fetchById',
+    async (userId: string, thunkAPI) => {
+      const response = await fetch(`https://reqres.in/api/users/${userId}`, {
+        signal: thunkAPI.signal,
+      })
+      return await response.json()
+    }
+  )
+  // implement abort request with axios
+  const fetchUserById = createAsyncThunk(
+    'users/fetchById',
+    async (userId, { signal }) => {
+      const source = axios.CancelToken.source()
+      signal.addEventListener('abort', () => {
+        source.cancel()
+      })
+      const response = await axios.get(`https://reqres.in/api/users/${userId}`, {
+        cancelToken: source.token,
+      })
+      return response.data
+    }
+  )
+
+  const {pending, fulfilled, rejected} = fetchUserById
+  // pending: 'users/requestStatus/pending'
+  // fulfilled: 'users/requestStatus/fulfilled'
+  // rejected: 'users/requestStatus/rejected'
+```
+
+### createAsyncThunk 'to Reducer'
+```tsx
+  const reducer1 = createReducer(initialState, {
+    [fetchUserById.fulfilled]: (state, action) => {},
+  })
+  const reducer2 = createReducer(initialState, (builder) => {
+    builder.addCase(fetchUserById.fulfilled, (state, action) => {})
+  })
+  const reducer3 = createSlice({
+    name: 'users',
+    initialState,
+    reducers: {},
+    extraReducers: {
+      [fetchUserById.fulfilled]: (state, action) => {},
+    },
+  })
+  const reducer4 = createSlice({
+    name: 'users',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+      builder.addCase(fetchUserById.fulfilled, (state, action) => {})
+    },
+  })
+```
+###
+###
+### createAsyncThunk 'Thunk Results'
+```tsx
+  const onClick1 = () => {
+    dispatch(fetchUserById(userId))
+      .unwrap()
+      .then((originalPromiseResult) => {
+        // handle result here
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        // handle error here
+      })
+  }
+  const onClick2 = async () => {
+    try {
+      const originalPromiseResult = await dispatch(fetchUserById(userId)).unwrap()
+      // handle result here
+    } catch (rejectedValueOrSerializedError) {
+      // handle error here
+    }
+  }
+  import { unwrapResult } from '@reduxjs/toolkit'
+  const onClick3 = async () => {
+    dispatch(fetchUserById(userId))
+      .then(unwrapResult)
+      .then((originalPromiseResult) => {
+        // handle result here
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        // handle result here
+      })
+  }
+```
+
+###
+### createAsyncThunk 'Cancel'
+<desc>
+  Canceling Before Execution
+</desc>
+
+```tsx
+  const fetchUserById = createAsyncThunk(
+    'users/fetchByIdStatus',
+    async (userId, thunkAPI) => {
+      const response = await userAPI.fetchById(userId)
+      return response.data
+    },
+    {
+      condition: (userId, { getState, extra }) => {
+        const { users } = getState()
+        const fetchStatus = users.requests[userId]
+        if (fetchStatus === 'fulfilled' || fetchStatus === 'loading') {
+          // Already fetched or in progress, don't need to re-fetch
+          return false
+        }
+      },
+    }
+  )
+```
+<desc>
+  Canceling While Running
+</desc>
+
+```tsx
+  // will add token to cancel request
+  const fetchUserById = createAsyncThunk(
+    'users/fetchByIdStatus',
+    async (userId: string, thunkAPI) => {
+      const response = await fetch(`https://reqres.in/api/users/${userId}`, {
+        signal: thunkAPI.signal,
+      })
+      return await response.json()
+    }
+  )
+  // cancel request
+  const promise = dispatch(fetchUserById(props.userId))
+  promise.abort()
+```
+
+### createEntityAdapter
+
+### createSelector

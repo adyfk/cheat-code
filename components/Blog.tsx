@@ -58,6 +58,7 @@ const components = {
     return (<h2 className='text-sky-900 text-2xl basis-full mt-5' id={children}>{children}</h2>);
   },
   h3: ({children}:any) => {
+    if (!children) return <div className='basis-full'></div>;
     return (<h3 className='text-sky-600 text-xl basis-full my-2'>{children}</h3>);
   },
   p: ({children}: any) => {
