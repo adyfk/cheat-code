@@ -56,11 +56,34 @@ Architecture
   # version client & host
   docker version
 
+  # help
+  docker --help
+  docker images --help
+  docker container --help
+  docker container create --help
+
   # singin docker
   docker login
 ```
 
 ### Images
+<desc>Help</desc>
+
+```bash
+  # docker images [OPTIONS] [REPOSITORY[:TAG]]
+
+  # List images
+
+  # Options:
+  #   -a, --all             Show all images (default hides intermediate images)
+  #       --digests         Show digests
+  #   -f, --filter filter   Filter output based on conditions provided
+  #       --format string   Pretty-print images using a Go template
+  #       --no-trunc        Don't truncate output
+  #   -q, --quiet           Only show image IDs
+```
+<desc>Implementation</desc>
+
 ```bash
   # list docker images in server
   docker images
@@ -88,6 +111,45 @@ Architecture
 ```
 
 ### Container
+<desc>Help</desc>
+
+```bash
+  # docker container [commands]
+  # commands -------------------------------------------
+  #   attach      Attach local standard input, output, and error streams to a running container
+  #   commit      Create a new image from a container's changes
+  #   cp          Copy files/folders between a container and the local filesystem
+  #   create      Create a new container
+  #   diff        Inspect changes to files or directories on a container's filesystem
+  #   exec        Run a command in a running container
+  #   export      Export a container's filesystem as a tar archive
+  #   inspect     Display detailed information on one or more containers
+  #   kill        Kill one or more running containers
+  #   logs        Fetch the logs of a container
+  #   ls          List containers
+  #   pause       Pause all processes within one or more containers
+  #   port        List port mappings or a specific mapping for the container
+  #   prune       Remove all stopped containers
+  #   rename      Rename a container
+  #   restart     Restart one or more containers
+  #   rm          Remove one or more containers
+  #   run         Run a command in a new container
+  #   start       Start one or more stopped containers
+  #   stats       Display a live stream of container(s) resource usage statistics
+  #   stop        Stop one or more running containers
+  #   top         Display the running processes of a container
+  #   unpause     Unpause all processes within one or more containers
+  #   update      Update configuration of one or more containers
+  #   wait        Block until one or more containers stop, then print their exit codes
+  #  ----------------------------------------------------
+  # docker container create [options] [IMAGE_NAME]
+  #  options -------------------------------------------- 
+  #       --name [name_container]
+  #   -p, --publish [port expose]:[port internal container]
+  #   -e, --env [name_env]:[value_env]
+```
+<desc>Implementation</desc>
+
 ```bash
   # list docker container in server running 
   # CONTAINER ID | IMAGE | COMMAND | CREATED | STATUS | PORTS | NAMES
@@ -95,11 +157,6 @@ Architecture
   # list docker container in server running / not
   docker container ls --all
 
-  # create container docker
-  # docker container create [options] mongo
-  # --name [name_container]
-  # -p, --publish [port expose]:[port internal container]
-  # -e, --env [name_env]:[value_env]
   docker container create 
     --name mongoserver 
     -p 8080:27017 
@@ -129,6 +186,7 @@ One of the reasons Docker containers and services are so powerful is that you ca
 Docker containers and services do not even need to be aware that they are deployed on Docker,\
 or whether their peers are also Docker workloads or not
 
+### Help
 ```bash
   # docker network COMMAND
   # Manage networks
@@ -140,7 +198,10 @@ or whether their peers are also Docker workloads or not
   #   ls          List networks
   #   prune       Remove all unused networks
   #   rm          Remove one or more networks
+```
 
+### Implementation
+```bash
   # create network
   docker network create my_network
 
