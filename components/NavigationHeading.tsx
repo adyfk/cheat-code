@@ -14,7 +14,7 @@ function NavigationHeading() {
         tempNavs.push(node);
       });
       setNavs(tempNavs);
-      setOpenNav(true);
+      if (process.env.NODE_ENV !== 'development') setOpenNav(true);
     }, 1000);
   }, []);
 

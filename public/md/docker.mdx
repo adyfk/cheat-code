@@ -1,0 +1,168 @@
+---
+title: "Docker"
+version: "20.10.8"
+versionLink: "https://docs.docker.com/"
+category: "CLI"
+language: ""
+used: []
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers. Containers are isolated from one another and bundle their own software, libraries and configuration files"
+updateAt: "4/2/2022 23:05:00"
+createdAt: "3/1/2022 00:00:00"
+progress: true
+---             
+
+## Getting Started
+<link to='https://www.docker.com/get-started'>
+  Download and Install 
+</link>
+
+
+Architecture
+* **Client** 
+  <desc clx='mt-5'>
+    The Docker client (docker) is the primary way that many Docker users interact with Docker<br/> 
+    When you use commands such as <em>docker run</em>, the client sends these commands to dockerd (daemon)
+  </desc>
+* **Host / Daemon / Server**
+  <desc>
+    The Docker daemon (dockerd) listens for Docker API requests and manages Docker objects such as 
+    <em>images, containers, networks, and volumes</em>. <br/>
+    A daemon can also communicate with other daemons to manage Docker services.
+  </desc>
+* **Registries**
+  <desc>
+    A Docker registry stores Docker images. <br/>
+    Docker Hub is a public registry that anyone can use, and Docker is configured to look for images on Docker Hub by default. <br/> 
+    You can even run your own private registry.
+  </desc>
+* **Docker Objects**
+  <desc>  
+    <b>Images</b> <br/>
+    An image is a read-only template with instructions for creating a Docker container.
+    <hr/>
+    <b>Container</b> <br/>
+    Running Image, we can running multiple Image
+    <hr/>
+  </desc>
+
+## Command
+
+### Basic
+```bash
+  # information
+  docker info
+  # version client & host
+  docker version
+
+  # singin docker
+  docker login
+```
+
+### Images
+```bash
+  # list docker images in server
+  docker images
+
+  # pull / download images from registry
+  docker pull mongo
+  # docker pull mongo:5.1
+
+  # remove images
+  # docker image rm [IMAGE ID | IMAGE_NAME]
+  docker image rm mongo
+
+  # create image with DockerFile
+  # docker build [options] [location]
+  #     --tag [name_image]:[version_image]
+  docker build --tag app-golang:1.0 .
+  
+  # clone docker local / create new tag
+  # docker tag [source_name:source_version] [target_name:target_version]
+  docker tag app-golang:1.0 new_image:1.0
+
+  # push image to registries
+  # docker push [image_name]
+  docker push new_image:1.0
+```
+
+### Container
+```bash
+  # list docker container in server running 
+  # CONTAINER ID | IMAGE | COMMAND | CREATED | STATUS | PORTS | NAMES
+  docker container ls
+  # list docker container in server running / not
+  docker container ls --all
+
+  # create container docker
+  # docker container create [options] mongo
+  # --name [name_container]
+  # -p, --publish [port expose]:[port internal container]
+  # -e, --env [name_env]:[value_env]
+  docker container create 
+    --name mongoserver 
+    -p 8080:27017 
+    -e E_START=CHEAT 
+    -e E_END=CODE 
+    mongo 
+
+  # view specify container
+  docker container inspect mongoserver
+
+  # start container
+  # docker conatiner start [...name_container]
+  docker container start mongoserver
+
+  # stop container
+  # docker conatiner stop [...name_container]
+  docker container stop mongoserver
+
+  # remove container
+  # docker container rm [...name_container]
+  docker container rm mongoserver
+
+```
+## Network
+
+One of the reasons Docker containers and services are so powerful is that you can connect them together, or connect them to non-Docker workloads. \
+Docker containers and services do not even need to be aware that they are deployed on Docker,\
+or whether their peers are also Docker workloads or not
+
+```bash
+  # docker network COMMAND
+  # Manage networks
+  # Commands:
+  #   connect     Connect a container to a network
+  #   create      Create a network
+  #   disconnect  Disconnect a container from a network
+  #   inspect     Display detailed information on one or more networks
+  #   ls          List networks
+  #   prune       Remove all unused networks
+  #   rm          Remove one or more networks
+
+  # create network
+  docker network create my_network
+
+  # show list network
+  docker network ls
+
+  # docker network connect [network_name] [container_name]
+  # inspect your container to check if it has connect to network
+  docker network connect my_network mongoserver
+```
+
+## Create Image
+
+### DockerFile
+```dockerfile
+  # pull image from registry
+  # FROM [name_image]:[image_version]
+  FROM golang:1.11.4
+
+  # copy local file's to directory image
+  # COPY [source] [target]
+  COPY . .
+
+  CMD ["go", "run", "/app/main.go"]
+```
