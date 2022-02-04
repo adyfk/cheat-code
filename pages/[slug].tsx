@@ -10,7 +10,7 @@ export default function BlogPost({source, frontMatter, slug}:any) {
         slug={slug}
         author={frontMatter.author}
         title={frontMatter.title}
-        desc={`${frontMatter.title} cheatsheet resume to guide: usage, examples, links, snippets, shorthand, best practice, and more.`}
+        desc={`${frontMatter.title} cheatsheet resume to guide: usage, examples, links, snippets, shorthand, best practice, api, and more.`}
         category={frontMatter.category}
         authorLink={frontMatter.authorLink}
         createdAt={getDate(frontMatter.createdAt)}
