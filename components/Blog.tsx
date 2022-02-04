@@ -71,6 +71,9 @@ const components = {
       {children}
     </li>
   ),
+  div: ({children, cls ='', className = '', ...rest}: any) => {
+    return (<div className={className + ' ' +cls} {...rest}>{children}</div>);
+  },
 };
 
 const Blog: React.FC<any> = ({frontMatter, source}) => {

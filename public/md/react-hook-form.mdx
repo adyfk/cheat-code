@@ -1,0 +1,553 @@
+---
+title: "React Hook Form"
+version: "7.25.3"
+versionLink: "https://react-hook-form.com"
+category: "Library"
+language: "Javascript"
+used: ['React JS']
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "Performant, flexible and extensible forms with easy-to-use validation."
+updateAt: "4/2/2022 14:05:00"
+createdAt: "3/1/2022 00:00:00"
+---             
+
+## Getting Started
+
+### Instalation
+
+```bash
+  npm install react-hook-form
+  npm install @hookform/resolvers yup
+  npm install @hookform/devtools
+```
+
+### Basic Implement
+```tsx
+  import { useForm } from "react-hook-form";
+  import { DevTool } from "@hookform/devtools";
+
+  export default function App() {
+    const { register, handleSubmit } = useForm();
+    const onSubmit = data => console.log(data);
+    
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input {...register("firstName")} />
+        <select {...register("gender", { required: "reqired field" })}>
+          <option value="female">female</option>
+          <option value="male">male</option>
+          <option value="other">other</option>
+        </select>
+        <input type="submit" />
+        <DevTool control={control} />
+      </form>
+    );
+  }
+```
+
+### Validation Implement
+```tsx
+  import { useForm } from "react-hook-form";
+  import { yupResolver } from '@hookform/resolvers/yup';
+  import * as yup from "yup";
+
+  const schema = yup.object({
+    firstName: yup.string().required(),
+  }).required();
+
+  export default function App() {
+    const { register, handleSubmit, formState:{ errors } } = useForm({
+      resolver: yupResolver(schema)
+    });
+    const onSubmit = data => console.log(data);
+
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input {...register("firstName")} />
+        <p>{errors.firstName?.message}</p>
+        <input type="submit" />
+      </form>
+    );
+  }
+```
+
+### With Context 
+```tsx
+  import { memo } from "react";
+  import { useForm, FormProvider, useFormContext } from "react-hook-form";
+
+  // we can use React.memo to prevent re-render except isDirty state changed
+  const NestedInput = memo(
+    ({ register, formState: { isDirty } }) => (
+      <div>
+        <input {...register("test")} />
+        {isDirty && <p>This field is dirty</p>}
+      </div>
+    ),
+    (prevProps, nextProps) =>
+      prevProps.formState.isDirty === nextProps.formState.isDirty
+  );
+  export const NestedInputContainer = ({ children }) => {
+    const methods = useFormContext();
+    return <NestedInput {...methods} />;
+  };
+  export default function App() {
+    const methods = useForm();
+    const onSubmit = data => console.log(data);
+
+    return (
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <NestedInputContainer />
+          <input type="submit" />
+        </form>
+      </FormProvider>
+    );
+  }
+```
+
+## Component API
+
+### Controller
+```tsx
+  <Controller
+    render={({
+      field: { onChange, onBlur, value, name, ref },
+      fieldState: { invalid, isTouched, isDirty, error },
+    }) => (
+      <TextField
+        value={value}
+        onChange={onChange} // send value to hook form
+        onBlur={onBlur} // notify when input is touched
+        inputRef={ref} // wire up the input ref
+      />
+    )}
+    name="TextField"
+    control={control}
+    rules={{ required: true }} 
+  />
+```
+<desc>
+  Props
+</desc>
+
+```tsx
+  type Render = (props: { 
+      field: {
+        onChange: (value: any) => void;
+        onBlur: () => void;
+        value: unknown;
+        name: st;
+        ref: React.Ref;
+      }, 
+      fieldState: {
+        invalid: boolean;
+        isTouched: boolean;
+        isDirty: boolean;
+        error: object
+      }, 
+      formState: {
+        isSubmitSuccessful: boolean;
+        isDirty: boolean;
+        isSubmitted: boolean;
+        dirtyFields: object;
+        touchedFields: object;
+        isSubmitting: boolean;
+        submitCount: number;
+        isValid: boolean;
+        isValidating: boolean;
+      } 
+    }) => 
+
+  type ControllerProps = {
+    name: string;
+    control: object;
+    render: Render;
+    defaultValue?: any;
+    rules?: object;
+    shouldUnregister?: boolean
+  }
+
+```
+
+### ErrorMessage
+```bash
+  npm install @hookform/error-message
+```
+```tsx
+  import { ErrorMessage } from '@hookform/error-message';
+
+  <ErrorMessage errors={errors} name="singleErrorInput" />
+  <ErrorMessage
+      errors={errors}
+      name="singleErrorInput"
+      render={({ message }) => <p>{message}</p>}
+    />
+```
+
+
+## Hooks API
+
+Reference <link to='https://react-hook-form.com/api'> React Hook Form API </link>
+
+### useForm Props
+```jsx
+  useForm({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    defaultValues: {},
+    resolver: undefined,
+    context: undefined,
+    criteriaMode: "firstError",
+    shouldFocusError: true,
+    shouldUnregister: false,
+    shouldUseNativeValidation: false,
+    delayError: undefined
+  })
+```
+* **mode** (?) 
+<note cls='mt-2'>
+  onChange | onBlur | onSubmit | onTouched | all
+</note>
+<desc>
+  validation strategy before user submit the form
+</desc>
+* **reValidateMode** (?)
+<note cls='mt-2'>
+  onChange | onBlur | onSubmit
+</note>
+<desc>
+  validation strategy after user submit the form
+</desc>
+* **defaultValues** (?)
+<note cls='mt-2'>
+  object
+</note>
+<desc>
+ initial value when a component is first rendered
+</desc>
+* **context** (?)
+<note cls='mt-2'>
+  object
+</note>
+<desc>
+  mutable and be injected to resolver's 2dn args
+</desc>
+* **criteriaMode** (?)
+<note cls='mt-2'>
+  firstError | all
+</note>
+<desc>
+  Criteria error mode
+</desc>
+* **shouldFocusError** (?)
+<note cls='mt-2'>
+  boolean
+</note>
+<danger>
+  only registered fields with a ref will work
+</danger>
+* **shouldUnregister** (?)
+<note cls='mt-2'>
+  boolean
+</note>
+<desc>
+  you can set shouldUnregister to true to unregister input during unmount
+</desc>
+* **shouldUseNativeValidation** (?)
+<note cls='mt-2'>
+  boolean
+</note>
+```jsx
+  register("firstName", { required: "Please enter your first name." })}
+```
+* **resolver** (?)
+```ts
+  type Options = { 
+    criteriaMode: string, 
+    fields: object, 
+    names: string[] 
+  }
+
+  (values: any, context?: object, options: Options) => 
+    Promise<ResolverResult> | ResolverResult 
+```
+<desc>
+  to external validation library such as Yup, Zod, Joi, Superstruct, Vest 
+</desc>
+<danger>
+  A resolver cannot be used with the built-in validators (e.g.: required, min, etc.)
+</danger>
+
+* **delayError** (?)
+<desc>
+  will delay the error state to be displayed to in milliseconds. Correct the error input will remove the error instantly and delay will not be applied
+</desc>
+
+### useForm Return
+
+```jsx
+  const { 
+    register, 
+    unregister,
+    formState,
+    watch,
+    handleSubmit,
+    reset,
+    resetField,
+    setError,
+    clearErrors,
+    setValue,
+    setFocus,
+    getValues,
+    getFieldState,
+    trigger, 
+    control
+  } = useForm()
+```
+
+* **register** 
+```ts
+  (name: string, RegisterOptions?) => ({ onChange, onBlur, name, ref })
+```
+
+```jsx
+  <input {...register("test", { 
+      required: "Error Message",
+      minLength: 3,
+      pattern: /[A-Za-z]{3}/,
+      validate: value => value === '1'
+    })}
+  />
+```
+
+* **unregister**
+```ts
+  unregister: (name: string | string[], options) => void
+```
+
+* **formState**
+```ts
+  type formState = {
+    isDirty: boolean;
+    dirtyFields: object;
+    touchedFields: object;
+    isSubmitted: boolean;
+    isSubmitSuccessful: boolean;
+    isSubmitting: boolean;
+    submitCount: number;
+    isValid: boolean;
+    isValidating: boolean;
+    errors: object;
+  }
+```
+* **watch**
+```ts
+  (names?: string | string[] | (data, options) => void) => unknown
+```
+```jsx
+  watch()
+  watch('inputName')
+  watch('inputName', 'value')
+  watch(['inputName1'])
+  watch(undefined, { field: '1' })
+  watch(['field1'], { field1: '1' })
+  watch((data, { name, type })
+
+    // Callback version of watch.  It's your responsibility to unsubscribe when done.
+  React.useEffect(() => {
+    const fn = (value, { name, type }) => console.log(value, name, type)
+    const subscription = watch(fn);
+    return () => subscription.unsubscribe();
+  }, [watch]);
+```
+* **handleSubmit**
+```ts
+  ((data: Object, e?: Event) => void, (errors: Object, e?: Event) => void) => Function
+```
+```ts
+  // SubmitHandler	(data: Object, e?: Event) => void	A successful callback.
+  // SubmitErrorHandler	(errors: Object, e?: Event) => void	An error callback.
+```
+* **reset**
+```ts
+  type Options = {
+    values: object;	
+    keepErrors: boolean;	
+    keepDirty: boolean;
+    keepValues: boolean;
+    keepDefaultValues: boolean;
+    keepIsSubmitted: boolean;	
+    keepTouched: boolean;
+    keepIsValid: boolean;
+    keepSubmitCount: boolean;
+  }
+  (values?: Record<string, any>, options?: Options) => void
+```
+* **resetField**
+```ts
+  type Options = {
+    keepError: boolean;	
+    keepDirty: boolean;	
+    keepTouched: boolean;	
+    defaultValue: unknown;
+  }
+  (name: string, options?: Options) => void
+```
+
+* **setError**
+```ts
+  (name: string, error: FieldError, { shouldFocus?: boolean }) => void
+```
+* **clearError**
+```ts
+  (name?: string | string[]) => void
+```
+* **setValue**
+```ts
+  (name: string, value: unknown, config?: Object) => void
+```
+* **setFocus**
+```ts
+  (name: string) => void
+```
+* **getValues**
+```ts
+  (payload?: string | string[]) => Object
+```
+
+* **getFieldState**
+```ts
+  (name: string, formState?: object) => { 
+    isDirty: boolean; 
+    isTouch: boolean; 
+    invalid: boolean; 
+    error: undefined | FieldError 
+  }
+```
+
+* **trigger**
+```ts
+  (name?: string | string[], {shouldFocus: boolean}?) => Promise<boolean>
+```
+<note>
+  Manually triggers form or input validation
+</note>
+
+### useController
+```ts
+  const {
+    field, 
+    fieldState,
+    formState
+  } = useController({
+    name: 'field-name';
+    control;
+    defaultValue: '';
+    rules: {
+      required: true
+    };
+    shouldUnregistered: false
+  })
+```
+* **useController**
+```ts
+  type UseControllerProps = {
+    name: string;
+    control: object;
+    defaultValue?: any;
+    rules?: object;
+    shouldUnregistered?: boolean;
+  }
+  type UseControllerReturn = { 
+      field: {
+        onChange: (value: any) => void;
+        onBlur: () => void;
+        value: unknown;
+        name: st;
+        ref: React.Ref;
+      }, 
+      fieldState: {
+        invalid: boolean;
+        isTouched: boolean;
+        isDirty: boolean;
+        error: object
+      }, 
+      formState: {
+        isSubmitSuccessful: boolean;
+        isDirty: boolean;
+        isSubmitted: boolean;
+        dirtyFields: object;
+        touchedFields: object;
+        isSubmitting: boolean;
+        submitCount: number;
+        isValid: boolean;
+        isValidating: boolean;
+      } 
+    }
+  (props?: UseControllerProps) => UseControllerReturn
+```
+
+###
+###
+### useFieldArray
+```ts
+  const { 
+    fields, 
+    append,
+    prepend, 
+    remove, 
+    swap, 
+    move, 
+    insert 
+    } = useFieldArray({
+    control, // control props comes from useForm (optional: if you are using FormContext)
+    name: "test", // unique name for your Field Array
+    // keyName: "id", default to "id", you can change the key name
+  });
+```
+<desc>
+  Types
+</desc>
+
+```ts
+  type Options = { 
+    shouldFocus?: boolean; 
+    focusIndex?: number; 
+    focusName?: string; 
+  }
+
+  type UseFieldArrayReturn =  {
+    fields: object & { id: string };
+    append: (obj: object | object[], options: Options) => void;
+    prepend: (obj: object | object[], options: Options) => void;
+    insert: (index: number, value: object | object[], options: Options) => void;
+    swap: (from: number, to: number) => void;
+    move: (from: number, to: number) => void;
+    update: (index?: number, obj: object) => void;
+    replace: (obj: object[]) => void;
+    remove: (index?: number | number[]) => void;
+  }
+
+  ({ control?: Control, name: string, keyName?: string = 'id' }) => UseFieldArrayReturn
+```
+
+###
+###
+### useWatch
+```ts
+  const value = useWatch({ name: 'test' });
+```
+<desc>
+  Types
+</desc>
+
+```ts
+  ({ 
+    control?: Control, 
+    name?: string, 
+    defaultValue?: any, 
+    disabled?: boolean 
+  }) => object
+```

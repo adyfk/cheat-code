@@ -1,6 +1,9 @@
-const DescNote: React.FC<{ disablePadding?: boolean }> = ({children, disablePadding}) => {
+const DescNote: React.FC<{
+  disablePadding?: boolean;
+  cls?: string
+}> = ({children, disablePadding, cls = ''}) => {
   return (
-    <div className={`bg-slate-50 ${disablePadding ? '' : 'p-3'} text-xs basis-full text-gray-600`}>
+    <div className={`bg-slate-50 ${disablePadding ? '' : 'p-3'} text-xs basis-full text-gray-600 ${cls}`}>
       {children}
     </div>
   );
