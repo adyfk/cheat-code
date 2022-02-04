@@ -13,7 +13,7 @@ createdAt: "3/1/2022 00:00:00"
 progress: true
 ---             
 
-## Getting Started
+## install
 
 ### Instalation
 
@@ -23,9 +23,61 @@ progress: true
   yarn add @reduxjs/toolkit
 ```
 
-## Redux Create Store
+## configureStore
 
-### configureStore
+### Types 
+```tsx
+  type ConfigureEnhancersCallback = (
+    defaultEnhancers: StoreEnhancer[]
+  ) => StoreEnhancer[]
+
+  interface ConfigureStoreOptions<
+    S = any,
+    A extends Action = AnyAction,
+    M extends Middlewares<S> = Middlewares<S>
+  > {
+    /**
+     * A single reducer function that will be used as the root reducer, or an
+     * object of slice reducers that will be passed to `combineReducers()`.
+     */
+    reducer: Reducer<S, A> | ReducersMapObject<S, A>
+    /**
+     * An array of Redux middleware to install. If not supplied, defaults to
+     * the set of middleware returned by `getDefaultMiddleware()`.
+     */
+    middleware?: ((getDefaultMiddleware: CurriedGetDefaultMiddleware<S>) => M) | M
+    /**
+     * Whether to enable Redux DevTools integration. Defaults to `true`.
+     *
+     * Additional configuration can be done by passing Redux DevTools options
+     */
+    devTools?: boolean | DevToolsOptions
+    /**
+     * The initial state, same as Redux's createStore.
+     * You may optionally specify it to hydrate the state
+     * from the server in universal apps, or to restore a previously serialized
+     * user session. If you use `combineReducers()` to produce the root reducer
+     * function (either directly or indirectly by passing an object as `reducer`),
+     * this must be an object with the same shape as the reducer map keys.
+     */
+    preloadedState?: DeepPartial<S extends any ? S : S>
+    /**
+     * The store enhancers to apply. See Redux's `createStore()`.
+     * All enhancers will be included before the DevTools Extension enhancer.
+     * If you need to customize the order of enhancers, supply a callback
+     * function that will receive the original array (ie, `[applyMiddleware]`),
+     * and should return a new array (such as `[applyMiddleware, offline]`).
+     * If you only need to add middleware, you can use the `middleware` parameter instead.
+     */
+    enhancers?: StoreEnhancer[] | ConfigureEnhancersCallback
+  }
+
+  function configureStore<S = any, A extends Action = AnyAction>(
+    options: ConfigureStoreOptions<S, A>
+  ): EnhancedStore<S, A>
+```
+
+### Implementation
 ```tsx
   // And use redux-batch as an example of adding enhancers
   import { reduxBatch } from '@manaflair/redux-batch'
@@ -66,9 +118,9 @@ progress: true
   })
 ```
 
-### createReducer 'General'
-<note>Basic Reducer</note>
+## createReducer
 
+### General
 ```tsx
   const initialState = { value: 0 }
   function counterReducer(state = initialState, action) {
@@ -83,8 +135,7 @@ progress: true
   }
 ```
 
-### createReducer 'Builder Callback'
-
+### Builder Callback
 ```tsx
   import {
     createAction,
@@ -121,7 +172,7 @@ progress: true
   // dispatch({ type: 'incrementByAmount', payload: 2 })
   // matcher isActionWithNumberPayload will called when payload === 'number'
 ```
-### createReducer 'Map Object'
+### Map Object
 
 ```tsx
   const initialState = 0
@@ -160,14 +211,16 @@ progress: true
 
 ```
 
-###
-### createAction
+## createAction
+
+### Types
 ```tsx
   function createAction(type, prepareAction?)
 ```
-<desc>Implementation</desc>
 
+### Implementation
 ```tsx
+
   import { createAction } from '@reduxjs/toolkit'
 
   const increment = createAction<number | undefined>('counter/increment')
@@ -193,9 +246,12 @@ progress: true
    *   }
    * }
    **/
+  
 ```
 
-### createSlice
+## createSlice
+
+### Types
 ```tsx
   function createSlice({
       // A name, used in action types
@@ -213,8 +269,8 @@ progress: true
       | ((builder: ActionReducerMapBuilder<State>) => void)
   })
 ```
-<note>Implementation</note>
 
+### Implementation
 ```tsx
   import { createSlice, createAction, PayloadAction } from '@reduxjs/toolkit'
   import { createStore, combineReducers } from 'redux'
@@ -269,7 +325,9 @@ progress: true
   store.dispatch(user.actions.setUserName('eric')) // -> { counter: 12, user: { name: 'eric', age: 22} }
 ```
 
-### createAsyncThunk 'Create'
+## createAsyncThunk
+
+### Create
 ```tsx
   import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
   import { userAPI } from './userAPI'
@@ -325,7 +383,7 @@ progress: true
   // rejected: 'users/requestStatus/rejected'
 ```
 
-### createAsyncThunk 'to Reducer'
+### Implementation to Reducer
 ```tsx
   const reducer1 = createReducer(initialState, {
     [fetchUserById.fulfilled]: (state, action) => {},
@@ -350,9 +408,8 @@ progress: true
     },
   })
 ```
-###
-###
-### createAsyncThunk 'Thunk Results'
+
+### Thunk Results
 ```tsx
   const onClick1 = () => {
     dispatch(fetchUserById(userId))
@@ -386,7 +443,7 @@ progress: true
 ```
 
 ###
-### createAsyncThunk 'Cancel'
+### Cancel
 <desc>
   Canceling Before Execution
 </desc>
@@ -430,6 +487,128 @@ progress: true
   promise.abort()
 ```
 
-### createEntityAdapter
 
-### createSelector
+## createEntityAdapter
+<desc>
+  Reference <link to='https://redux-toolkit.js.org/api/createEntityAdapter#return-value'>RTK createEntitiyAdapter</link>
+</desc>
+
+
+### Types
+```tsx
+  export interface EntityStateAdapter<T> {
+    addOne(state: S, entity: T): S
+    addOne(state: S, action: PayloadAction<T>): S
+    addMany(state: S, entities: T[]): S
+    addMany(state: S, entities: PayloadAction<T[]>): S
+    setAll(state: S, entities: T[]): S
+    setAll(state: S, entities: PayloadAction<T[]>): S
+    removeOne(state: S, key: EntityId): S
+    removeOne(state: S, key: PayloadAction<EntityId>): S
+    removeMany(state: S, keys: EntityId[]): S
+    removeMany(state: S, keys: PayloadAction<EntityId[]>): S
+    removeAll(state: S): S
+    updateOne(state: S, update: Update<T>): S
+    updateOne(state: S, update: PayloadAction<Update<T>>): S
+    updateMany(state: S, updates: Update<T>[]): S
+    updateMany(state: S,updates: PayloadAction<Update<T>[]>): S
+    upsertOne(state: S, entity: T): S
+    upsertOne(state: S, entity: PayloadAction<T>): S
+    upsertMany(state: S, entities: T[]): S
+    upsertMany(state: S, entities: PayloadAction<T[]>): S
+  }
+
+  export interface EntitySelectors<T, V> {
+    selectIds: (state: V) => EntityId[]
+    selectEntities: (state: V) => Dictionary<T>
+    selectAll: (state: V) => T[]
+    selectTotal: (state: V) => number
+    selectById: (state: V, id: EntityId) => T | undefined
+  }
+
+  export interface EntityAdapter<T> extends EntityStateAdapter<T> {
+    selectId: IdSelector<T>
+    sortComparer: false | Comparer<T>
+    getInitialState(): EntityState<T>
+    getInitialState<S extends object>(state: S): EntityState<T> & S
+    getSelectors(): EntitySelectors<T, EntityState<T>>
+    getSelectors<V>(
+      selectState: (state: V) => EntityState<T>
+    ): EntitySelectors<T, V>
+  }
+```
+### Implementation
+
+```tsx
+  import {
+    createEntityAdapter,
+    createSlice,
+    configureStore,
+  } from '@reduxjs/toolkit'
+  type Book = { bookId: string; title: string }
+
+  const booksAdapter = createEntityAdapter<Book>({
+    // Assume IDs are stored in a field other than `book.id`
+    selectId: (book) => book.bookId,
+    // Keep the "all IDs" array sorted based on book titles
+    sortComparer: (a, b) => a.title.localeCompare(b.title),
+  })
+  const booksSlice = createSlice({
+    name: 'books',
+    initialState: booksAdapter.getInitialState(),
+    reducers: {
+      bookAdded: booksAdapter.addOne,
+      booksReceived(state, action) {
+        booksAdapter.setAll(state, action.payload.books)
+      },
+    },
+  })
+  const store = configureStore({
+    reducer: {
+      books: booksSlice.reducer,
+    },
+  })
+  type RootState = ReturnType<typeof store.getState>
+ 
+  // Can create a set of memoized selectors based on the location of this entity state
+  const booksSelectors = booksAdapter.getSelectors<RootState>(
+    (state) => state.books
+  )
+
+  // And then use the selectors to retrieve values
+  const allBooks = booksSelectors.selectAll(store.getState())
+```
+## createSelector
+The createSelector utility from the Reselect library, re-exported for ease of use.\
+Besides re-exporting **createSelector**, RTK also exports a wrapped version of **createSelector** named **createDraftSafeSelector**\
+that allows you to create selectors that can safely be used inside of createReducer and createSlice
+
+### Implement 
+```tsx
+  const selectSelf = (state: State) => state
+  const unsafeSelector = createSelector(selectSelf, (state) => state.value)
+  const draftSafeSelector = createDraftSafeSelector(
+    selectSelf,
+    (state) => state.value
+  )
+
+  // in your reducer:
+
+  state.value = 1
+  const unsafe1 = unsafeSelector(state)
+  const safe1 = draftSafeSelector(state)
+
+  state.value = 2
+  const unsafe2 = unsafeSelector(state)
+  const safe2 = draftSafeSelector(state)
+```
+<desc>
+  After executing that, unsafe1 and unsafe2 will be of the same value, 
+  because the memoized selector was executed on the same object.
+  But safe2 will actually be different from safe1 (with the updated value of 2), 
+  because the safe selector detected that it was executed on a Immer draft object and recalculated 
+  using the current value instead of returning a cached value.
+</desc>
+
+
+## RTK Query (Upcoming)
