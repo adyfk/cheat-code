@@ -1,0 +1,438 @@
+---
+title: "Python"
+version: ""
+versionLink: "https://www.python.org/downloads/"
+category: "Language"
+language: ""
+used: []
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "Python is an interpreted high-level general-purpose programming language. Its design philosophy emphasizes code readability with its use of significant indentation"
+updateAt: "3/2/2022 23:05:00"
+createdAt: "3/1/2022 00:00:00"
+progress: true
+---             
+
+## Getting Started 
+
+<link to='https://www.python.org/downloads/'>
+  Download Here 
+</link>
+
+## Basic
+
+### Data Types 
+
+* Text Type:	**str**
+* Numeric Types:	**int, float, complex**
+* Sequence Types:	**list, tuple, range**
+* Mapping Type:	**dict**
+* Set Types:	**set, frozenset**
+* Boolean Type:	**bool**
+* Binary Types:	**bytes, bytearray, memoryview***\
+
+<note>Data Type Check</note>
+
+```py 
+  print(type(10))        # <class 'int'>
+```
+<note>
+  Assigning Value
+</note>
+
+```py
+  x = "Hello World"	      #str
+  y = """Multiline String"""	                    #str
+  x = 20                  #int	
+  x = 20.5	              #float	
+  x = 1j                  #complex	
+  x = ["apple", "banana", "cherry"] #list	
+  x = ("apple", "banana", "cherry")	#tuple	
+  x = range(6)            #range	
+  x = {
+    "name" : "John", 
+    "age" : 36
+  }	                      #dict	
+  x = { "apple", "banana", "cherry" }	           #set	
+  x = frozenset({ "apple", "banana", "cherry"})  #frozenset	
+  x = True	              #bool	
+  x = b"Hello"	          #bytes	
+  x = bytearray(5)	      #bytearray	
+  x = memoryview(bytes(5))#memoryview
+```
+<note>
+  Assigning Class
+</note>
+
+```py
+  x = str("Hello World")  #str	
+  x = int(20)             #int	
+  x = float(20.5)         #float	
+  x = complex(1j)         #complex	
+  x = list(("apple", "banana", "cherry")) #list	
+  x = tuple(("apple", "banana", "cherry"))  #tuple	
+  x = range(6)            #range	range(start, end, incement)
+  x = dict(name="John", age=36) #dict	
+  x = set(("apple", "banana", "cherry"))  #set	
+  x = frozenset(("apple", "banana", "cherry"))  #frozenset	
+  x = bool(5)             #bool	
+  x = bytes(5)            #bytes	
+  x = bytearray(5)        #bytearray	
+  x = memoryview(bytes(5))#memoryview
+```
+
+### Conditions
+
+<note><b>IF</b></note>
+
+```py
+  if b > a:
+    print("b is greater than a")
+  elif a == b:
+    print("a and b are equal")
+  else:
+    print("a is greater than b")
+```
+<note><b>Short Hand If ... Else</b></note>
+
+```py 
+  print("A") if a > b else print("B")
+```
+
+### Looping
+<note><b>While</b></note>
+
+```py
+  while i < 6:
+    print(i)
+    i += 1
+
+  while i < 6:
+    print(i)
+    i += 1
+  else:
+    print("i is no longer less than 6")
+
+  while i < 6:
+    print(i)
+    if i == 3: break
+    i += 1
+
+  while i < 6:
+    i += 1
+    if i == 3: continue
+    print(i)
+```
+<note><b>For</b></note>
+
+```py
+  for x in range(6):
+    print(x)
+
+  for x in "cheatcode":
+    if x == "t": continue
+    print(x)
+
+  for x in [1,2,3,4]:
+    if x == 3: break
+    print(x)
+  else:
+    print("Finally finished!")
+```
+
+### 
+### Function
+```py
+  # basic function
+  def my_func():
+    print("Hello")
+  my_func() # Hellp
+  
+  # function with return 
+  def my_func3():
+    return 1
+  print(my_func3()) # 1
+
+  # params with default value
+  def my_func3(fname, lname = 'code'):
+    print("Name " + fname + " " + lname)
+  my_func3("cheat") # Name cheat code
+
+  # Arbitrary Arguments, *args
+  def my_func4(*kids):
+    print("The youngest child is " + kids[1])
+  my_func4("cheat", "code") # code
+
+  # Arbitrary Keyword Arguments, **kwargs
+  def my_func5(**kid):
+    print(kid["lname"])
+  my_func5(fname = "A", lname = "B") # B
+```
+
+### Lambda
+```py
+  x = lambda a : a + 10
+  print(x(5)) #15
+```
+###
+### Class 
+```py
+  # create class
+  class MyClass:
+    x = 5
+    name = ""
+    def __init__(self, name):
+      self.name = name
+
+    def sayHello(self):
+      print("Hello " + self.name)
+
+  my1 = MyClass("cheat")
+  print(my1.x) # 5
+  my1.sayHello() # Hello cheat
+```
+<note>Empty</note>
+
+```py
+  class MyClass:
+    pass
+```
+<note>Inheritance</note>
+
+```py
+  class Person:
+    def __init__(self, fname):
+      self.firstname = fname
+    def printname(self):
+      print(self.firstname)
+  
+  class Student(Person):
+    def __init__(self, fname):
+      # Person.__init__(self, fname) 
+      super().__init__(fname)
+```
+### Module
+
+<note>mymodule.py</note>
+
+```py
+  def greeting(name):
+    print("Hello, " + name)
+```
+<note>app.py</note>
+
+```py
+  import mymodule
+  import mymodule as mx 
+  from mymodule import greeting
+  
+  mymodule.greeting("Jonathan")
+  mx.greeting("Jonathan")
+  greeting("Jonathan")
+```
+
+### TryExcept
+```py
+  try:
+    print(x)
+  except NameError:
+    print("Variable x is not defined")
+  except:
+    print("Something else went wrong")
+  else: #when getting no error
+    print("Nothing went wrong")
+  finally: #when the TryExcept is over
+    print("The 'try except' is finished")
+
+  # custom message & trow
+  try:
+    raise Exception("Just Error")
+  except Exception as error:
+	  print(error) # Just Error
+```
+
+###
+### Operator 
+<note>Aritmetic</note>
+
+```py
+  # +	Addition	
+  # -	Subtraction		
+  # *	Multiplication		
+  # /	Division		
+  # %	Modulus
+  # **	Exponentiation		
+  # //	Floor division
+```
+<note>Logical</note>
+
+```py
+  x < 5 and  x < 10 
+  x < 5 or x < 4 
+  not(x < 5 and x < 10)	
+```
+<note>Identity</note>
+
+```py
+  # Identity operators are used to compare the objects
+  x is y
+  x is not y
+```
+<note>Membership</note>
+
+```py
+  # Membership operators are used to test if a sequence is presented in an object:
+  x in y
+  x not in y
+```
+
+## More Implementation 
+
+### String Method 
+```py
+  a = "Hello, Wordl!"
+  print(a[1])         # e
+  # length
+  print(len(a))       # 13
+  # include
+  print("World" in a) # True
+  # slice
+  print(a[2:5])       # llo
+  print(b[:5])        # Hello
+  print(b[2:])        # llo, World!
+  print(b[-5:-2])     # orl
+  # modify
+  print(a.upper())    
+  print(a.lower())
+  print((" " + a + " ").strip()) # returns "Hello, World!"
+  print(a.replace("H", "J"))     # Jello, World!
+  print(a.split(","))            #['Hello', ' World!']
+  # format
+  myorder = "I want {} pieces of item {} for {} dollars."
+  print(myorder.format(quantity, itemno, price))
+  # I want 3 pieces of item 567 for 49.95 dollars.
+  myorder = "I want to pay {2} dollars for {0} pieces of item {1}."
+  print(myorder.format(quantity, itemno, price))
+  # I want to pay 49.95 dollars for 3 pieces of item 567
+```
+<note>
+  Reference <link to='https://docs.python.org/3/library/stdtypes.html#string-methods'>String Method</link>
+</note>
+
+### Number Method 
+```py
+  import math
+
+  abs(-1)           # 1
+  round(1.555, 1)   # 1.6
+  math.floor(1.9)   # 1
+  math.ceil(1.2)    # 2
+```
+
+### Boolean Condition
+```py 
+  print(bool(False))# False
+  print(bool(None)) # False
+  print(bool(0))    # False
+  print(bool(""))   # False
+  print(bool(()))   # False
+  print(bool([]))   # False
+  print(bool({}))   # False
+```
+
+###
+### List 
+<note>
+  <em>Allow Duplicates, Changeable, Ordered, List Items - Data Types</em>
+</note>
+
+```py
+  thislist = ["apple", "banana", "cherry", "apple", "cherry"]
+  # access -------------------
+  thislist[1]        # banana
+  thislist[-1]       # cherry
+  len(thislist)      # 5
+  # slice
+  thislist[2:5]      # ['cherry', 'apple', 'cherry']
+  if "apple" in thislist:
+    print("Yes)
+
+  # change -----------------------------------------------
+  thislist[1] = "blackcurrant"
+  thislist[1:3] = ["blackcurrant", "watermelon"]
+  thislist.insert(2, "watermelon")
+  thislist.append("orange")
+  thislist.remove("banana")
+  thislist.pop(1)             # pop spesific index
+  del thislist[0]
+  thislist.clear()
+
+  # loop -------------------------------------------------
+  for x in thislist:
+    print(x)
+
+  # Looping Using List Comprehension ---------------------
+  [print(x) for x in thislist]
+  # filtering 
+  # [expression for item in iterable if condition == True]
+  newlist = [x for x in thislist if "a" in x]  
+  # ['apple', 'banana', 'apple']
+  newlist = [x.upper() for x in thislist]
+  # ['APPLE', 'BANANA', 'CHERRY', 'APPLE', 'CHERRY']
+  newlist = [x if x != "banana" else "orange" for x in thislist] 
+  # ['apple', 'orange', 'cherry', 'apple', 'cherry']
+
+  # sort -------------------------------------------------
+  thislist.sort()
+  thislist.sort(reverse = True)
+  # custom sort
+  newlist = [100, 50, 65, 82, 23]
+  def myfunc(n):
+    return abs(n - 50)
+  newlist.sort(key = myfunc) 
+  # [50, 65, 23, 82, 100]
+
+  # copy -------------------------------------------------
+  newlist = thislist.copy()
+  newlist = list(thislist)
+  
+  # Join -------------------------------------------------
+  newlist = newlist + thislist
+  newlist.extend(newlist)
+```
+
+### Tuple 
+<note>
+  <em>Allow Duplicates, Unchangeable, Ordered, List Items - Data Types</em>
+</note>
+
+```py
+  thistuple = ("apple", "banana", "cherry", "banana")
+  
+  # access like list --------------------------------------
+  thistuple[1]
+  
+  # change ------------------------------------------------
+  templist = list(thistuple)
+  templist[1] = "kiwi"
+  thistuple = tuple(templist)
+
+  # unpack ------------------------------------------------
+  (a, b) = thistuple 
+  # a = apple , b = banana
+  (a, *b) = thistuple
+  # a = apple , b = ['cherry', 'banana']
+
+  # loop  -------------------------------------------------
+  for x in thistuple:
+    print(x)
+
+  # join  -------------------------------------------------
+  tuple1 = ("a", "b" , "c")
+  tuple2 = (1, 2, 3)
+  tuple3 = tuple1 + tuple2
+
+  fruits = ("apple", "banana", "cherry")
+  mytuple = fruits * 2
+  # 'apple', 'banana', 'cherry', 'apple', 'banana', 'cherry')
+```
