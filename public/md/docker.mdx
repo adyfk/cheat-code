@@ -8,16 +8,17 @@ used: []
 author: "Adi Fatkhurozi"
 authorLink: "https://github.com/adyfk"
 description: "Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers. Containers are isolated from one another and bundle their own software, libraries and configuration files"
-updateAt: "4/2/2022 23:05:00"
+updateAt: "5/2/2022 00:05:00"
 createdAt: "3/1/2022 00:00:00"
-progress: true
 ---             
 
 ## Getting Started
 <link to='https://www.docker.com/get-started'>
   Download and Install 
 </link>
-
+<link to='https://docs.docker.com/engine/reference/run/'>
+  Reference 
+</link>
 
 Architecture
 * **Client** 
@@ -66,9 +67,9 @@ Architecture
   docker login
 ```
 
-### Images
-<desc>Help</desc>
+## Docker Images
 
+### Help
 ```bash
   # docker images [OPTIONS] [REPOSITORY[:TAG]]
 
@@ -82,7 +83,7 @@ Architecture
   #       --no-trunc        Don't truncate output
   #   -q, --quiet           Only show image IDs
 ```
-<desc>Implementation</desc>
+### Implementation
 
 ```bash
   # list docker images in server
@@ -109,10 +110,25 @@ Architecture
   # docker push [image_name]
   docker push new_image:1.0
 ```
+### File
+<desc>
+  name file (DockerFile)
+</desc>
 
-### Container
-<desc>Help</desc>
+```dockerfile
+  # pull image from registry
+  # FROM [name_image]:[image_version]
+  FROM golang:1.11.4
 
+  # copy local file's to directory image
+  # COPY [source] [target]
+  COPY . .
+
+  CMD ["go", "run", "/app/main.go"]
+```
+
+## Docker Container
+### Help
 ```bash
   # docker container [commands]
   # commands -------------------------------------------
@@ -147,9 +163,10 @@ Architecture
   #       --name [name_container]
   #   -p, --publish [port expose]:[port internal container]
   #   -e, --env [name_env]:[value_env]
+  #   -v, --volume [name_volume|local_path]:[source_of_db] (i) goto DB documentation
 ```
-<desc>Implementation</desc>
 
+### Implementation
 ```bash
   # list docker container in server running 
   # CONTAINER ID | IMAGE | COMMAND | CREATED | STATUS | PORTS | NAMES
@@ -162,6 +179,7 @@ Architecture
     -p 8080:27017 
     -e E_START=CHEAT 
     -e E_END=CODE 
+    -v mongo_data=/data/db
     mongo 
 
   # view specify container
@@ -178,9 +196,8 @@ Architecture
   # remove container
   # docker container rm [...name_container]
   docker container rm mongoserver
-
 ```
-## Network
+## Docker Network
 
 One of the reasons Docker containers and services are so powerful is that you can connect them together, or connect them to non-Docker workloads. \
 Docker containers and services do not even need to be aware that they are deployed on Docker,\
@@ -213,17 +230,209 @@ or whether their peers are also Docker workloads or not
   docker network connect my_network mongoserver
 ```
 
-## Create Image
+## Docker Volume
+Manage Data In Docker\
+store data on volume or storage don't store data in container\
+because when the container is deleted the data will be lost\
+Reference <link to='https://docs.docker.com/storage/volumes/'>Docker Volume</link>
 
-### DockerFile
-```dockerfile
-  # pull image from registry
-  # FROM [name_image]:[image_version]
-  FROM golang:1.11.4
+### Help
+```bash
+  # docker volume COMMAND
+  # Manage volumes
+  # Commands:
+  #   create      Create a volume
+  #   inspect     Display detailed information on one or more volumes
+  #   ls          List volumes
+  #   prune       Remove all unused local volumes
+  #   rm          Remove one or more volumes
+```
 
-  # copy local file's to directory image
-  # COPY [source] [target]
-  COPY . .
+### Implementation
+```bash
+  # create volume create [volume_name]
+  docker volume create mongo_data
+  
+  # create container by targeting the volume
+```
 
-  CMD ["go", "run", "/app/main.go"]
+## Docker Exec
+Command runs a new command in a running container.\
+managing inside container
+
+### Help
+```bash
+  # docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
+  # Run a command in a running container
+  # Options:
+  #   -d, --detach               Detached mode: run command in the background
+  #       --detach-keys string   Override the key sequence for detaching a
+  #                              container
+  #   -e, --env list             Set environment variables
+  #       --env-file list        Read in a file of environment variables
+  #   -i, --interactive          Keep STDIN open even if not attached
+  #       --privileged           Give extended privileges to the command
+  #   -t, --tty                  Allocate a pseudo-TTY
+  #   -u, --user string          Username or UID (format:
+  #                             <name|uid>[:<group|gid>])
+  #   -w, --workdir string       Working directory inside the container
+```
+
+### Implementation
+```bash
+  # docker exec -t -i [container_name] [execute_command]
+  docker exec -t -i redis /bin/bash
+  
+```
+
+## Docker System
+### Help
+```bash
+  # docker system COMMAND
+  # Manage Docker
+  # Commands:
+  #   df          Show docker disk usage
+  #   events      Get real time events from the server
+  #   info        Display system-wide information
+  #   prune       Remove unused data 
+```
+### Implementation
+```bash
+  docker system df 
+  # TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+  # Images          0         0         0B        0B
+  # Containers      0         0         0B        0B
+  # Local Volumes   0         0         0B        0B
+  # Build Cache     19        0         36.05MB   36.05MB
+```
+
+## Docker Compose
+### Help
+```bash
+  # Define and run multi-container applications with Docker.
+
+  # Usage:
+  #   docker-compose [-f <arg>...] [--profile <name>...] [options] [--] [COMMAND] [ARGS...]
+  #   docker-compose -h|--help
+
+  # Options:
+  #   -f, --file FILE             Specify an alternate compose file
+  #                               (default: docker-compose.yml)
+  #   -p, --project-name NAME     Specify an alternate project name
+  #                               (default: directory name)
+  #   --profile NAME              Specify a profile to enable
+  #   -c, --context NAME          Specify a context name
+  #   --verbose                   Show more output
+  #   --log-level LEVEL           Set log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  #   --ansi (never|always|auto)  Control when to print ANSI control characters
+  #   --no-ansi                   Do not print ANSI control characters (DEPRECATED)
+  #   -v, --version               Print version and exit
+  #   -H, --host HOST             Daemon socket to connect to
+
+  #   --tls                       Use TLS; implied by --tlsverify
+  #   --tlscacert CA_PATH         Trust certs signed only by this CA
+  #   --tlscert CLIENT_CERT_PATH  Path to TLS certificate file
+  #   --tlskey TLS_KEY_PATH       Path to TLS key file
+  #   --tlsverify                 Use TLS and verify the remote
+  #   --skip-hostname-check       Don't check the daemon's hostname against the
+  #                               name specified in the client certificate
+  #   --project-directory PATH    Specify an alternate working directory
+  #                               (default: the path of the Compose file)
+  #   --compatibility             If set, Compose will attempt to convert keys
+  #                               in v3 files to their non-Swarm equivalent (DEPRECATED)
+  #   --env-file PATH             Specify an alternate environment file
+
+  # Commands:
+  #   build              Build or rebuild services
+  #   config             Validate and view the Compose file
+  #   create             Create services
+  #   down               Stop and remove resources
+  #   events             Receive real time events from containers
+  #   exec               Execute a command in a running container
+  #   help               Get help on a command
+  #   images             List images
+  #   kill               Kill containers
+  #   logs               View output from containers
+  #   pause              Pause services
+  #   port               Print the public port for a port binding
+  #   ps                 List containers
+  #   pull               Pull service images
+  #   push               Push service images
+  #   restart            Restart services
+  #   rm                 Remove stopped containers
+  #   run                Run a one-off command
+  #   scale              Set number of containers for a service
+  #   start              Start services
+  #   stop               Stop services
+  #   top                Display the running processes
+  #   unpause            Unpause services
+  #   up                 Create and start containers
+  #   version            Show version information and quit
+```
+
+### Implementation
+```bash
+  # create container & start 
+  # -d = deamon mode running create & start in host
+  docker-compose up -d
+  
+  # stop & remove container
+  docker-compose down
+
+  # start already container
+  docker-compose start
+
+  # stop already running container
+  docker-compose stop
+```
+
+### File
+<desc>
+  name file (docker-compose.yml)
+</desc>
+
+```yml
+  version: "3.9" # version of docker-compose
+  services:      # container
+    mongo:
+      container_name: mongo
+      image: mongo:4-xenial
+      ports: 
+        - 27017:27017
+      networks:  # connect to network
+        - my_network   
+      volumes:
+        - mongo_data:/data/db
+    redis:
+      container_name: redis
+      image: redis:5
+      ports:
+        - 6379:6379
+      networks:  # connect to network
+        - my_network
+      - myapp:/home/node/app
+    java-docker:
+      container_name: java-docker
+      image: java-docker:1.0
+      networks:  # connect to network
+        - my_network
+      ports:
+        -8080:8080
+      depends_on # will makesure running after depends
+        - redis
+        - mongo
+      environtment:
+        - NAME=Docker
+        - MONGO_HOST=mongo
+        - MONGO_PORT=27017
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379
+
+  volumes:
+    mongo_data:
+      # external: true
+
+  networks:         # create network
+    my_network:
+      name: my_network
 ```
