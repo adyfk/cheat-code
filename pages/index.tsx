@@ -3,7 +3,7 @@ import Header from '@components/Header';
 import {getMdxData} from '@utils/get-mdx-content';
 import type {NextPage} from 'next';
 import Link from 'next/link';
-import {PauseIcon} from '@heroicons/react/solid';
+import {PauseIcon, StopIcon} from '@heroicons/react/solid';
 import {generate} from 'scripts/generate-sitemap';
 
 const Home: NextPage<any> = ({contents}) => {
@@ -29,7 +29,8 @@ const Home: NextPage<any> = ({contents}) => {
                               {data.title}
                             </a>
                           </Link>
-                          {data.progress && (<PauseIcon className='text-orange-500 inline ml-2' width={20}/>)}
+                          {!data.stop && data.progress && (<PauseIcon className='text-orange-500 inline ml-2' width={20}/>)}
+                          {data.stop && (<StopIcon className='text-red-500 inline ml-2' width={20}/>)}
                           {data.version && (
                             <a href={data.versionLink} className='cursor-pointer text-yellow-500 ml-5 hover:underline'>
                               [{data.version}]

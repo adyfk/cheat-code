@@ -1,0 +1,120 @@
+---
+title: "Kubernetes"
+version: "20.10.8"
+versionLink: "https://docs.docker.com/"
+category: "Devops"
+language: ""
+used: []
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "Kubernetes It groups containers that make up an application into logical units for easy management and discovery."
+updateAt: "5/2/2022 9:05:00"
+createdAt: "3/1/2022 00:00:00"
+progress: true
+stop: true
+---             
+
+## Architecture
+
+Reference <link to='https://kubernetes.io/docs/concepts/overview/components/'>Kubernetes Components</link>\
+When you deploy Kubernetes, you get a cluster. \
+A Kubernetes cluster consists of a set of worker machines, called nodes, that run containerized applications. Every cluster has at least one worker node.
+
+<img width='100%' src='/assets/kubernetes/components.svg' title='Architecture Kubernetes' />
+
+* **Control Plane Component**
+  <desc clx='mt-5'>
+    The control plane's components make global decisions about the cluster (for example, scheduling), as well as detecting and responding to cluster events (for example, starting up a new pod when a deployment's replicas field is unsatisfied).
+  </desc>
+  <ul>
+    <li>
+      <b>kube-apiserver</b><br/>
+      <desc>control plane that exposes the Kubernetes API. The API server is the front end for the Kubernetes control plane</desc>
+    </li>
+    <li>
+      <b>etcd</b><br/>
+      <desc>Consistent and highly-available key value store used as Kubernetes' backing store for all cluster data.</desc>
+    </li>
+    <li>
+      <b>kube-scheduler</b><br/>
+      <desc>Control plane component that watches for newly created Pods with no assigned node, and selects a node for them to run on.</desc>
+    </li>
+    <li>
+      <b>kube-controller-manager</b><br/>
+      <desc>Logically, each controller is a separate process, but to reduce complexity, they are all compiled into a single binary and run in a single process.</desc>
+    </li>
+    <li>
+      <b>cloud-controller-manager</b><br/>
+      <desc>A Kubernetes control plane component that embeds cloud-specific control logic</desc>
+    </li>
+  </ul>
+* **Kubernetes Master / Cluster** 
+  <desc clx='mt-5'>
+    The Docker client (docker) is the primary way that many Docker users interact with Docker<br/> 
+    When you use commands such as <em>docker run</em>, the client sends these commands to dockerd (daemon)
+  </desc>
+  
+* **Kubernetes Node(s) / Worker(s)**
+  <desc>
+    Node components run on every node, maintaining running pods and providing the Kubernetes runtime environment.  
+  </desc>
+  <ul>
+    <li>
+      <b>kubelet</b><br/>
+      <desc>An agent that runs on each node in the cluster. It makes sure that containers are running in a Pod.</desc>
+    </li>
+    <li>
+      <b>kube-proxy</b><br/>
+      <desc>kube-proxy is a network proxy that runs on each node in your cluster, implementing part of the Kubernetes Service concept.</desc>
+    </li>
+    <li>
+      <b>Container runtime</b><br/>
+      <desc>The container runtime is the software that is responsible for running containers.</desc>
+    </li>
+   </ul>
+* **Kubernetes Cloud**
+
+
+## Getting Started
+The Kubernetes command-line tool, kubectl, 
+allows you to run commands against Kubernetes clusters. 
+You can use kubectl to deploy applications, 
+inspect and manage cluster resources, and view logs
+
+### Install
+<desc>
+  <link to='https://www.docker.com/get-started'>Install Docker</link><br/>
+  Install Kubernetes<br/>
+  <link to='https://kubernetes.io/docs/tasks/tools/'>Install Kubectl</link><br/>
+</desc>
+
+## Reference Config File
+Go to <link to='https://github.com/khannedy/belajar-kubernetes/tree/master/templates'> Template </link>
+
+## Kubernetes Node
+  Node components run on every node, maintaining running pods and providing the Kubernetes runtime environment.  
+
+### Command
+```bash
+  # list node
+  kubectl get node
+  # NAME             STATUS   ROLES                  AGE     VERSION
+  # docker-desktop   Ready    control-plane,master   4h21m   v1.22.5
+
+  # detail node
+  # kubectl describe node [node_name]
+  kubectl describe node docker-desktop
+```
+
+## Kubernetes Pod
+  Pods contain one or more containers, such as Docker containers.
+  a Node can create multiple Pods
+
+### Command
+```bash
+  # list pod
+  kubectl get pod
+  # detail pod
+  # kubectl describe pod [node_name]
+```
+###  
