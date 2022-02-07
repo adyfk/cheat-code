@@ -20,6 +20,7 @@ module.exports = withPlugins([
         skipWaiting: true,
         disable: process.env.NODE_ENV === 'development',
         cacheOnFrontEndNav: true,
+        publicExcludes: ['/sitemap.xml'],
       },
     },
   ],

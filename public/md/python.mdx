@@ -352,6 +352,8 @@ progress: true
   thislist[1]        # banana
   thislist[-1]       # cherry
   len(thislist)      # 5
+  thistuple.count("apple") # 2
+
   # slice
   thislist[2:5]      # ['cherry', 'apple', 'cherry']
   if "apple" in thislist:
@@ -410,8 +412,8 @@ progress: true
   thistuple = ("apple", "banana", "cherry", "banana")
   
   # access like list --------------------------------------
-  thistuple[1]
-  
+  thistuple[1]  # banana
+
   # change ------------------------------------------------
   templist = list(thistuple)
   templist[1] = "kiwi"
@@ -436,3 +438,58 @@ progress: true
   mytuple = fruits * 2
   # 'apple', 'banana', 'cherry', 'apple', 'banana', 'cherry')
 ```
+
+### Set 
+<note>
+  <em>Duplicates Not Allowed, Unchangeable, Unordered, List Items - Data Types</em>
+</note>
+
+```py
+  thisset = {"apple", "banana", "cherry"}
+  
+  # access like list --------------------------------------
+  print(len(thisset)) # 3
+  for x in thisset:
+    print(x)
+  print("banana" in thisset) # True
+
+  # change ------------------------------------------------
+  thisset.add("orange") 
+  # ("apple", "banana", "cherry", "orange")
+  
+  # If not exist, remove() will raise an error.
+  thisset.remove("banana")
+  # If not exist, discard() will NOT raise an error
+  thisset.discard("banana")
+
+  thisset.clear()
+  print(thisset) # set()
+
+  # The del keyword will delete the set completely:
+  del thisset
+  print(thisset) # error thisset not defined
+
+  # join  -------------------------------------------------
+  # update(iteretable) 
+  # / method that inserts all the items from one set into another
+  thisset.update({"orange", "mango"}) 
+  # union(iteretable) 
+  # / method that returns a new set containing all items
+  thisset.union({"orange", "mango"}) 
+  # intersection_update()
+  # / method will keep only the items that are present in both sets.
+  thisset.intersection_update({"banana"})
+  print(thisset)  # banana
+  # intersection() 
+  # / method will return a new set, that only contains the items that are present in both sets.
+  thisset.intersection(y) # banana
+  # symmetric_difference_update() 
+  # / method will keep only the elements that are NOT present in both sets.
+  thisset.symmetric_difference_update({"banana"})
+  print(thisset) # {"apple", "cherry"}
+  # symmetric_difference()
+  # / method will return a new set, that contains only the elements that are NOT present in both sets.
+  thisset.symmetric_difference({"banana"}) #  {"apple", "cherry"}
+```
+
+### Dictionary
