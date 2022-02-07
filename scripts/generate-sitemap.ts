@@ -8,14 +8,12 @@ export async function generate(posts: any) {
         <url>
             <loc>${baseUrl}</loc>
             <lastmod>${new Date().toISOString()}</lastmod>
-            <priority>1.0</priority>
         </url>
         ${posts.map(({slug, data}:any) => {
     return `
             <url>
                 <loc>${baseUrl+'/'+slug}</loc>
                 <lastmod>${getDate(data.updateAt)}</lastmod>
-                <priority>0.9</priority>
             </url>
             `;
   })
