@@ -343,7 +343,7 @@ progress: true
 ###
 ### List 
 <note>
-  <em>Allow Duplicates, Changeable, Ordered, List Items - Data Types</em>
+  <em>Allow Duplicates, Changeable, Ordered</em>
 </note>
 
 ```py
@@ -405,7 +405,7 @@ progress: true
 
 ### Tuple 
 <note>
-  <em>Allow Duplicates, Unchangeable, Ordered, List Items - Data Types</em>
+  <em>Allow Duplicates, Unchangeable, Ordered</em>
 </note>
 
 ```py
@@ -441,7 +441,7 @@ progress: true
 
 ### Set 
 <note>
-  <em>Duplicates Not Allowed, Unchangeable, Unordered, List Items - Data Types</em>
+  <em>Duplicates Not Allowed, Unchangeable, Unordered</em>
 </note>
 
 ```py
@@ -470,26 +470,67 @@ progress: true
   print(thisset) # error thisset not defined
 
   # join  -------------------------------------------------
-  # update(iteretable) 
-  # / that inserts all the items from one set into another
+  # update(iteretable) that inserts all the items from one set into another
   thisset.update({"orange", "mango"}) 
-  # union(iteretable) 
-  # / that returns a new set containing all items
+  # union(iteretable) that returns a new set containing all items
   thisset.union({"orange", "mango"}) 
-  # intersection_update()
-  # / will keep only the items that are present in both sets.
+  # intersection_update()will keep only the items that are present in both sets.
   thisset.intersection_update({"banana"})
   print(thisset)  # banana
-  # intersection() 
-  # / will return a new set, that only contains the items that are present in both sets.
+  # intersection() will return a new set, that only contains the items that are present in both sets.
   thisset.intersection(y) # banana
-  # symmetric_difference_update() 
-  # / will keep only the elements that are NOT present in both sets.
+  # symmetric_difference_update() will keep only the elements that are NOT present in both sets.
   thisset.symmetric_difference_update({"banana"})
   print(thisset) # {"apple", "cherry"}
-  # symmetric_difference()
-  # / will return a new set, that contains only the elements that are NOT present in both sets.
+  # symmetric_difference()will return a new set, that contains only the elements that are NOT present in both sets.
   thisset.symmetric_difference({"banana"}) #  {"apple", "cherry"}
 ```
-
+###
 ### Dictionary
+<note>
+  <em>Duplicates Not Allowed, Changeable, Ordered</em>
+</note>
+
+```py 
+  thisdict = {
+    "brand": "Ford",
+    "electric": False,
+    "year": 1964
+  }
+  # access --------------------------------------
+  # length = any data-type 
+  print(len(thisdict)) # 3
+  print(thisdict['brand']) 
+  print(thisdict.get('brand')) 
+  print(thisdict.keys()) # dict_keys(['brand', 'electric', 'year'])
+  print(thisdict.values()) # dict_values(['Ford', 'Mustang', 1964])
+  print(thisdict.items()) # dict_items([('brand', 'Ford'), ('model', 'Mustang'), ('year', 1964)])
+  # if white not exist will return White
+  print(car.setdefault("color", "White")) # White
+  if "model" in thisdict:
+    print("Yes")
+  
+  # update or add -------------------------------
+  thisdict["year"] = 2018
+  thisdict.update({"year": 2020})
+  print(dict.fromkeys(('key1','key2'), 5)) # {key1:5,key2:5}
+
+  # delete --------------------------------------
+  thisdict.pop("model")
+  thisdict.popitem()
+  del thisdict["model"]
+  thisdict.clear() # remove inside directory
+  del thisdict # remove variable
+
+  # loop ----------------------------------------
+  for x in thisdict:
+    print(x)
+  # brand model year
+  for x in thisdict.values():
+    print(x)
+  # Ford False 1964
+
+  # copy ----------------------------------------
+  thisdict = thisdict.copy()
+  thisdict = dict(thisdict)
+```
