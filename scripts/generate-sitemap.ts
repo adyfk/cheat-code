@@ -23,5 +23,11 @@ export async function generate(posts: any) {
     rmSync('public/sitemap.xml', {recursive: true, force: true});
   } catch (error) {
   }
-  writeFileSync('public/sitemap.xml', sitemap);
+
+  try {
+    writeFileSync('public/sitemap.xml', sitemap);
+    console.log('success generating sitemap');
+  } catch (error) {
+    console.error('error generating sitemap');
+  }
 }
