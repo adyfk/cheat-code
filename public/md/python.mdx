@@ -471,24 +471,24 @@ progress: true
 
   # join  -------------------------------------------------
   # update(iteretable) 
-  # / method that inserts all the items from one set into another
+  # / that inserts all the items from one set into another
   thisset.update({"orange", "mango"}) 
   # union(iteretable) 
-  # / method that returns a new set containing all items
+  # / that returns a new set containing all items
   thisset.union({"orange", "mango"}) 
   # intersection_update()
-  # / method will keep only the items that are present in both sets.
+  # / will keep only the items that are present in both sets.
   thisset.intersection_update({"banana"})
   print(thisset)  # banana
   # intersection() 
-  # / method will return a new set, that only contains the items that are present in both sets.
+  # / will return a new set, that only contains the items that are present in both sets.
   thisset.intersection(y) # banana
   # symmetric_difference_update() 
-  # / method will keep only the elements that are NOT present in both sets.
+  # / will keep only the elements that are NOT present in both sets.
   thisset.symmetric_difference_update({"banana"})
   print(thisset) # {"apple", "cherry"}
   # symmetric_difference()
-  # / method will return a new set, that contains only the elements that are NOT present in both sets.
+  # / will return a new set, that contains only the elements that are NOT present in both sets.
   thisset.symmetric_difference({"banana"}) #  {"apple", "cherry"}
 ```
 
