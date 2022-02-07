@@ -1,5 +1,5 @@
 
-### Cheat Code
+### Cheatsheet Code
 
 ## View Website
 

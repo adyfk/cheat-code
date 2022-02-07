@@ -156,12 +156,12 @@ progress: true
   # params with default value
   def my_func3(fname, lname = 'code'):
     print("Name " + fname + " " + lname)
-  my_func3("cheat") # Name cheat code
+  my_func3("cheatsheet") # Name cheatsheet code
 
   # Arbitrary Arguments, *args
   def my_func4(*kids):
     print("The youngest child is " + kids[1])
-  my_func4("cheat", "code") # code
+  my_func4("cheatsheet", "code") # code
 
   # Arbitrary Keyword Arguments, **kwargs
   def my_func5(**kid):
@@ -187,9 +187,9 @@ progress: true
     def sayHello(self):
       print("Hello " + self.name)
 
-  my1 = MyClass("cheat")
+  my1 = MyClass("cheatsheet")
   print(my1.x) # 5
-  my1.sayHello() # Hello cheat
+  my1.sayHello() # Hello cheatsheet
 ```
 <note>Empty</note>
 

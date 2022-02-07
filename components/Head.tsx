@@ -20,7 +20,7 @@ const Head: React.FC<{
   updateAt = new Date().toISOString(),
   createdAt = new Date().toISOString(),
 }) => {
-  const headline = `Cheat Code ${!!title ? `- ${title}`: ''}`;
+  const headline = `Cheatsheet Code ${!!title ? `- ${title}`: ''}`;
   const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
   return (
     <NextHead>
@@ -39,14 +39,14 @@ const Head: React.FC<{
       <meta content="" name="copyright"></meta>
       <meta name='twitter:card' content='summary' />
       <meta name='twitter:url' content={`${process.env.BASEURL}`} />
-      <meta name='twitter:title' content='Cheat Code' />
+      <meta name='twitter:title' content='Cheatsheet Code' />
       <meta name='twitter:description' content={desc} />
       <meta name='twitter:image' content={`${process.env.BASEURL}/icon-192x192.png`} />
       <meta name='twitter:creator' content='@Adyfkz' />
       <meta property='og:type' content='website' />
-      <meta property='og:title' content='Cheat Code' />
+      <meta property='og:title' content='Cheatsheet Code' />
       <meta property='og:description' content={desc} />
-      <meta property='og:site_name' content='Cheat Code' />
+      <meta property='og:site_name' content='Cheatsheet Code' />
       <meta property='og:url' content={`${process.env.BASEURL}`} />
       <Script
         strategy="lazyOnload"

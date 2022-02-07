@@ -1,5 +1,5 @@
 {
-  "name": "cheat-code",
+  "name": "cheatsheet-code",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -14,7 +14,7 @@ const Header = () => {
       </div>
       <Link href='/' >
         <a className='text-sm font-semibold cursor-pointer text-sky-700 hover:text-sky-500'>
-          CHEATCODE
+          CHEATSHEET
         </a>
       </Link>
       <div>

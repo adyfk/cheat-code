@@ -110,7 +110,7 @@ The data type of a col defines what value the col can hold: integer, character, 
   --   "dimensions": [1,2,3,4],
   --   "weight": 10,
   --   "manufacture": {
-  --     "name": "cheat-sheet"
+  --     "name": "cheatsheet-sheet"
   --   }
   -- }
   -- '
@@ -118,7 +118,7 @@ The data type of a col defines what value the col can hold: integer, character, 
   -- SET properties = JSON_OBJECT(
   --   'weight', 10,
   --   'dimensions': JSON_ARRAY(1,2,3),
-  --   'manufacture': JSON_OBJECT('name','cheat-sheet') 
+  --   'manufacture': JSON_OBJECT('name','cheatsheet-sheet') 
   -- )
   -- // case 3 update only one key
   -- SET properties = JSON_SET(
@@ -137,8 +137,8 @@ The data type of a col defines what value the col can hold: integer, character, 
     product_id, 
     JSON_EXTRACT(properties, '$.weight'),
     properties -> '$.dimensions[0]',
-    properties -> '$.manufacture.name', -- "cheat-sheet" (with "")
-    properties ->> '$.manufacture.name', -- cheat-code (without "")
+    properties -> '$.manufacture.name', -- "cheatsheet-sheet" (with "")
+    properties ->> '$.manufacture.name', -- cheatsheet-code (without "")
 
   FROM products
   WHERE product_id = 1;

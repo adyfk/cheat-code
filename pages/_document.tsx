@@ -14,10 +14,10 @@ class MyDocument extends Document {
           <link rel="icon" href="/favicon.ico" />
           <link rel='shortcut icon' href='/favicon.ico' />
           <link rel='manifest' href='/manifest.json' />
-          <meta name='application-name' content='Cheat Code' />
+          <meta name='application-name' content='Cheatsheet Code' />
           <meta name='apple-mobile-web-app-capable' content='yes' />
           <meta name='apple-mobile-web-app-status-bar-style' content='default' />
-          <meta name='apple-mobile-web-app-title' content='Cheat Code' />
+          <meta name='apple-mobile-web-app-title' content='Cheatsheet Code' />
           <meta name='mobile-web-app-capable' content='yes' />
           <meta name="theme-color" content="#FEFEFE"/>
           <link rel="apple-touch-icon" href={`${process.env.BASEURL}/icon-192x192.png`} />

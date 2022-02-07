@@ -4,7 +4,7 @@
     "display": "fullscreen",
     "scope": "/",
     "start_url": "/",
-    "name": "Cheat Code",
+    "name": "Cheatsheet Code",
     "short_name": "CheatCode",
     "prefer_related_applications": true,
     "description": "CheatCode will save you from having to remember everything you learn",

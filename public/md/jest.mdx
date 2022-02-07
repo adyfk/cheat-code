@@ -8,7 +8,7 @@ used: []
 author: "Adi Fatkhurozi"
 authorLink: "https://github.com/adyfk"
 description: "Jest is a delightful JavaScript Testing Javascript Framework with a focus on simplicity. It works with projects using: Babel, TypeScript, Node, React, Angular, Vue and more!"
-updateAt: "4/2/2022 01:05:00"
+updateAt: "7/2/2022 01:05:00"
 createdAt: "3/1/2022 00:00:00"
 ---             
 
@@ -113,36 +113,36 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
 ### String
 ```js
   // toBe using (===)
-  ec('cheat').toBe('cheat');
-  ec('cheat').toEqual('cheat');
+  ec('cheatsheet').toBe('cheatsheet');
+  ec('cheatsheet').toEqual('cheatsheet');
 
   // regex
   ec('1').toMatch('1')
   ec('1').toMatch(/1/)
 
-  ec('cheat').toHaveLength(5)
+  ec('cheatsheet').toHaveLength(5)
 ```
 
 ### Array
 ```js
-  ec(['cheat']).toContain('cheat');
+  ec(['cheatsheet']).toContain('cheatsheet');
   ec([4,3,2]).toHaveLength(3)
-  ec([{name:'cheat'}]).toContainEqual({name:'cheat'})
-  ec([{name:'cheat'}]).toMatchObject({name:'cheat'})
+  ec([{name:'cheatsheet'}]).toContainEqual({name:'cheatsheet'})
+  ec([{name:'cheatsheet'}]).toMatchObject({name:'cheatsheet'})
 ```
 
 ### Object
 ```js
   // toEqual to compare recursively all properties of 
   // object instances (also known as "deep" equality)
-  const a = { name: 'cheat', birth: { date: 1 } };
-  const b = { name: 'cheat', birth: { date: 1 } }
+  const a = { name: 'cheatsheet', birth: { date: 1 } };
+  const b = { name: 'cheatsheet', birth: { date: 1 } }
 
   ec(a).toEqual(b)
 
   // toHaveProperty(keyPath, value?)
   ec(a).toHaveProperty('name')
-  ec(a).toHaveProperty('name', 'cheat')
+  ec(a).toHaveProperty('name', 'cheatsheet')
   
   // match object
   ec(a).toMatchObject({ birth: { date: 1 } })
@@ -151,13 +151,13 @@ to make writing short, the "`expect`" function will use the alias "`ec`"
 ### Function
 ```js
   const drink = jest.fn((param)=>param);
-  drink('cheat', 'code');
+  drink('cheatsheet', 'code');
   ec(drink).toHaveBeenCalled();
   ec(drink).toHaveBeenCalledTimes(1)
-  ec(drink).toHaveBeenCalledWith('cheat', 'code')
+  ec(drink).toHaveBeenCalledWith('cheatsheet', 'code')
   drink('code')
   ec(drink).toHaveBeenLastCalledWith('code')
-  ec(drink).toHaveBeenNthCalledWith(1, 'cheat', 'code')
+  ec(drink).toHaveBeenNthCalledWith(1, 'cheatsheet', 'code')
   ec(drink).toHaveBeenNthCalledWith(2, 'code')
 
   // to test that the mock function successfully returned
