@@ -8,6 +8,7 @@ class MyDocument extends Document {
   }
 
   render() {
+    const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
     return (
       <Html lang='en'>
         <Head>
@@ -20,8 +21,8 @@ class MyDocument extends Document {
           <meta name='apple-mobile-web-app-title' content='Cheatsheet Code' />
           <meta name='mobile-web-app-capable' content='yes' />
           <meta name="theme-color" content="#FEFEFE"/>
-          <link rel="apple-touch-icon" href={`icon-192x192.png`} />
-          <link rel='icon' type='image/png' sizes='32x32' href='icon-32x32.png' />
+          <link rel="apple-touch-icon" href={`${baseUrl}/icon-192x192.png`} />
+          <link rel='icon' type='image/png' sizes='32x32' href={`${baseUrl}/icon-32x32.png`} />
           <meta name="google-site-verification" content="pqURzWqJv4aLGt93AqrLuOZ4R0ZxbwlJymFj1mnpkSo" />
           <meta name="yandex-verification" content="662f5acd93fe5c17" />
         </Head>
