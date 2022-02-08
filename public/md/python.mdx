@@ -81,6 +81,52 @@ progress: true
   x = memoryview(bytes(5))#memoryview
 ```
 
+### Operator 
+<note>Aritmetic</note>
+
+```py
+  # +	Addition	
+  # -	Subtraction		
+  # *	Multiplication		
+  # /	Division		
+  # %	Modulus
+  # **	Exponentiation		
+  # //	Floor division
+```
+<note>Logical</note>
+
+```py
+  x < 5 and  x < 10 
+  x < 5 or x < 4 
+  not(x < 5 and x < 10)	
+```
+<note>Identity</note>
+
+```py
+  # Identity operators are used to compare the objects
+  x is y
+  x is not y
+```
+<note>Membership</note>
+
+```py
+  # Membership operators are used to test if a sequence is presented in an object:
+  x in y
+  x not in y
+```
+
+### Boolean Condition
+```py 
+  print(bool(False))# False
+  print(bool(None)) # False
+  print(bool(0))    # False
+  print(bool(""))   # False
+  print(bool(()))   # False
+  print(bool([]))   # False
+  print(bool({}))   # False
+```
+
+###
 ### Conditions
 
 <note><b>IF</b></note>
@@ -140,7 +186,6 @@ progress: true
     print("Finally finished!")
 ```
 
-### 
 ### Function
 ```py
   # basic function
@@ -174,7 +219,7 @@ progress: true
   x = lambda a : a + 10
   print(x(5)) #15
 ```
-###
+
 ### Class 
 ```py
   # create class
@@ -252,50 +297,39 @@ progress: true
 ```
 
 ###
-### Operator 
-<note>Aritmetic</note>
-
+###
+### RegEx
 ```py
-  # +	Addition	
-  # -	Subtraction		
-  # *	Multiplication		
-  # /	Division		
-  # %	Modulus
-  # **	Exponentiation		
-  # //	Floor division
-```
-<note>Logical</note>
+  import re
 
+  txt = "The rain in Spain"
+  re.search("^The.*Spain$", txt)  
+  # <re.Match object; span=(0, 17), match='The rain in Spain'>
+  re.search(r"\bS\w+", txt).group() 
+  # Spain
+  re.findall("ai", txt) 
+  # ['ai', 'ai']
+  re.split("\s", txt, 1) # ['The', 'rain', 'in', 'Spain']
+  re.split("\s", txt, 1) # ['The', 'rain in Spain']
+  re.sub("\s", "9", txt) # The9rain9in9Spain
+```
+
+### Input 
 ```py
-  x < 5 and  x < 10 
-  x < 5 or x < 4 
-  not(x < 5 and x < 10)	
-```
-<note>Identity</note>
-
-```py
-  # Identity operators are used to compare the objects
-  x is y
-  x is not y
-```
-<note>Membership</note>
-
-```py
-  # Membership operators are used to test if a sequence is presented in an object:
-  x in y
-  x not in y
+  username = input("Enter username:")
+  print("Username is: " + username)
 ```
 
-### Boolean Condition
-```py 
-  print(bool(False))# False
-  print(bool(None)) # False
-  print(bool(0))    # False
-  print(bool(""))   # False
-  print(bool(()))   # False
-  print(bool([]))   # False
-  print(bool({}))   # False
+###
+### PIP 
+```bash
+  pip --version
+
+  pip list
+  pip install camelcase
+  pip uninstall camelcase
 ```
+
 
 ## Data Type Method 
 
@@ -380,6 +414,37 @@ progress: true
 <note>
   Reference: <link to='https://strftime.org/'>strftime</link>, <link to='https://www.geeksforgeeks.org/get-current-time-in-different-timezone-using-python/?ref=lbp'>timezone</link>
 </note>
+
+### Math 
+```py
+  min(5, 10, 25) # 5
+  max([5, 10, 25]) # 5
+  abs(-7.25) # 7.25
+  pow(4, 3) 
+
+  import math
+  
+  math.sqrt(25) # 5.0
+  math.ceil(1.4) # 2
+  math.floor(1.4) # 1
+  math.pi # 22/7
+```
+
+### JSON
+```py
+  import json
+
+  user = json.loads('{ "name":"John", "age":30, "city":"New York"}')
+  print(user['name'])
+
+  # convert python to json
+  json.dumps({ "name": "John", "age": 30, "city": "New York" }) 
+  json.dumps(["cheatsheet", "code"]) # ["cheatsheet", "code"]
+  json.dumps(42) # 42
+  json.dumps(31.7) # 31.7
+  json.dumps(True) # true
+  json.dumps(None) # null
+```
 
 ## Array
 
