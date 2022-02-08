@@ -29,7 +29,7 @@ function NavigationHeading() {
             <ArrowSmLeftIcon onClick={toogleNav} />
           }
         </div>
-        <div className={`${openNav ? '': 'mr-[-280px]'} transition-all w-[280px]  rounded-md p-4 bg-sky-600`}>
+        <div className={`${openNav ? '': 'mr-[-280px] opacity-0'} transition-all w-[280px]  rounded-md p-4 bg-sky-600`}>
           <div className='mb-2'>
             <h2 className='mb-2 text-white font-bold text-xl'>Navigate Topic</h2>
           </div>
