@@ -8,9 +8,8 @@ used: ['']
 author: "Adi Fatkhurozi"
 authorLink: "https://github.com/adyfk"
 description: "Besides its obvious scientific uses, NumPy can also be used as an efficient multi-dimensional container of generic data. Arbitrary data-types can be defined. This allows NumPy to seamlessly and speedily integrate with a wide variety of databases."
-updateAt: "8/2/2022 14:05:00"
+updateAt: "8/2/2022 20:05:00"
 createdAt: "3/1/2022 00:00:00"
-progress: true
 ---             
 
 ## Getting Started
@@ -248,3 +247,160 @@ progress: true
   np.searchsorted(np.array([6, 7, 8, 9]), 7, side='right') # 2
   # The number 7 should be inserted on index 2 to remain the sort order.
 ```
+
+### Array Sort 
+```py
+  print(np.sort(np.array(['banana', 'cherry', 'apple']))) # ['apple' 'banana' 'cherry']
+```
+
+### Array Filter
+```py 
+  arr = np.array([41, 42, 43, 44])
+  x = [True, False, True, False]
+  arr[x] # [41 43]
+
+  # Direcly filter
+  arr = np.array([41, 42, 43, 44])
+  arr[arr > 42] # [43 44]
+```
+
+## Random
+
+### Intro
+```py 
+  from numpy import random
+  
+  # Random Number
+  print(random.randint(100)) # 0 - 100
+  print(random.randint(100), size=(5)) # [r,r,r,r,r]
+  print(random.randint(100), size=(3,5)) 
+  # [ [r,r,r,r,r], [r,r,r,r,r], [r,r,r,r,r] ]
+  
+  # Random Float
+  print(random.rand()) # 0 - 1
+  print(random.rand(5)) # [r,r,r,r,r] 
+  print(random.rand(3,5)) 
+  # [ [r,r,r,r,r], [r,r,r,r,r], [r,r,r,r,r] ]
+
+  # Random Choice
+  pinrt(random.choice([3, 5, 7, 9])) # 3/5/7/9
+  pinrt(random.choice([3, 5, 7, 9], size=(3, 5)))
+   # [ [r,r,r,r,r], [r,r,r,r,r], [r,r,r,r,r] ]
+```
+
+### Distribution
+```py
+  # Random Choice with Probabiliy each choice
+  random.choice(
+    [3, 5, 7, 9], 
+    p=[0.1, 0.3, 0.6, 0.0], 
+    size=(100)
+  )
+```
+
+### Permutation
+```py
+  arr = np.array([1, 2, 3, 4, 5])
+  # method makes changes to the original array.
+  random.shuffle(arr)
+  print(arr) # random item
+  # method returns a re-arranged array (and leaves the original array un-changed).
+  print(random.permutation(arr))
+```
+
+### Normal Distribution 
+<desc>
+  It is also called the Gaussian Distribution after the German mathematician Carl Friedrich Gauss.
+</desc>
+<note>
+  It fits the probability distribution of many events, eg. IQ Scores, Heartbeat etc.
+</note>
+
+* loc - (Mean) where the peak of the bell exists.
+* scale - (Standard Deviation) how flat the graph distribution should be.
+* size - The shape of the returned array.
+
+### Binomial Distribution
+<desc>
+  It describes the outcome of binary scenarios, e.g. toss of a coin, it will either be head or tails.
+</desc>
+
+* n - number of trials.
+* p - probability of occurence of each trial (e.g. for toss of a coin 0.5 each).
+* size - The shape of the returned array.
+
+### Poisson Distribution
+<desc>
+  It estimates how many times an event can happen in a specified time. 
+  e.g. If someone eats twice a day what is probability he will eat thrice?
+</desc>
+
+* lam - rate or known number of occurences e.g. 2 for above problem.
+* size - The shape of the returned array.
+
+### Uniform Distribution
+<desc>
+  Used to describe probability where every event has equal chances of occuring.
+</desc>
+
+* a - lower bound - default 0 .0.
+* b - upper bound - default 1.0.
+* size - The shape of the returned array.
+
+### Logistic Distribution
+<desc>
+ Used extensively in machine learning in logistic regression, neural networks etc.
+</desc>
+
+* loc - mean, where the peak is. Default 0.
+* scale - standard deviation, the flatness of distribution. Default 1.
+* size - The shape of the returned array.
+
+### Multinomial Distribution
+<desc>
+  It describes outcomes of multi-nomial scenarios unlike binomial where scenarios must be only one of two. e.g. Blood type of a population, dice roll outcome.
+</desc>
+
+* n - number of possible outcomes (e.g. 6 for dice roll).
+* pvals - list of probabilties of outcomes (e.g. [1/6, 1/6, 1/6, 1/6, 1/6, 1/6] for dice roll).
+* size - The shape of the returned array.
+
+### Exponential Distribution
+<desc>
+  Exponential distribution is used for describing time till next event e.g. failure/success etc.
+</desc>
+
+* scale - inverse of rate ( see lam in poisson distribution ) defaults to 1.0.
+* size - The shape of the returned array.
+
+### Chi Square Distribution
+<desc>
+  Chi Square distribution is used as a basis to verify the hypothesis.
+</desc>
+
+* df - (degree of freedom).
+* size - The shape of the returned array.
+
+### Rayleigh Distribution
+<desc>
+  Rayleigh distribution is used in signal processing.
+</desc>
+
+* scale - (standard deviation) decides how flat the distribution will be default 1.0).
+* size - The shape of the returned array.
+
+### Pareto Distribution
+<desc>
+  A distribution following Pareto's law i.e. 80-20 distribution (20% factors cause 80% outcome).
+</desc>
+
+* a - shape parameter.
+* size - The shape of the returned array.
+
+### Zipf Distribution
+<desc>
+   In a collection the nth common term is 1/n times of the most common term.
+</desc>
+
+* a - distribution parameter.
+* size - The shape of the returned array.
