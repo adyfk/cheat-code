@@ -3,7 +3,7 @@ const DescNote: React.FC<{
   cls?: string
 }> = ({children, disablePadding, cls = ''}) => {
   return (
-    <div className={`bg-slate-50 ${disablePadding ? '' : 'p-3'} text-xs basis-full text-gray-600 ${cls}`}>
+    <div className={`bg-slate-50 ${disablePadding ? '' : 'p-3'} text-sm basis-full text-gray-600 ${cls}`}>
       {children}
     </div>
   );
