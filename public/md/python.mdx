@@ -10,7 +10,6 @@ authorLink: "https://github.com/adyfk"
 description: "Python is an interpreted high-level general-purpose programming language. Its design philosophy emphasizes code readability with its use of significant indentation"
 updateAt: "3/2/2022 23:05:00"
 createdAt: "3/1/2022 00:00:00"
-progress: true
 ---             
 
 ## Getting Started 
@@ -320,7 +319,6 @@ progress: true
   print("Username is: " + username)
 ```
 
-###
 ### PIP 
 ```bash
   pip --version
@@ -640,4 +638,77 @@ progress: true
   # copy ----------------------------------------
   thisdict = thisdict.copy()
   thisdict = dict(thisdict)
+```
+
+## File Handling
+
+### Help 
+<note>Method</note>
+
+* "r" - Read
+<desc>
+  Default value. Opens a file for reading, error if the file does not exist
+</desc>
+* "a" - Append 
+<desc>
+  Opens a file for appending, creates the file if it does not exist
+</desc>
+* "w" - Write
+<desc>
+  Opens a file for writing, creates the file if it does not exist
+</desc>
+* "x" - Create
+<desc>
+  Creates the specified file, returns an error if the file exists
+</desc>
+
+<note>Mode</note>
+
+* "t" - Text
+<desc>
+  Default value. Text mode
+</desc>
+* "b" - Binary
+<desc>
+  Binary mode (e.g. images)
+</desc>
+
+### Function
+```py
+  # demofile.txt 
+  # ``` Hello! Welcome to demofile.txt
+  # This file is for testing purposes.
+  # Good Luck! ```
+
+  # Reading
+
+  f = open("demofile.txt", "r")
+  # print all string text
+  print(f.read()) 
+
+  # print line by line
+  print(f.readline()) # Hello! Welcome to demofile.txt
+  print(f.readline()) # This file is for testing purposes.
+
+  # add more content
+  f = open("demofile2.txt", "a")
+  f.write("Now the file has more content!")
+  f.close()
+
+  # rewrite content
+  f = open("demofile3.txt", "w")
+  f.write("Woops! I have deleted the content!")
+  f.close()
+
+  # delete
+  import os
+
+  # remove file
+  if os.path.exists("demofile.txt"):
+    os.remove("demofile.txt")
+  else:
+    print("The file does not exist")
+
+  # remove directory
+  os.rmdir("myfolder")
 ```
