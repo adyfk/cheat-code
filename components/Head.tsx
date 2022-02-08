@@ -49,7 +49,7 @@ const Head: React.FC<{
       <meta property='og:url' content={`${baseUrl}/${slug}`} />
       <Script
         strategy="lazyOnload"
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6527215730285341"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6745713539605746"
         crossOrigin="anonymous"></Script>
       <script
         type="application/ld+json"
