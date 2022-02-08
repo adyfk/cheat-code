@@ -286,7 +286,18 @@ progress: true
   x not in y
 ```
 
-## More Implementation 
+### Boolean Condition
+```py 
+  print(bool(False))# False
+  print(bool(None)) # False
+  print(bool(0))    # False
+  print(bool(""))   # False
+  print(bool(()))   # False
+  print(bool([]))   # False
+  print(bool({}))   # False
+```
+
+## Data Type Method 
 
 ### String Method 
 ```py
@@ -329,18 +340,49 @@ progress: true
   math.ceil(1.2)    # 2
 ```
 
-### Boolean Condition
-```py 
-  print(bool(False))# False
-  print(bool(None)) # False
-  print(bool(0))    # False
-  print(bool(""))   # False
-  print(bool(()))   # False
-  print(bool([]))   # False
-  print(bool({}))   # False
-```
+### Date 
+```py
+  import datetime
+  
+  datetime.datetime.now() # 2022-02-08 08:50:48.650909
+  datetime.datetime(2020, 5, 17) # 2020-05-17 00:00:00
+  datetime.datetime.now().year)
+  datetime.datetime.now().month)
+  datetime.datetime.now().day)
+  datetime.datetime.now().hour)
+  datetime.datetime.now().minute)
+  datetime.datetime.now().second)
 
-###
+  from datetime import date
+  
+  date.today() # 2019-12-11
+
+  # get date and time by local timezone
+  # utc – it helps to get the standard UTC time zone
+  # timezone() – it helps to get the time zone of a particular location
+  # now() – it helps to get the date, time, utc standard in default format
+  # astimezone() – it helps to convert the time of a particular time zone into another time zone
+  import time 
+  import pytz
+
+  time.strftime("%H:%M:%S", time.localtime()) # 11:58:19
+
+  # get the standard UTC time 
+  UTC = pytz.utc
+  # of the specified location
+  IST = pytz.timezone('Asia/Kolkata')    
+  # print the date and time in
+  datetime.now(UTC) # 2020-03-31 07:15:59.640418+00:00
+  datetime.now(IST) # 2020-03-31 12:45:59.692642+05:30
+  datetime.now(UTC).strftime('%Y:%m:%d %H:%M:%S %Z %z') # 2020:03:31 07:15:59 UTC+0000
+  datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S %Z %z') # 2020:03:31 12:45:59 IST+0530
+```
+<note>
+  Reference: <link to='https://strftime.org/'>strftime</link>, <link to='https://www.geeksforgeeks.org/get-current-time-in-different-timezone-using-python/?ref=lbp'>timezone</link>
+</note>
+
+## Array
+
 ### List 
 <note>
   <em>Allow Duplicates, Changeable, Ordered</em>
