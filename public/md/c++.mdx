@@ -1,0 +1,332 @@
+---
+title: "C++"
+version: ""
+versionLink: "https://en.wikipedia.org/wiki/C%2B%2B"
+category: "Devops"
+language: ""
+used: []
+author: "Adi Fatkhurozi"
+authorLink: "https://github.com/adyfk"
+description: "C++ is a popular programming language."
+updateAt: "7/2/2022 9:05:00"
+createdAt: "3/1/2022 00:00:00"
+---             
+
+## Basic
+
+### Getting Started 
+```cpp 
+  #include <iostream>
+
+  int main() {
+    std::cout << "Hello Cheetsheet!";
+    return 0;
+  }
+```
+<note>namespace</note>
+
+```cpp
+  #include <iostream>
+  using namespace std;
+
+  int main() {
+    cout << "Hello Cheetsheet!";
+    return 0;
+  }
+```
+
+### Output 
+```cpp
+  #include <iostream>
+  using namespace std;
+
+  int main() {
+    cout << "Hello Cheetsheet!";
+    // print with new line
+    cout << "Hello Cheetsheet! \n";
+    cout << "Hello Cheetsheet!" << endl;
+    return 0;
+  }
+```
+
+### Data Types
+```cpp
+  // constant
+  const int minutesPerHour = 60;
+
+  // variable
+  int a = 1;          // 4 bytes | Integer (whole number without decimals)
+  double b = 1.5;     // 8 bytes | Floating point number (with decimals)
+  char d = 'A';       // 1 byte  | Character
+  bool f = true;      // 1 byte  | Boolean (true or false)
+  string e = "Hello"; // -       | String (text)
+
+  cout << "I am " << e << " and I am" << a << " years old.";
+```
+
+### User Input
+```cpp
+  int x; 
+  cout << "Type a number: "; // Type a number and press enter
+  cin >> x;
+```
+
+### Operator 
+```cpp
+  // Aritmetic
+  // +
+  // -
+  // *
+  // /
+  // %
+  // ++
+  // --
+
+  // Comparison
+  //  ==
+  //  !=
+  //  >
+  //  <
+  //  >=
+  //  <=
+
+  // Logical
+  // && 
+  // ||
+  // !
+```
+
+### String
+<note>(Concat, Lenght, Number, Access) </note>
+
+```cpp
+  // Concat
+  string firstName = "John ";
+  string lastName = "Doe";
+  string fullName1 = firstName + lastName;
+  string fullName2 = firstName.append(lastName);
+
+  // Length of string
+  cout << fullName1.length();
+  cout << fullName1.size();
+
+  // Accesible
+  cout << fullName1[0];
+  
+  // User Input
+  string fullName;
+  cout << "Type your full name: ";
+  cin >> fullName; // cannot get space
+  getline(cin, fullName);  // can get space 
+```
+
+### Math
+```cpp
+  #include <cmath>
+
+  cout << sqrt(64);
+  cout << round(2.6);
+  cout << log(2);
+  cout << max(5, 10); // 10
+  cout << min(5, 10); // 5
+```
+
+### Conditions
+<note>IF</note>
+
+```cpp
+  if (20 > 18) {
+    cout << "20 is greater than 18";
+  } else if (10 < 20) {
+    cout << "Good day.";
+  } else {
+    cout << "Good evening.";
+  }
+```
+<note>Shorthand IF</note>
+
+```cpp
+  cout << (time < 18) ? "Good day." : "Good evening.";
+```
+
+<note>Switch</note>
+
+```cpp
+  int day = 4;
+  switch (day) {
+    case 1:
+      cout << "Monday";
+      break;
+    default:
+      cout << "Sunday";
+      break;
+  }
+```
+
+### Loop
+<note>While</note>
+
+```cpp
+  int i = 0;
+  while (i < 5) {
+    cout << i << "\n";
+    i++;
+  }
+
+  while (i < 5) {
+    if (i == 4) {
+      break;
+    }
+    if (i == 5) {
+      continue;
+    }
+    cout << i << "\n";
+    i++;
+  }
+```
+
+<note>While</note>
+
+```cpp
+  for (int i = 0; i < 5; i++) {
+    cout << i << "\n";
+  }
+
+  for (int i = 0; i < 5; i++) {
+    if (i == 4) {
+      break;
+    }
+    if (i == 5) {
+      continue;
+    }
+    cout << i << "\n";
+  }
+```
+
+### Array
+```cpp
+  int myNum[3] = {10, 20, 30};
+  string cars[4];
+  string cars[4] = {"Honda", "Yamaha", "Suzuki"};
+
+  // set and print
+  cars[0] = "Becak";
+  cout << cars[0];
+
+  // looping
+  for(int i = 0; i < cars.size(); i++) {
+    cout << i << ": " << cars[i] << "\n";
+  }
+```
+
+### Reference
+```cpp
+  string theme = "Cheetsheet";
+  cout << &theme;  // print memory address
+ 
+  string &meal = theme;
+  cout << theme << "\n";  // Outputs Cheetsheet
+  cout << meal << "\n";  // Outputs Cheetsheet
+```
+###
+### Pointers
+```cpp
+  string theme = "Cheetsheet";  // A theme variable of type string
+  string* ptr = &theme;    // A pointer variable, with the name ptr, that stores the address of theme
+  
+  // Output the value of theme (Cheetsheet)
+  cout << theme << "\n";
+  // Output the memory address
+  cout << &theme << "\n";
+  // Output the memory address
+  cout << ptr << "\n";
+  // Dereference: Output the value of theme with the pointer (Cheetsheet)
+  cout << *ptr << "\n";
+
+  // Change the value of the pointer
+  *ptr = "Code";
+  // Output the new value of the pointer (Code)
+  cout << *ptr << "\n";
+  // Output the new value of the food variable (Code)
+  cout << food << "\n";
+```
+
+### Function
+```cpp
+  // predefined
+  int myFunction(int x)
+  float myFunction(float x)
+  double myFunction(double x, double y)
+
+  // Create a function
+  void myFunction1() {
+    cout << "I just got executed!";
+  }
+
+  int myFunction2() {
+    return 1;
+  }
+
+  void myFunction(string fname = "cheatcode") {
+    cout << fname << " Refsnes\n";
+  }
+```
+
+###
+### Class 
+```cpp
+  class BasicClass {  // The class
+    public:
+      int x;
+  }
+
+  class MyClass {      
+    private:   // Private access specifier
+      int y;   // Private attribute
+    public:             // Access specifier
+      int myNum;        // Attribute (int variable)
+      string myString;  // Attribute (string variable)
+      MyClass() {       // Constructor
+        cout << "Hello Cheetsheet!";
+      }
+      MyClass(int x) {  // Constructor
+        cout << x;
+      }
+      void myMethod1() {  // Method/function defined inside the class
+        cout << "Hello Cheetsheet!";
+      }
+      void setSalary(int yVal) {
+        y = yVal;
+      }
+  };
+
+  // Inheritance
+  class MyChildClass: public MyClass {
+    public:
+      string model = "Mustang";
+  };
+
+  // Multiple Inheritance
+  class MyChildClass: public MyClass, public BasicClass {
+    public:
+      string model = "Mustang";
+  };
+
+  // Method/function definition outside the class
+  void MyClass::myMethod2() {
+    cout << "Hello Cheetsheet!";
+  }
+
+  int main() {
+    MyClass myObj, myObj(10);  // Create an object of MyClass
+
+    // Access attributes and set values
+    myObj.myNum = 15; 
+    myObj.myString = "Some text";
+
+    // Print attribute values
+    cout << myObj.myNum << "\n";
+    cout << myObj.myString;
+    return 0;
+  }
+```
