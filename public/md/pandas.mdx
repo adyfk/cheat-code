@@ -8,7 +8,7 @@ used: ['']
 author: "Adi Fatkhurozi"
 authorLink: "https://github.com/adyfk"
 description: "pandas is a Python package that provides fast, flexible, and expressive data structures designed to make working with `relational` or `labeled` data both easy and intuitive."
-updateAt: "8/2/2022 20:5:00"
+updateAt: "9/2/2022 20:5:00"
 createdAt: "3/1/2022 00:00:00"
 ---
 
@@ -43,7 +43,6 @@ createdAt: "3/1/2022 00:00:00"
 
 ### Add Label to Series
 ```py
-
   # Add Label to Series
   myvar = pd.Series(a, index = ["x", "y", "z"])
   print(myvar)
@@ -80,31 +79,13 @@ attribute `inplace` mean affect to real data
     "calories": [420, 380, 390],
     "duration": [50, 40, 45]
   }
-
   # Load data into a DataFrame object
   df = pd.DataFrame(data)
-  print(df)
-  #    calories  duration
-  # 0       420        50
-  # 1       380        40
-  # 2       390        45
-  print(df.loc[0])
-  print(df[0])
-  # calories    420
-  # duration     50
-  print(df.loc[[0, 2]])
-  #    calories  duration
-  # 0       420        50
-  # 2       390        45
 ```
 
 ### Named Columns
 ```py
-  data = {
-    "calories": [420, 380, 390],
-    "duration": [50, 40, 45]
-  }
-
+  data = { "calories": [420, 380, 390], "duration": [50, 40, 45] }
   df = pd.DataFrame(data, columns = ["x", "y"])
   print(df)
   #           x         y
@@ -115,11 +96,7 @@ attribute `inplace` mean affect to real data
 
 ### Named Indexes
 ```py 
-  data = {
-    "calories": [420, 380, 390],
-    "duration": [50, 40, 45]
-  }
-
+  data = { "calories": [420, 380, 390], "duration": [50, 40, 45] }
   df = pd.DataFrame(data, index = ["day1", "day2", "day3"])
   print(df)
   #       calories  duration
@@ -144,7 +121,7 @@ attribute `inplace` mean affect to real data
   # drop columns 
   df.drop(columns['x','y'])
 ```
-
+###
 ### Subset Obeservatios - rows
 ```py
   df[df.Lenght > 7] # filtering data-frame
@@ -182,6 +159,8 @@ attribute `inplace` mean affect to real data
   # Use df.loc[] and df.iloc[] to select only rows, only columns or both
   # Use df.at[] and df.iat[] to access a single value by row and column.
 
+  # select row 0 and 2
+  df.loc[[0, 2]]
   # select rows 10-20
   df.iloc[10:20]
   # seelct columns in positions 1,2,5 first column is 0
@@ -203,6 +182,18 @@ attribute `inplace` mean affect to real data
   # rows count
   lent(df)
   # of distinct values in a column.
+  df['w'].nunique()
+  # basic describe
+  df.describe()
+  # math
+  df.sum()
+  df.count()
+  df.min()
+  df.max()
+  df.median()
+  df.mean()
+  df.std()
+  df.apply(callback)
 ```
 
 ### Import Files 
@@ -231,24 +222,38 @@ attribute `inplace` mean affect to real data
 
 ### Cleaning NAN / NULL
 ```py
-  import pandas as pd
-
-  df = pd.read_csv('data.csv')
-
   # Drop row  ----------------------------------------
   # return new data (remove row has NaN)
-  print(df.dropna())
+  df.dropna()
   # inplace means affect to real data (remove row has NaN)
   df.dropna(inplace = True)
   # replace NaN with (value)
-  df.fillna(130, inplace = True)
-  
+  df.fillna(130, inplace = True)  
   # Delete Duplicate Row
   df.drop_duplicates(inplace = True)
 ```
 
-### Finding Relationships
+### Combine Data Sets
+```py
+  # basic like join query SQL
+  # join matchin rows from df2 to df1 with col=x1
+  pd.merge(df1, df2, how='left', on='x1')
+  # join data , only rows in both side
+  pd.merge(df1, df2, how='inner', on='x1')
+  # join data , all values, and rows
+  pd.merge(df1, df2, how='outer', on='x1')
+```
 
+### Grouping Data
+```py
+  # groupby columns
+  df.groupby(by="col")
+  # groupby index
+  df.groupby(level='ind')
+```
+
+###
+### Finding Relationships
 ```py
   # The corr() method calculates the relationship between each column 
   # in your data set.
