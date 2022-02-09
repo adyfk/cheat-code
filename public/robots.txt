@@ -2,5 +2,3 @@ Sitemap: https://www.cheatcode.website/sitemap.xml
 
 User-agent: *
 Allow: /*
-
-Disallow: /api/*
