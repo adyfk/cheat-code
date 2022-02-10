@@ -14,14 +14,13 @@ function NavigationHeading() {
         tempNavs.push(node);
       });
       setNavs(tempNavs);
-      if (process.env.NODE_ENV !== 'development') setOpenNav(true);
     }, 1000);
   }, []);
 
   const toogleNav = ( ) => setOpenNav((prev)=>!prev);
 
   return (
-    <div className={`fixed bottom-1/2 translate-y-[50%] right-0 select-none`} >
+    <div className={`fixed bottom-5 right-0 select-none`} >
       <div className='relative'>
         <div className=' transition-all cursor-pointer w-10 bg-sky-600 hover:bg-amber-400 absolute left-[-10px] top-1/2 translate-y-[-50%] translate-x-[-100%] text-white rounded-full'>
           {openNav ?
